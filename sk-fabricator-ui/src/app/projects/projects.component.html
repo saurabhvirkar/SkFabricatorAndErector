@@ -1,0 +1,14 @@
+<div class="container py-4">
+	<h2 class="mb-4">Our Projects</h2>
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		<div class="col" *ngFor="let project of projects">
+			<div class="card h-100">
+				<img [src]="project.image" class="card-img-top" alt="Project image" *ngIf="project.image">
+				<div class="card-body">
+					<h5 class="card-title">{{ project.title }}</h5>
+					<p class="card-text">{{ project.description }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

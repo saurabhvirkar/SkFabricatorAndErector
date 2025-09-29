@@ -1,0 +1,35 @@
+
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+	font-family: 'Roboto', Arial, sans-serif;
+	background: #f7fafd;
+	color: #1a237e;
+}
+
+.sk-theme {
+	background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
+	color: #fff;
+}
+
+.sk-header {
+	background: #1976d2;
+	color: #fff;
+	padding: 1rem 2rem;
+	border-bottom: 4px solid #00bcd4;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.sk-btn {
+	background: #00bcd4;
+	color: #fff;
+	border-radius: 24px;
+	padding: 0.5rem 2rem;
+	font-weight: 600;
+	box-shadow: 0 2px 8px rgba(0,188,212,0.15);
+	transition: background 0.2s;
+}
+.sk-btn:hover {
+	background: #1976d2;
+}

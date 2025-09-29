@@ -1,0 +1,14 @@
+<div class="container py-4">
+	<h2 class="mb-4">Subscribe to Our Newsletter</h2>
+	<form [formGroup]="newsletterForm" (ngSubmit)="onSubmit()" class="row g-3">
+		<div class="col-md-8">
+			<label for="email" class="form-label">Email address</label>
+			<input id="email" type="email" class="form-control" formControlName="email" required>
+		</div>
+		<div class="col-md-4 d-flex align-items-end">
+			<button type="submit" class="btn btn-success w-100" [disabled]="newsletterForm.invalid">Subscribe</button>
+		</div>
+		<div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+		<div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+	</form>
+</div>
