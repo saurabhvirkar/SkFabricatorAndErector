@@ -1,41 +1,49 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../services/api.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-newsletter',
-  imports: [ReactiveFormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './newsletter.component.html',
-  styleUrl: './newsletter.component.scss'
+  styleUrls: ['./newsletter.component.scss'],
 })
 export class NewsletterComponent {
-  newsletterForm: FormGroup;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+  private fb = inject(FormBuilder);
+  private apiService = inject(ApiService);
 
-  constructor(private fb: FormBuilder, private api: ApiService) {
-    this.newsletterForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
-    });
-  }
+  newsletterForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
+
+  submissionStatus = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  responseMessage = signal('');
 
   onSubmit() {
-    if (this.newsletterForm.valid) {
-      this.api.subscribeNewsletter(this.newsletterForm.value).subscribe({
-        next: () => {
-          this.successMessage = 'You have subscribed successfully!';
-          this.errorMessage = null;
-          this.newsletterForm.reset();
-        },
-        error: () => {
-          this.successMessage = null;
-          this.errorMessage = 'Subscription failed. Please try again.';
-        }
-      });
-    } else {
-      this.successMessage = null;
-      this.errorMessage = 'Please enter a valid email address.';
+    if (this.newsletterForm.invalid) {
+      this.newsletterForm.markAllAsTouched();
+      this.responseMessage.set('Please enter a valid email.');
+      this.submissionStatus.set('error');
+      return;
     }
+
+    this.submissionStatus.set('loading');
+    this.responseMessage.set('');
+
+    this.apiService.subscribeNewsletter(this.newsletterForm.value.email!).subscribe(
+      res => {
+        this.responseMessage.set(res.message);
+        this.submissionStatus.set(res.success ? 'success' : 'error');
+        if (res.success) {
+          this.newsletterForm.reset();
+        }
+      },
+      error => {
+        this.responseMessage.set('Subscription failed due to a network error.');
+        this.submissionStatus.set('error');
+      }
+    );
   }
 }

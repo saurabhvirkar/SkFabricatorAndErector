@@ -1,14 +1,87 @@
-<div class="container py-4">
-	<h2 class="mb-4">Our Projects</h2>
-	<div class="row row-cols-1 row-cols-md-3 g-4">
-		<div class="col" *ngFor="let project of projects">
-			<div class="card h-100">
-				<img [src]="project.image" class="card-img-top" alt="Project image" *ngIf="project.image">
-				<div class="card-body">
-					<h5 class="card-title">{{ project.title }}</h5>
-					<p class="card-text">{{ project.description }}</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+
+    <!-- Main App Container -->
+    <div class="min-h-screen bg-gray-50 font-sans antialiased text-gray-800">
+
+      <!-- Configuration for custom styles (sk-primary color) -->
+      <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                // Defined custom color used in the user's provided template
+                'sk-primary': '#4f46e5', // Example: Indigo-600
+              },
+            }
+          }
+        }
+      </script>
+
+      <!-- Header -->
+      <header class="bg-gray-900 text-white p-4 shadow-xl">
+        <div class="container mx-auto">
+          <h1 class="text-xl font-bold">SK Fabricator & Erector</h1>
+        </div>
+      </header>
+
+      <!-- Projects Page Content -->
+      <div class="projects-page py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Our Completed Projects</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              A showcase of our commitment to quality, speed, and precision across various industrial sectors.
+            </p>
+          </header>
+
+          <!-- Filter Buttons -->
+          <div class="flex justify-center flex-wrap gap-3 mb-10">
+            @for (category of categories; track category) {
+              <button (click)="setFilter(category)"
+                      [class]="[
+                          'px-6 py-2 rounded-full font-medium transition duration-150 border border-gray-200 shadow-md',
+                          activeFilter() === category
+                            ? 'bg-sk-primary text-white shadow-lg transform scale-105'
+                            : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg'
+                      ].join(' ')">
+                {{ category }}
+              </button>
+            }
+          </div>
+
+          <!-- Projects Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (project of filteredProjects(); track project.id) {
+              <div class="bg-white rounded-xl shadow-xl overflow-hidden group hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                <!-- Image -->
+                <div class="h-56 overflow-hidden">
+                  <img [src]="project.imageUrl" [alt]="project.title"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                  <span class="inline-block text-xs font-semibold uppercase tracking-wider text-sk-primary mb-2 px-3 py-1 rounded-full bg-indigo-50">
+                    {{ project.category }}
+                  </span>
+                  <h2 class="text-xl font-bold text-gray-800 mb-2">{{ project.title }}</h2>
+                  <p class="text-gray-600 text-sm h-12 overflow-hidden">{{ project.description }}</p>
+                </div>
+              </div>
+            } @empty {
+              <div class="col-span-full text-center py-10 text-gray-500 text-lg">
+                No projects found in the '{{ activeFilter() }}' category.
+              </div>
+            }
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer (Keeping the structure simple) -->
+      <footer class="bg-gray-900 text-white p-4 mt-auto">
+        <div class="container mx-auto text-center text-sm opacity-75">
+          &copy; {{ currentYear }} SK Fabricator & Erector.
+        </div>
+      </footer>
+    </div>

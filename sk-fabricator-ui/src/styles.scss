@@ -1,35 +1,86 @@
+/* Define Theme Colors */
+$sk-blue: #004d99; // Primary Blue
+$sk-gold: #ffcc00; // Accent Gold
+$sk-light-grey: #f8f9fa;
 
-@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
-
-body {
-	font-family: 'Roboto', Arial, sans-serif;
-	background: #f7fafd;
-	color: #1a237e;
+/* Customizing Angular Material & Overrides */
+.mat-toolbar.mat-primary {
+    background: $sk-blue;
 }
 
-.sk-theme {
-	background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
-	color: #fff;
+.mat-raised-button.mat-primary {
+    background-color: $sk-blue;
+    color: white;
 }
 
-.sk-header {
-	background: #1976d2;
-	color: #fff;
-	padding: 1rem 2rem;
-	border-bottom: 4px solid #00bcd4;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+.mat-raised-button.mat-accent, .mat-button.mat-accent {
+    background-color: $sk-gold;
+    color: $sk-blue;
+    font-weight: bold;
 }
 
-.sk-btn {
-	background: #00bcd4;
-	color: #fff;
-	border-radius: 24px;
-	padding: 0.5rem 2rem;
-	font-weight: 600;
-	box-shadow: 0 2px 8px rgba(0,188,212,0.15);
-	transition: background 0.2s;
+// Custom Text Colors
+.text-primary { color: $sk-blue !important; }
+.text-accent { color: $sk-gold !important; }
+.bg-accent { background-color: $sk-gold !important; }
+.bg-light { background-color: $sk-light-grey !important; }
+
+
+// Global Layout
+main {
+    min-height: 80vh;
 }
-.sk-btn:hover {
-	background: #1976d2;
+
+// Typography
+.fw-bold { font-weight: 700 !important; }
+
+// Custom Icon Sizes (used in Home and Services components)
+.icon-large {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
 }
+.service-large-icon {
+    font-size: 150px;
+    width: 150px;
+    height: 150px;
+}
+
+// Component Sizing
+.inquiry-card, .login-card {
+    max-width: 500px;
+    width: 90%;
+}
+.project-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover; /* Ensures images look good */
+}
+
+// Snackbar for errors
+.snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+// Import Bootstrap CSS (ensure this path is correct based on your angular.json)
+// This line may still show a deprecation warning, but is kept for functionality.
+@import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+/* Import necessary utilities and styles */
+
+/* This file primarily includes global setup, often including Tailwind imports
+In this environment, we rely on the Tailwind CDN included in index.html,
+but we can define some custom variables or base styles here.
+*/
+
+:root {
+--primary: #1e3a8a; /* Dark Blue */
+--secondary: #fcd34d; /* Amber */
+--accent: #ef4444; /* Red */
+}
+
+// REMOVED THE FOLLOWING LINES (which caused the 'Can't find stylesheet to import' error):
+// @import 'tailwindcss/base';
+// @import 'tailwindcss/components';
+// @import 'tailwindcss/utilities';

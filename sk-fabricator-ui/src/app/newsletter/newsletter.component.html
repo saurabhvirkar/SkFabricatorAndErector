@@ -1,14 +1,30 @@
-<div class="container py-4">
-	<h2 class="mb-4">Subscribe to Our Newsletter</h2>
-	<form [formGroup]="newsletterForm" (ngSubmit)="onSubmit()" class="row g-3">
-		<div class="col-md-8">
-			<label for="email" class="form-label">Email address</label>
-			<input id="email" type="email" class="form-control" formControlName="email" required>
-		</div>
-		<div class="col-md-4 d-flex align-items-end">
-			<button type="submit" class="btn btn-success w-100" [disabled]="newsletterForm.invalid">Subscribe</button>
-		</div>
-		<div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-		<div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
-	</form>
+<div>
+<h3 class="text-lg font-semibold mb-4">Stay Updated</h3>
+<p class="text-gray-400 text-sm mb-4">Subscribe to our newsletter for project updates and industry news.</p>
+
+<form [formGroup]="newsletterForm" (ngSubmit)="onSubmit()">
+<div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-2">
+<input type="email" formControlName="email" placeholder="Your email address"
+class="flex-grow px-3 py-2 text-gray-800 rounded-lg border border-gray-300 focus:ring-sk-primary focus:border-sk-primary shadow-sm text-sm">
+
+  <button type="submit" [disabled]="submissionStatus() === 'loading'"
+          class="px-4 py-2 text-sm font-medium text-white bg-sk-primary rounded-lg hover:bg-blue-700 transition duration-150 disabled:opacity-50">
+    @if (submissionStatus() === 'loading') {
+      <span>Wait...</span>
+    } @else {
+      <span>Subscribe</span>
+    }
+  </button>
+</div>
+
+@if (responseMessage()) {
+  <p [ngClass]="{
+    'text-green-400': submissionStatus() === 'success',
+    'text-red-400': submissionStatus() === 'error'
+  }" class="mt-2 text-xs font-medium">
+    {{ responseMessage() }}
+  </p>
+}
+
+</form>
 </div>

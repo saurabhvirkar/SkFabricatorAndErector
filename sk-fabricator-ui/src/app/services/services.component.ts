@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../services/api.service';
+import { DataService } from '../_services/data.service';
+import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 
 @Component({
   selector: 'app-services',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, InquiryFormComponent],
   templateUrl: './services.component.html',
-  styleUrl: './services.component.scss'
+  styleUrls: ['./services.component.scss'],
 })
-export class ServicesComponent implements OnInit {
-  services: any[] = [];
-
-  constructor(private api: ApiService) {}
-
-  ngOnInit() {
-    this.api.getServices().subscribe({
-      next: (data) => this.services = data,
-      error: () => this.services = []
-    });
-  }
+export class ServicesComponent {
+  private dataService = inject(DataService);
+  allServices = this.dataService.getServices();
 }

@@ -1,44 +1,57 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApiService } from '../../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-login',
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './admin-login.component.html',
-  styleUrl: './admin-login.component.scss'
+  styleUrls: ['./admin-login.component.scss'],
 })
 export class AdminLoginComponent {
-  loginForm: FormGroup;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
+  private fb = inject(FormBuilder);
+  private apiService = inject(ApiService);
+  private router = inject(Router);
 
-  constructor(private fb: FormBuilder, private api: ApiService) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  loginForm = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+  });
+
+  submissionStatus = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  responseMessage = signal('');
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.api.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          this.successMessage = 'Login successful!';
-          this.errorMessage = null;
-          // TODO: Store user info/token, redirect as needed
-        },
-        error: () => {
-          this.successMessage = null;
-          this.errorMessage = 'Invalid credentials. Please try again.';
-        }
-      });
-    } else {
-      this.errorMessage = 'Please fill all required fields.';
-      this.successMessage = null;
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.responseMessage.set('Please enter both username and password.');
+      this.submissionStatus.set('error');
+      return;
     }
+
+    this.submissionStatus.set('loading');
+    this.responseMessage.set('');
+
+    this.apiService.adminLogin(this.loginForm.value).subscribe(
+      res => {
+        if (res.success) {
+          this.submissionStatus.set('success');
+          this.responseMessage.set('Login successful! Redirecting...');
+          // In a real app, store token (res.token) and navigate to the admin dashboard
+          setTimeout(() => this.router.navigate(['/']), 1000); // Mock redirect
+        } else {
+          this.submissionStatus.set('error');
+          this.responseMessage.set(res.message);
+        }
+      },
+      error => {
+        this.submissionStatus.set('error');
+        this.responseMessage.set('A communication error occurred.');
+        console.error('Login Error:', error);
+      }
+    );
   }
 }

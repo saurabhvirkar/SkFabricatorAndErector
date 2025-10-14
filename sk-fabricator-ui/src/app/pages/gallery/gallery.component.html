@@ -1,13 +1,87 @@
-<div class="container py-5">
-  <h2 class="text-center mb-4">Our Work Gallery</h2>
-  <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let photo of photos">
-      <div class="card h-100 shadow-sm">
-        <img [src]="photo.url" class="card-img-top" alt="Work Photo">
-        <div class="card-body text-center">
-          <p class="card-text mb-0">{{ photo.caption }}</p>
+
+    <!-- Main App Container -->
+    <div class="min-h-screen bg-gray-50 font-sans antialiased text-gray-800">
+
+      <!-- Configuration for custom styles (sk-primary color) -->
+      <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                // Defined custom color used in the user's provided template
+                'sk-primary': '#4f46e5', // Example: Indigo-600
+              },
+            }
+          }
+        }
+      </script>
+
+      <!-- Header -->
+      <header class="bg-gray-900 text-white p-4 shadow-xl">
+        <div class="container mx-auto">
+          <h1 class="text-xl font-bold">SK Fabricator & Erector</h1>
+        </div>
+      </header>
+
+      <!-- Gallery Page Content (Using the new gallery-page structure) -->
+      <div class="gallery-page py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Our Work Gallery</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              Visual proof of our capabilities and successful project execution across multiple industrial disciplines.
+            </p>
+          </header>
+
+          <!-- Filter Buttons -->
+          <div class="flex justify-center flex-wrap gap-3 mb-10">
+            <!-- FIX: Removed the invalid template casting 'as any' -->
+            @for (category of categories; track category) {
+              <button (click)="setFilter(category)"
+                      [class]="[
+                          'px-6 py-2 rounded-full font-medium transition duration-150 border border-gray-200 shadow-md',
+                          activeFilter() === category
+                            ? 'bg-sk-primary text-white shadow-lg transform scale-105'
+                            : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg'
+                      ].join(' ')">
+                {{ category }}
+              </button>
+            }
+          </div>
+
+          <!-- Gallery Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for (image of filteredImages(); track image.id) {
+              <div class="rounded-xl shadow-lg overflow-hidden relative group cursor-pointer hover:shadow-2xl transition duration-300">
+                <img [src]="image.url" [alt]="image.alt"
+                      class="w-full h-64 object-cover transition duration-500 group-hover:scale-105">
+                
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gray-900 bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                  <div class="text-white text-center p-4">
+                    <p class="text-lg font-semibold">{{ image.alt }}</p>
+                    <span class="text-xs uppercase font-medium text-sk-primary bg-white px-2 py-1 rounded mt-2 inline-block shadow-md">
+                      {{ image.category }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="col-span-full text-center py-10 text-gray-500 text-lg">
+                No images found in the '{{ activeFilter() }}' category.
+              </div>
+            }
+          </div>
+
         </div>
       </div>
+
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-white p-4 mt-auto">
+        <div class="container mx-auto text-center text-sm opacity-75">
+          &copy; {{ currentYear }} SK Fabricator & Erector.
+        </div>
+      </footer>
     </div>
-  </div>
-</div>
+  

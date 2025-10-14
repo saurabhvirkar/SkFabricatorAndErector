@@ -1,13 +1,42 @@
-<footer class="footer">
-  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-    <div class="mb-2 mb-md-0">
-      <strong>SK Fabricator & Erector</strong><br>
-      <small>Quality & timely delivery</small>
+<footer class="bg-gray-800 text-white mt-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-700 pb-8 mb-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-sk-primary">SK Fabricator</h3>
+                <p class="text-gray-400 text-sm">
+                    Perfection Through Precision. Leading Engineering Contractor for Industrial Piping, Structure Fabrication, and Equipment Erection.
+                </p>
+                <div class="mt-4 flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-150">F</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-150">L</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-150">X</a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a routerLink="/" class="text-gray-400 hover:text-sk-primary text-sm transition duration-150">Home</a></li>
+                    <li><a routerLink="/services" class="text-gray-400 hover:text-sk-primary text-sm transition duration-150">Services</a></li>
+                    <li><a routerLink="/projects" class="text-gray-400 hover:text-sk-primary text-sm transition duration-150">Projects</a></li>
+                    <li><a routerLink="/team" class="text-gray-400 hover:text-sk-primary text-sm transition duration-150">Our Team</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                <p class="text-gray-400 text-sm">
+                    Office & Store: [Address Placeholder]<br>
+                    Email: info&#64;skfabricator.com<br>
+                    Phone: +91 98765 43210
+                </p>
+            </div>
+
+            <app-newsletter></app-newsletter>
+        </div>
+
+        <div class="text-center text-gray-500 text-sm pt-4">
+            &copy; {{ currentYear }} SK Fabricator & Erector. All rights reserved.
+        </div>
     </div>
-    <div>
-      <span class="me-3"><i class="bi bi-envelope"></i> info&#64;skfabricator.com</span>
-      <span class="me-3"><i class="bi bi-telephone"></i> +91 9876543210</span>
-      <span><i class="bi bi-geo-alt"></i> Pune, Maharashtra</span>
-    </div>
-  </div>
 </footer>

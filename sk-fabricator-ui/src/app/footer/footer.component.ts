@@ -1,11 +1,17 @@
+// src/app/footer/footer.component.ts
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NewsletterComponent } from '../newsletter/newsletter.component';
+import { RouterLink } from '@angular/router'; // Used for routerLink in template
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NewsletterComponent, RouterLink], 
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss'
+  styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {}
+export class FooterComponent {
+  currentYear = new Date().getFullYear();
+}

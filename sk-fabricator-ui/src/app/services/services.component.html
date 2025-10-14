@@ -1,9 +1,43 @@
-<div class="container py-4">
-	<h2 class="mb-4">Our Services</h2>
-	<ul class="list-group list-group-flush">
-		<li class="list-group-item" *ngFor="let service of services">
-			<h5 class="mb-1">{{ service.title }}</h5>
-			<p class="mb-0">{{ service.description }}</p>
-		</li>
-	</ul>
+<div class="services-page py-12">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<header class="text-center mb-12">
+<h1 class="text-4xl font-extrabold text-gray-900 mb-4">Integrated Engineering Solutions</h1>
+<p class="text-xl text-gray-600 max-w-4xl mx-auto">
+We offer a comprehensive range of high-quality services for industrial projects, ensuring perfection through precision and safety.
+</p>
+</header>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  @for (service of allServices; track service.id) {
+    <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+      <!-- Icon Placeholder -->
+      <div class="text-6xl text-sk-primary mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-blue-50">
+        {{ service.icon }}
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ service.name }}</h2>
+      <p class="text-gray-600 mb-4">{{ service.summary }}</p>
+      <ul class="text-sm text-gray-700 space-y-2 border-l-2 border-sk-primary pl-4">
+        <li>Specialized welding techniques.</li>
+        <li>Advanced project management.</li>
+        <li>Commitment to safety and quality.</li>
+      </ul>
+    </div>
+  }
+  <!-- Additional Service Card -->
+  <div class="bg-white p-8 rounded-xl shadow-xl border-4 border-dashed border-gray-300 flex flex-col justify-center items-center text-center">
+    <h3 class="text-2xl font-bold text-gray-800 mb-3">Custom Requirement?</h3>
+    <p class="text-gray-600 mb-6">If your need isn't listed, contact us to discuss a tailored solution.</p>
+    <a href="#inquiry" class="px-6 py-2 text-sm font-medium text-white bg-sk-primary rounded-lg hover:bg-blue-700 transition duration-150">
+      Inquire Now
+    </a>
+  </div>
+</div>
+
+</div>
+
+<!-- Inquiry Form Section -->
+
+<div id="inquiry" class="mt-16">
+<app-inquiry-form></app-inquiry-form>
+</div>
 </div>

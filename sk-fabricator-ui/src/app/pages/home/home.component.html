@@ -1,46 +1,53 @@
-
-<div class="container py-5">
-	<div class="row align-items-center">
-		<div class="col-md-6">
-			<h2 class="sk-theme mb-4" style="font-weight:700;">Welcome to S K Fabricator & Erector</h2>
-			<p style="font-size:1.2rem;">Specialist in Machine Installation, Industrial Piping, Structure Fabrication, Equipment Erection, Ducting, S.S & M.S Pipe Fabrication, and Maintenance. Committed to quality and timely delivery.</p>
-			<a href="/inquiry" class="sk-btn mt-3">Submit Inquiry</a>
-		</div>
-		<div class="col-md-6 text-center">
-			<img src="assets/sk-logo.jpg" alt="SK Logo" style="max-width:300px;">
-		</div>
-	</div>
+<div class="home-page">
+<!-- Hero Section -->
+<section class="relative h-[60vh] md:h-[70vh] bg-cover bg-center"
+style="background-image: url('https://www.google.com/search?q=https://placehold.co/1920x800/1f2937/ffffff%3Ftext%3DIndustrial%2BPiping%2Band%2BFabrication');">
+<div class="absolute inset-0 bg-gray-900 bg-opacity-60"></div>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-full relative z-10">
+<div class="text-white max-w-2xl">
+<p class="text-lg uppercase font-semibold text-sk-primary mb-2">Perfection Through Precision</p>
+<h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
+Leading Engineering Contractor for Industrial Projects
+</h1>
+<p class="text-xl mb-8 text-gray-300">
+Integrated solutions for structural design, fabrication, piping, and plant maintenance.
+</p>
+<a routerLink="/projects" class="inline-block px-8 py-3 text-lg font-medium text-white bg-sk-primary rounded-xl hover:bg-blue-700 transition duration-300 shadow-xl">
+View Our Work
+</a>
 </div>
-<section class="hero text-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-7">
-        <h1 class="display-5">Tough Situations call for Precise Solutions</h1>
-        <p class="lead">Since 2008 — Machine Installation, Industrial Piping, Structure Fabrication, Equipment Erection, Ducting, Pipe Fabrication and Maintenance.</p>
-        <a routerLink="/inquiry" class="btn btn-warning btn-lg">Contact Us</a>
-      </div>
-      <div class="col-md-5 text-center">
-        <img src="assets/sk-logo.jpg" alt="SK" class="img-fluid" style="max-width:260px;">
-      </div>
-    </div>
-  </div>
+</div>
 </section>
 
-<section class="py-5">
-  <div class="container">
-    <h3 class="mb-4">Our Services</h3>
-    <div class="row g-4">
-      <div class="col-md-4" *ngFor="let s of [1,2,3]">
-        <div class="card p-3 sk-theme">
-          <h5>Service Title</h5>
-         <h1 class="display-5">Tough Situations call for Precise Solutions</h1>
-            <p class="lead">Since 2008 — Machine Installation, Industrial Piping, Structure Fabrication, Equipment Erection, Ducting, Pipe Fabrication and Maintenance.</p>
-            <a routerLink="/inquiry" class="btn btn-warning btn-lg">Contact Us</a>
-        </div>
-      <div class="col-md-5 text-center">
-        <img src="assets/sk-logo.jpg" alt="SK" class="img-fluid" style="max-width:260px;">
-      </div>
-      </div>
-    </div>
-  </div>
+<!-- Accolades Component -->
+
+<app-accolades></app-accolades>
+
+<!-- Featured Services -->
+
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Our Core Services</h2>
+<p class="text-center text-gray-500 mb-12 max-w-3xl mx-auto">
+Committed towards quality services with top-notch equipment and specialized teams.
+</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+@for (service of featuredServices; track service.id) {
+<div class="bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 text-center border-t-4 border-sk-primary">
+<div class="text-5xl text-sk-primary mb-4">{{ service.icon }}</div>
+<h3 class="text-xl font-semibold mb-3 text-gray-800">{{ service.name }}</h3>
+<p class="text-gray-600">{{ service.summary }}</p>
+<a routerLink="/services" class="mt-4 inline-block text-sk-primary hover:text-blue-700 font-medium text-sm">
+Learn More &rarr;
+</a>
+</div>
+}
+</div>
+</div>
 </section>
+
+<!-- Inquiry Form Component (Call to Action) -->
+
+<app-inquiry-form></app-inquiry-form>
+
+</div>

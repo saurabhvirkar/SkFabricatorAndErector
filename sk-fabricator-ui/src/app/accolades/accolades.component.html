@@ -1,1 +1,19 @@
-<p>accolades works!</p>
+<section class="py-12 bg-gray-100">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+@for (acc of accolades; track acc.id) {
+<div class="p-6 bg-white rounded-xl shadow-lg transition duration-300 hover:shadow-xl">
+<!-- Icon Placeholder -->
+<div class="text-5xl text-sk-primary mb-3 mx-auto w-12 h-12 flex items-center justify-center rounded-full bg-blue-50">
+<!-- Icon will be text/emoji for simplicity in this template -->
+{{ acc.icon }}
+</div>
+<p class="text-4xl font-extrabold text-gray-800">
+{{ acc.count }}{{ acc.suffix }}
+</p>
+<p class="text-md font-medium text-gray-500 mt-1">{{ acc.title }}</p>
+</div>
+}
+</div>
+</div>
+</section>

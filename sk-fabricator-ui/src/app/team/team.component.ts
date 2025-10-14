@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DataService } from '../_services/data.service';
 
 @Component({
   selector: 'app-team',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './team.component.html',
-  styleUrl: './team.component.scss'
+  styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent {
-
+  private dataService = inject(DataService);
+  teamMembers = this.dataService.getTeamMembers();
 }
