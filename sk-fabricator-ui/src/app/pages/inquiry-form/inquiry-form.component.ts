@@ -3,8 +3,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../api.service';
-import { Inquiry } from '../_models/inquiry.model'; // Assuming you create this file
+import { ApiService } from '../../api.service';
+import { Inquiry } from '../../_models/inquiry.model'; // Assuming you create this file
 
 @Component({
   selector: 'app-inquiry-form',

@@ -1,31 +1,3 @@
-// import { Component, inject, signal } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { DataService } from '../_services/data.service';
-
-// @Component({
-//   selector: 'app-projects',
-//   standalone: true,
-//   imports: [CommonModule],
-//   templateUrl: './projects.component.html',
-//   styleUrls: ['./projects.component.scss'],
-// })
-// export class ProjectsComponent {
-//   private dataService = inject(DataService);
-//   allProjects = this.dataService.getProjects();
-//   filteredProjects = signal(this.allProjects);
-//   activeFilter = signal<'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance'>('All');
-//   categories = ['All', 'Piping', 'Fabrication', 'Erection', 'Maintenance'];
-
-//   setFilter(category: 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance') {
-//     this.activeFilter.set(category);
-//     if (category === 'All') {
-//       this.filteredProjects.set(this.allProjects);
-//     } else {
-//       this.filteredProjects.set(this.allProjects.filter(p => p.category === category));
-//     }
-//   }
-// }
-
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 /**

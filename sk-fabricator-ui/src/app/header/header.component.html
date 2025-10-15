@@ -1,59 +1,68 @@
 <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
-<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex items-center justify-between h-16">
-<!-- Logo -->
-<a routerLink="/" class="flex-shrink-0 flex items-center">
-<!-- Placeholder for SK Logo -->
-<img class="h-8 w-auto rounded" src="https://www.google.com/search?q=https://placehold.co/40x40/007bff/ffffff%3Ftext%3DSK" alt="SK Fabricator Logo">
-<span class="ml-3 text-xl font-bold text-gray-900">SK FABRICATOR</span>
-</a>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a routerLink="/" class="flex-shrink-0 flex items-center">
+        <!-- **FIXED PATH: Using ABSOLUTE path /assets/sk_logo.png** -->
+        <img class="h-8 w-auto rounded" src="/sk-fabricator-ui/src/assets/sk_logo.jpg" alt="SK Fabricator Logo">
+        <span class="ml-3 text-xl font-bold text-gray-900">SK FABRICATOR</span>
+      </a>
+      
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+                @for (item of navItems; track item.label) {
+                  <a [routerLink]="item.link" routerLinkActive="text-sk-primary font-bold"          
+             [ngClass]="item.class"          
+             class="text-gray-600 hover:bg-gray-50 hover:text-sk-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">
+                      {{ item.label }}
+                    </a>
+                }
+                <a routerLink="/admin"
+            class="ml-4 px-4 py-2 text-sm font-medium text-white bg-sk-primary rounded-lg hover:bg-blue-700 transition duration-150 shadow-md">
+                    Admin Login
+                  </a>
+              </div>
+          </nav>
 
-  <!-- Desktop Navigation -->
-  <nav class="hidden md:block">
-    <div class="ml-10 flex items-baseline space-x-4">
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+            <button (click)="isMenuOpen = !isMenuOpen" type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <span class="sr-only">Open main menu</span>
+                <!-- Icon placeholder for menu toggle -->
+                <svg *ngIf="!isMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+                   
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                 
+          </svg>
+                <svg *ngIf="isMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+                   
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                 
+          </svg>
+              </button>
+          </div>
+    </div>
+
+  </div>
+
+  <!-- Mobile Menu -->
+
+  <div *ngIf="isMenuOpen" class="md:hidden" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
       @for (item of navItems; track item.label) {
-        <a [routerLink]="item.link" routerLinkActive="text-sk-primary font-bold"
-           [ngClass]="item.class"
-           class="text-gray-600 hover:bg-gray-50 hover:text-sk-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">
-          {{ item.label }}
-        </a>
+      <a [routerLink]="item.link" (click)="isMenuOpen = false" routerLinkActive="bg-gray-100 text-sk-primary"
+        class="text-gray-700 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">
+        {{ item.label }}
+      </a>
       }
-      <a routerLink="/admin" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-sk-primary rounded-lg hover:bg-blue-700 transition duration-150 shadow-md">
+      <a routerLink="/admin" (click)="isMenuOpen = false"
+        class="text-gray-700 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">
         Admin Login
       </a>
     </div>
-  </nav>
-
-  <!-- Mobile Menu Button -->
-  <div class="md:hidden">
-    <button (click)="isMenuOpen = !isMenuOpen" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-      <span class="sr-only">Open main menu</span>
-      <!-- Icon placeholder for menu toggle -->
-      <svg *ngIf="!isMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg *ngIf="isMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
   </div>
-</div>
-
-</div>
-
-<!-- Mobile Menu -->
-
-<div *ngIf="isMenuOpen" class="md:hidden" id="mobile-menu">
-<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-@for (item of navItems; track item.label) {
-<a [routerLink]="item.link" (click)="isMenuOpen = false" routerLinkActive="bg-gray-100 text-sk-primary"
-class="text-gray-700 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">
-{{ item.label }}
-</a>
-}
-<a routerLink="/admin" (click)="isMenuOpen = false" class="text-gray-700 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">
-Admin Login
-</a>
-</div>
-</div>
 </header>

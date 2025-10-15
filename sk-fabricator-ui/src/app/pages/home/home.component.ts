@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccoladesComponent } from '../../accolades/accolades.component';
-import { InquiryFormComponent } from '../../inquiry-form/inquiry-form.component';
+import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { DataService } from '../../_services/data.service';
 import { RouterLink } from '@angular/router';
 

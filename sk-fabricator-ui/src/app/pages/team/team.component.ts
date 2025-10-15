@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../_services/data.service';
+import { DataService } from '../../_services/data.service';
 
 @Component({
   selector: 'app-team',

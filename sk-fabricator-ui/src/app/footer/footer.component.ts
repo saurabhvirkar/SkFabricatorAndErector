@@ -2,7 +2,7 @@
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NewsletterComponent } from '../newsletter/newsletter.component';
+import { NewsletterComponent } from '../pages/newsletter/newsletter.component';
 import { RouterLink } from '@angular/router'; // Used for routerLink in template
 
 @Component({

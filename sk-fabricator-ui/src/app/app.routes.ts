@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { TeamComponent } from './team/team.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { TeamComponent } from './pages/team/team.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
-import { ServicesComponent } from './services/services.component';
+import { ServicesComponent } from './pages/services/services.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, title: 'Home | SK Fabricator' },
