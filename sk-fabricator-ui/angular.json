@@ -94,7 +94,8 @@
               "buildTarget": "sk-fabricator-ui:build:production"
             },
             "development": {
-              "buildTarget": "sk-fabricator-ui:build:development"
+              "buildTarget": "sk-fabricator-ui:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

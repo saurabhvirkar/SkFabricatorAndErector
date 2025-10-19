@@ -4,7 +4,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../api.service';
-import { Inquiry } from '../../_models/inquiry.model'; // Assuming you create this file
+import { Inquiry } from '../../_models/inquiry.model';
 
 @Component({
   selector: 'app-inquiry-form',
@@ -26,10 +26,10 @@ export class InquiryFormComponent {
   inquiryForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    phone: [''], 
-    subject: [''], 
-    category: [''], 
-    preferredContact: [''], 
+    phone: [''],
+    subject: [''],
+    category: [''],
+    preferredContact: ['Email'], // Set a default value
     message: ['', Validators.required],
   });
 
@@ -50,30 +50,37 @@ export class InquiryFormComponent {
     this.submissionStatus.set('loading');
     this.responseMessage.set('');
 
-    const inquiryData: Inquiry = this.inquiryForm.value as Inquiry;
+    const formValue = this.inquiryForm.value;
+    const inquiryData: Inquiry = {
+      name: formValue.name!,
+      email: formValue.email!,
+      phone: formValue.phone || "", // Correctly convert empty string to null
+      subject: formValue.subject || "", // Correctly convert empty string to null
+      category: formValue.category || "", // Correctly convert empty string to null
+      preferredContact: formValue.preferredContact || "", // Correctly convert empty string to null
+      message: formValue.message!,
+    };
 
     // 2. API Service Integration
     this.apiService.submitInquiry(inquiryData).subscribe({
-      next: (res: { success: boolean, message: string }) => {
-        if (res.success) {
-          this.submissionStatus.set('success');
-          // Use the message returned from the mock API
-          this.responseMessage.set(res.message); 
-          // Reset the form on successful submission
-          this.inquiryForm.reset({
-            name: '', email: '', phone: '', subject: '', category: '', preferredContact: '', message: ''
-          });
-        } else {
-          this.submissionStatus.set('error');
-          // Use the error message returned from the mock API
-          this.responseMessage.set(res.message); 
-        }
+      next: (res) => {
+        debugger
+        this.submissionStatus.set('success');
+        // The backend returns { success: true } without a message, so we provide one here.
+        this.responseMessage.set('Your inquiry has been sent successfully! We will get back to you shortly.');
+        // Reset the form to its initial state, preserving defaults
+        this.inquiryForm.reset({
+          category: '',
+          preferredContact: 'Email'
+        });
       },
-      error: (error) => {
+      error: (err) => {
+        debugger
         // 3. Error Handling for network/server issues
         this.submissionStatus.set('error');
-        this.responseMessage.set('A severe network error occurred. Please check your connection and try again.');
-        console.error('Inquiry Submission Error:', error);
+        // Use the error message from the API if available, otherwise show a generic one.
+        this.responseMessage.set(err.error?.message || 'An unexpected error occurred. Please try again.');
+        console.error('Inquiry Submission Error:', err);
       }
     });
   }

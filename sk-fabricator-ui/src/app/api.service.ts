@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { Inquiry } from './_models/inquiry.model';
 
 /**
  * A service for handling external API calls like form submissions or admin login.
@@ -11,14 +12,15 @@ import { Observable, of } from 'rxjs';
 })
 export class ApiService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:5001/api'; // Dummy base URL
+  // The proxy will forward requests starting with /api to your backend
+  private apiUrl = '/api';
 
-  // Mock form submission
-  submitInquiry(formData: any): Observable<{ success: boolean, message: string }> {
-    console.log('Submitting inquiry:', formData);
-    // In a real application, you would use:
-    // return this.http.post(`${this.baseUrl}/inquiry`, formData);
-    return of({ success: true, message: 'Inquiry received successfully. We will contact you shortly.' });
+  /**
+   * Submits the inquiry form data to the backend API.
+   */
+  submitInquiry(inquiryData: Inquiry): Observable<{ success: boolean, message: string }> {
+    debugger
+    return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/Inquiry`, inquiryData);
   }
   
   // Mock admin login
