@@ -15,14 +15,6 @@
           }
         }
       </script>
-
-      <!-- Header -->
-      <header class="bg-gray-900 text-white p-4 shadow-xl">
-        <div class="container mx-auto">
-          <h1 class="text-xl font-bold">SK Fabricator & Erector</h1>
-        </div>
-      </header>
-
       <!-- Gallery Page Content (Using the new gallery-page structure) -->
       <div class="gallery-page py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +34,7 @@
                       [class]="[
                           'px-6 py-2 rounded-full font-medium transition duration-150 border border-gray-200 shadow-md',
                           activeFilter() === category
-                            ? 'bg-sk-primary text-white shadow-lg transform scale-105'
+                            ? 'bg-sk-primary text-black shadow-lg transform scale-105'
                             : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg'
                       ].join(' ')">
                 {{ category }}
@@ -76,12 +68,5 @@
 
         </div>
       </div>
-
-      <!-- Footer -->
-      <footer class="bg-gray-900 text-white p-4 mt-auto">
-        <div class="container mx-auto text-center text-sm opacity-75">
-          &copy; {{ currentYear }} SK Fabricator & Erector.
-        </div>
-      </footer>
     </div>
   

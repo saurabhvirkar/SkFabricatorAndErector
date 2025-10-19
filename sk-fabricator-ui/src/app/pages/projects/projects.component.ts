@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Project } from '../../_models/data.model';
 
 /**
  * Define the strict union type for project categories.
@@ -6,14 +7,6 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
  * the categories array and the signal match the setFilter function signature.
  */
 type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
-
-interface Project {
-  id: number;
-  title: string;
-  category: ProjectCategory;
-  description: string;
-  imageUrl: string;
-}
 
 /**
  * The main application component.

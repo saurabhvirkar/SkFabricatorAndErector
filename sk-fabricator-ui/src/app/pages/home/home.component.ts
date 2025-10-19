@@ -14,5 +14,6 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent {
   private dataService = inject(DataService);
+  // featuredServices now pulls the first 3 from the updated list
   featuredServices = this.dataService.getServices().slice(0, 3);
 }

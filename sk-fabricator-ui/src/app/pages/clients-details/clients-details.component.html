@@ -1,0 +1,30 @@
+<div class="client-details-page py-12 bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Our Valued Clients</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        We are proud to partner with industry leaders across various sectors, delivering excellence in every project.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-8 items-center justify-center">
+      @for (client of clientDetails; track client.id) {
+        <div class="bg-white rounded-lg shadow-md flex justify-center items-center h-24 transition duration-300 hover:shadow-xl hover:scale-105 overflow-hidden">
+          <img [src]="client.imageUrl" [alt]="client.name + ' Logo'"
+               class="w-full h-full object-cover transition duration-300">
+        </div>
+      }
+    </div>
+
+    <section class="mt-16 bg-blue-100 p-10 rounded-xl text-center shadow-lg">
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Want to become our next partner?</h3>
+      <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+        We are ready to take on your next industrial challenge and deliver integrated, high-value solutions.
+      </p>
+      <a href="/contact" class="inline-block px-8 py-3 text-lg font-medium text-white bg-sk-primary rounded-xl hover:bg-blue-700 transition duration-300 shadow-xl">
+        Contact Us Today
+      </a>
+    </section>
+
+  </div>
+</div>

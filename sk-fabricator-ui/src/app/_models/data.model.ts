@@ -5,14 +5,6 @@ export interface TeamMember {
   imageUrl: string;
 }
 
-// export interface Project {
-//   id: number;
-//   title: string;
-//   category: 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
-//   description: string;
-//   imageUrl: string;
-// }
-
 /**
  * Define the strict union type for project categories.
  * This resolves the TypeScript error in the template by ensuring
@@ -41,4 +33,10 @@ export interface Accolade {
   title: string;
   count: number;
   suffix: string;
+}
+
+export interface ClientDetails {
+  id: number;
+  name: string;
+  imageUrl: string;
 }
