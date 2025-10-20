@@ -1,16 +1,25 @@
-<div class="home-page">
+<div class="home-page min-w-full">
   <!-- Hero Section -->
-  <section class="relative h-[70vh] md:h-[80vh] bg-cover bg-center text-white" style="background-image: url('assets/photo1.jpg');">
+  <section class="relative text-white overflow-hidden">
+    <!-- Background Image Slider -->
+    @for (slide of backgroundSlides; track slide; let i = $index) {
+      <div 
+        class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+        [style.background-image]="'url(' + slide + ')'"
+        [class.opacity-100]="currentSlideIndex === i"
+        [class.opacity-0]="currentSlideIndex !== i"
+        role="img"
+        [attr.aria-label]="'Hero background image ' + (i + 1)"
+      ></div>
+    }
+
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center items-start relative z-10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center py-32 md:py-48">
       <div class="max-w-3xl">
-        <p class="text-lg uppercase font-semibold text-blue-300 mb-2 animate-fade-in-down">
-          Perfection Through Precision
-        </p>
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 animate-fade-in-up">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 animate-fade-in-up">
           Expert Contractors for Industrial Piping, Fabrication, and Erection
         </h1>
-        <p class="text-xl text-gray-200 mb-8 animate-fade-in-up animation-delay-300">
+        <p class="text-lg md:text-xl text-gray-200 mb-8 animate-fade-in-up animation-delay-300">
           Integrated solutions for structural design, fabrication, piping, and plant maintenance for leading industrial sectors.
         </p>
         <a routerLink="/projects"

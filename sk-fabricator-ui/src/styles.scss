@@ -82,3 +82,9 @@ but we can define some custom variables or base styles here.
 // @import 'tailwindcss/base';
 // @import 'tailwindcss/components';
 // @import 'tailwindcss/utilities';
+
+/* Add a min-width to the body to prevent layout collapse on zoom-out */
+body {
+  min-width: 320px; /* A common min-width for mobile-first designs */
+  padding-top: 5rem; /* 80px, to offset the fixed h-20 header */
+}

@@ -1,64 +1,88 @@
-<header class="bg-gray-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50 transition-all duration-300">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <a routerLink="/" class="flex items-center space-x-3">
-        <img src="assets/sk_logo.png" alt="SK Fabricator & Erector Logo" class="h-10 w-auto">
-        <span class="text-2xl font-bold text-white tracking-wider">SK Fabricator</span>
+<header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center gap-x-3" aria-label="SK Fabricator & Erector Home">
+        <div class="bg-sk-primary text-black font-black text-2xl w-12 h-12 flex items-center justify-center rounded-lg shadow-sm">
+          SK
+        </div>
+        <div class="hidden sm:flex flex-col leading-tight">
+          <span class="text-xl font-bold text-gray-800">
+            Fabricator & Erector
+          </span>
+          <span class="text-xs text-gray-500 font-medium">
+            Perfection Through Precision
+          </span>
+        </div>
       </a>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center space-x-2">
-        @for (item of navItems; track item.label) {
-          <a [routerLink]="item.link"
-             routerLinkActive="bg-gray-700 text-white"
-             [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-             class="text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-            {{ item.label }}
+      <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+        @if (navItems$ | async; as navItems) {
+          @for (item of navItems; track item.link) {
+            <a [routerLink]="item.link" routerLinkActive="text-sk-primary border-b-2 border-sk-primary"
+              [routerLinkActiveOptions]="{exact: item.link === '/'}"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-sk-primary transition-colors duration-200">
+              {{ item.label }}
+            </a>
+          }
+        }
+        <!-- Login/Logout Button -->
+        @if (isLoggedIn$ | async) {
+          <button (click)="logout()" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors">
+            Logout
+          </button>
+        } @else {
+          <a routerLink="/login" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+            Admin Login
           </a>
         }
-      </nav>
-
-      <div class="hidden md:flex items-center space-x-4">
-        <a routerLink="/admin"
-           class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform duration-200 transform hover:scale-105 shadow-md">
-          Admin Login
-        </a>
       </div>
 
       <!-- Mobile Menu Button -->
-      <div class="md:hidden">
-        <button (click)="isMenuOpen = !isMenuOpen" class="text-gray-400 hover:text-white focus:outline-none">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            @if (!isMenuOpen) {
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            } @else {
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            }
+      <div class="md:hidden flex items-center">
+        <button (click)="toggleMenu()" type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-sk-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sk-primary"
+          aria-controls="mobile-menu" [attr.aria-expanded]="isMenuOpen">
+          <span class="sr-only">Open main menu</span>
+          <!-- Icon for menu (hamburger) -->
+          <svg *ngIf="!isMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+          <!-- Icon for close (X) -->
+          <svg *ngIf="isMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu md:hidden" [class.open]="isMenuOpen">
-    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-      @for (item of navItems; track item.label) {
-        <a [routerLink]="item.link"
-           routerLinkActive="bg-gray-700 text-white"
-           (click)="isMenuOpen = false"
-           class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
-          {{ item.label }}
-        </a>
-      }
+  <!-- Mobile menu, show/hide based on menu state. -->
+  @if (isMenuOpen) {
+    <div class="md:hidden bg-white border-t border-gray-200" id="mobile-menu">
+      @if (navItems$ | async; as navItems) {
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          @for (item of navItems; track item.link) {
+            <a [routerLink]="item.link" routerLinkActive="bg-blue-50 text-sk-primary" (click)="toggleMenu()"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+              {{ item.label }}
+            </a>
+          }
+          <!-- Mobile Login/Logout -->
+          <div class="border-t border-gray-200 mt-2 pt-2">
+            @if (isLoggedIn$ | async) {
+              <button (click)="logout()" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-700 hover:bg-red-50">
+                Logout
+              </button>
+            } @else {
+              <a routerLink="/login" (click)="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+                Admin Login
+              </a>
+            }
+          </div>
+        </div>
+        }
     </div>
-    <div class="border-t border-gray-700 pt-4 pb-3">
-      <div class="flex items-center px-5">
-        <a routerLink="/admin" (click)="isMenuOpen = false"
-           class="w-full text-center bg-blue-600 text-white px-4 py-2 rounded-md text-base font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-          Admin Login
-        </a>
-      </div>
-    </div>
-  </div>
+  }
 </header>

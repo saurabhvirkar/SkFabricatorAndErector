@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // Define the interface to clearly define the expected structure (optional: class)
 interface NavItem {
@@ -19,8 +22,14 @@ interface NavItem {
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  // Use the defined interface for better type checking
-  navItems: NavItem[] = [ 
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  isLoggedIn$ = this.authService.isLoggedIn$;
+  isMenuOpen = false;
+
+  // Base navigation items
+  baseNavItems: NavItem[] = [
     { label: 'Home', link: '/' },
     { label: 'About', link: '/about' },
     { label: 'Services', link: '/services' },
@@ -28,12 +37,29 @@ export class HeaderComponent {
     { label: 'Clients', link: '/clients' },
     { label: 'Team', link: '/team' },
     { label: 'Gallery', link: '/gallery' },
-    // You could add an item with a class like this:
-    // { label: 'Admin', link: '/admin', class: 'border-2 border-red-500' }
   ];
-  isMenuOpen = false;
+
+  // Admin-only navigation item
+  adminNavItem: NavItem = { label: 'Inquiries', link: '/inquiries' };
+
+  // Combine base and admin items based on login state
+  navItems$ = combineLatest([
+    this.authService.isLoggedIn$,
+    this.authService.currentUserRole$
+  ]).pipe(
+    map(([isLoggedIn, role]) => {
+      const isAdminOrManager = role === 'admin' || role === 'manager';
+      return isLoggedIn && isAdminOrManager ? [...this.baseNavItems, this.adminNavItem] : this.baseNavItems;
+    })
+  );
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']); // Navigate to home after logout
+    this.isMenuOpen = false; // Close mobile menu on logout
   }
 }

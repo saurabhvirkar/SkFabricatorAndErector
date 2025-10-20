@@ -1,18 +1,19 @@
-<!-- Page Header -->
-<header class="bg-gray-900 text-white pt-32 pb-20">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h1 class="text-5xl font-extrabold mb-4 animate-fade-in-down">Our Completed Projects</h1>
-    <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
-      A showcase of our commitment to quality, speed, and precision across various industrial sectors.
-    </p>
-  </div>
-</header>
-
-<!-- Main Content -->
-<main class="py-20 bg-gray-50">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Filter Buttons -->
-    <div class="flex justify-center flex-wrap gap-4 mb-12">
+<div class="projects-page min-w-full">
+  <!-- Page Header -->
+  <header class="bg-gray-900 text-white pt-12 pb-20">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-5xl font-extrabold mb-4 animate-fade-in-down">Our Completed Projects</h1>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
+        A showcase of our commitment to quality, speed, and precision across various industrial sectors.
+      </p>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Filter Buttons -->
+      <div class="flex justify-center flex-wrap gap-4 mb-12">
       @for (category of categories; track category) {
         <button (click)="setFilter(category)"
                 [class]="'px-6 py-2 rounded-full font-semibold text-sm transition-all duration-200 border-2 ' + (activeFilter() === category ? 'bg-blue-600 text-white border-blue-600 shadow-lg' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 hover:border-gray-300')">
@@ -20,29 +21,30 @@
         </button>
       }
     </div>
-
-    <!-- Projects Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      @for (project of filteredProjects(); track project.id) {
-        <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2">
-          <div class="h-56 overflow-hidden">
-            <img [src]="project.imageUrl" [alt]="project.title"
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+  
+      <!-- Projects Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (project of filteredProjects(); track project.id) {
+          <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2">
+            <div class="h-56 overflow-hidden">
+              <img [src]="project.imageUrl" [alt]="project.title"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            </div>
+            <div class="p-6">
+              <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2 px-3 py-1 rounded-full bg-blue-100">
+                {{ project.category }}
+              </span>
+              <h2 class="text-xl font-bold text-gray-900 mb-2">{{ project.title }}</h2>
+              <p class="text-gray-600 text-sm">{{ project.description }}</p>
+            </div>
           </div>
-          <div class="p-6">
-            <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2 px-3 py-1 rounded-full bg-blue-100">
-              {{ project.category }}
-            </span>
-            <h2 class="text-xl font-bold text-gray-900 mb-2">{{ project.title }}</h2>
-            <p class="text-gray-600 text-sm">{{ project.description }}</p>
+        } @empty {
+          <div class="col-span-full text-center py-16 text-gray-500">
+            <p class="text-2xl font-semibold">No projects found.</p>
+            <p class="mt-2">Please try another category.</p>
           </div>
-        </div>
-      } @empty {
-        <div class="col-span-full text-center py-16 text-gray-500">
-          <p class="text-2xl font-semibold">No projects found.</p>
-          <p class="mt-2">Please try another category.</p>
-        </div>
-      }
+        }
+      </div>
     </div>
-  </div>
-</main>
+  </main>
+</div>

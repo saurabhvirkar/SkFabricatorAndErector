@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../api.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 })
 export class AdminLoginComponent {
   private fb = inject(FormBuilder);
-  private apiService = inject(ApiService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -35,23 +35,22 @@ export class AdminLoginComponent {
     this.submissionStatus.set('loading');
     this.responseMessage.set('');
 
-    this.apiService.adminLogin(this.loginForm.value).subscribe(
-      res => {
-        if (res.success) {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        if (response.success) {
           this.submissionStatus.set('success');
           this.responseMessage.set('Login successful! Redirecting...');
-          // In a real app, store token (res.token) and navigate to the admin dashboard
-          setTimeout(() => this.router.navigate(['/']), 1000); // Mock redirect
+          this.router.navigate(['/']); // Navigate to home on successful login
         } else {
           this.submissionStatus.set('error');
-          this.responseMessage.set(res.message);
+          this.responseMessage.set(response.message);
         }
       },
-      error => {
+      error: (error) => {
         this.submissionStatus.set('error');
         this.responseMessage.set('A communication error occurred.');
         console.error('Login Error:', error);
       }
-    );
+    });
   }
 }
