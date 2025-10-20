@@ -4,11 +4,12 @@ import { AccoladesComponent } from '../../accolades/accolades.component';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { DataService } from '../../_services/data.service';
 import { RouterLink } from '@angular/router';
+import { AboutDetailsComponent } from "../about-details/about-details.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, AccoladesComponent, InquiryFormComponent, RouterLink],
+  imports: [CommonModule, InquiryFormComponent, RouterLink, AboutDetailsComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

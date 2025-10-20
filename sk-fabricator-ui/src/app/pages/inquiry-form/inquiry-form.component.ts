@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../api.service';
 import { Inquiry } from '../../_models/inquiry.model';
+import { ContactMapComponent } from '../contact-map/contact-map.component';
 
 @Component({
   selector: 'app-inquiry-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ContactMapComponent],
   templateUrl: './inquiry-form.component.html',
   styleUrls: ['./inquiry-form.component.scss'],
 })

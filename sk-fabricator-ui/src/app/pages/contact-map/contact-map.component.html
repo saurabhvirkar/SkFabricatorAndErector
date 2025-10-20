@@ -1,0 +1,35 @@
+<div class="space-y-8 h-full flex flex-col justify-between">
+  <div class="rounded-xl overflow-hidden shadow-xl flex-grow md:h-2/3">
+    <h3 class="sr-only">Our Location</h3>
+    <iframe
+      [src]="safeMapUrl"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="w-full h-full min-h-[300px] md:min-h-0"
+      frameborder="0">
+    </iframe>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-sk-primary">
+    <h3 class="text-xl font-bold text-gray-800 mb-4">Contact Information</h3>
+    <div class="space-y-3 text-gray-700">
+      <div class="flex items-start">
+        <span class="text-sk-primary mr-3 text-lg mt-1">📍</span>
+        <p class="font-medium">{{ address }}</p>
+      </div>
+      <div class="flex items-center">
+        <span class="text-sk-primary mr-3 text-lg">📧</span>
+        <a [href]="'mailto:' + email" class="hover:text-sk-primary transition">{{ email }}</a>
+      </div>
+      <div class="flex items-center">
+        <span class="text-sk-primary mr-3 text-lg">📞</span>
+        <div class="flex flex-col">
+          <a [href]="'tel:' + phoneNumber1" class="hover:text-sk-primary transition">{{ phoneNumber1 }}</a>
+          <a [href]="'tel:' + phoneNumber2" class="hover:text-sk-primary transition">{{ phoneNumber2 }}</a>
+          <a [href]="'tel:' + phoneNumber3" class="hover:text-sk-primary transition">{{ phoneNumber3 }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
