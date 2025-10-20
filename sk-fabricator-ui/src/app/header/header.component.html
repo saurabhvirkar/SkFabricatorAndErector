@@ -1,56 +1,64 @@
-<header class="bg-white shadow-xl fixed w-full top-0 z-40 border-b border-blue-100">
+<header class="bg-gray-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50 transition-all duration-300">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-20">
-      
-      <a routerLink="/" class="text-3xl font-extrabold text-gray-800 tracking-tight flex items-center">
-        <svg class="w-6 h-6 mr-2 text-sk-primary" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.25a.75.75 0 011.08.75l-4 4a.75.75 0 01-1.08 0l-4-4a.75.75 0 011.08-.75L9 5.06l-.54-.54a.75.75 0 00-1.06 1.06l.54.54-4 4a.75.75 0 001.06 1.06L9 7.06l-.54-.54a.75.75 0 011.06-1.06l.54.54 4-4a.75.75 0 01.18-.8z" clip-rule="evenodd" /></svg>
-        SK Fabricator & Erector
+    <div class="flex items-center justify-between h-16">
+      <a routerLink="/" class="flex items-center space-x-3">
+        <img src="assets/sk_logo.png" alt="SK Fabricator & Erector Logo" class="h-10 w-auto">
+        <span class="text-2xl font-bold text-white tracking-wider">SK Fabricator</span>
       </a>
 
-      <nav class="hidden md:flex space-x-6 items-center">
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-2">
         @for (item of navItems; track item.label) {
-          <a [routerLink]="item.link" 
-             routerLinkActive="text-sk-primary font-bold border-b-2 border-sk-primary"
+          <a [routerLink]="item.link"
+             routerLinkActive="bg-gray-700 text-white"
              [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-             class="text-gray-600 hover:text-sk-primary hover:bg-blue-50/50 px-2 py-2 rounded-md transition duration-200 text-base">
+             class="text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
             {{ item.label }}
           </a>
         }
-        
-        <a routerLink="/admin"
-           class="px-5 py-2 text-base font-medium text-black **bg-blue-600** rounded-full hover:bg-blue-700 transition duration-200 shadow-lg ml-4">
-          Admin Login
-        </a>
       </nav>
 
-      <button (click)="isMenuOpen = !isMenuOpen" class="md:hidden p-2 rounded-md text-gray-700 hover:text-sk-primary transition focus:outline-none focus:ring-2 focus:ring-sk-primary">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          @if (!isMenuOpen) {
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-          } @else {
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          }
-        </svg>
-      </button>
+      <div class="hidden md:flex items-center space-x-4">
+        <a routerLink="/admin"
+           class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform duration-200 transform hover:scale-105 shadow-md">
+          Admin Login
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button (click)="isMenuOpen = !isMenuOpen" class="text-gray-400 hover:text-white focus:outline-none">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (!isMenuOpen) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            }
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
-  @if (isMenuOpen) {
-    <div class="md:hidden bg-gray-50 border-t border-gray-200 py-3 shadow-inner">
+  <!-- Mobile Menu -->
+  <div class="mobile-menu md:hidden" [class.open]="isMenuOpen">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
       @for (item of navItems; track item.label) {
-        <a (click)="isMenuOpen = false"
-           [routerLink]="item.link" 
-           routerLinkActive="bg-blue-100 text-sk-primary font-semibold"
-           [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-           class="block px-6 py-3 text-gray-700 hover:bg-blue-50 transition duration-150 border-b border-gray-100">
+        <a [routerLink]="item.link"
+           routerLinkActive="bg-gray-700 text-white"
+           (click)="isMenuOpen = false"
+           class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
           {{ item.label }}
         </a>
       }
-      <a (click)="isMenuOpen = false"
-         routerLink="/admin"
-         class="block px-6 py-3 mt-2 **text-black** bg-sk-primary text-center hover:bg-blue-700 transition duration-150">
-        Admin Login
-      </a>
     </div>
-  }
+    <div class="border-t border-gray-700 pt-4 pb-3">
+      <div class="flex items-center px-5">
+        <a routerLink="/admin" (click)="isMenuOpen = false"
+           class="w-full text-center bg-blue-600 text-white px-4 py-2 rounded-md text-base font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+          Admin Login
+        </a>
+      </div>
+    </div>
+  </div>
 </header>

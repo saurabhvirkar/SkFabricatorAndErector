@@ -9,7 +9,7 @@ import { AboutDetailsComponent } from "../about-details/about-details.component"
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, InquiryFormComponent, RouterLink, AboutDetailsComponent],
+  imports: [CommonModule, AccoladesComponent, InquiryFormComponent, RouterLink, AboutDetailsComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

@@ -1,2 +1,15 @@
 /* header styles */
-.logo{height:56px}
+.logo {
+  height: 56px;
+}
+
+/* Mobile Menu Animation */
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.mobile-menu.open {
+  max-height: 500px; /* Adjust as needed */
+}

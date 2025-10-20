@@ -32,4 +32,8 @@ export class HeaderComponent {
     // { label: 'Admin', link: '/admin', class: 'border-2 border-red-500' }
   ];
   isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

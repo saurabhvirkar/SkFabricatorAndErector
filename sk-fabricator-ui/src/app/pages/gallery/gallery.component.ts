@@ -32,16 +32,17 @@ export class GalleryComponent {
 
   // Gallery image data (replacing the previous 'allProjects')
   private allImages: Image[] = [
-    { id: 1, url: 'https://placehold.co/600x400/374151/ffffff?text=Piping+Work', alt: 'Piping Installation', category: 'Piping' },
-    { id: 2, url: 'https://placehold.co/600x400/374151/ffffff?text=Erection+Crane', alt: 'Equipment Erection', category: 'Erection' },
-    { id: 3, url: 'https://placehold.co/600x400/374151/ffffff?text=Tank+Fabrication', alt: 'Storage Tank Fabrication', category: 'Fabrication' },
-    { id: 4, url: 'https://placehold.co/600x400/374151/ffffff?text=Onsite+Welding', alt: 'Onsite Welding Job', category: 'Maintenance' },
+    { id: 1, url: 'assets/photo1.jpg', alt: 'Piping Installation', category: 'Piping' },
+    { id: 2, url: 'assets/photo2.jpg', alt: 'Equipment Erection', category: 'Erection' },
+    { id: 3, url: 'assets/photo3.jpg', alt: 'Storage Tank Fabrication', category: 'Fabrication' },
+    { id: 4, url: 'assets/photo4.jpg', alt: 'Onsite Welding Job', category: 'Maintenance' },
     { id: 5, url: 'https://placehold.co/600x400/374151/ffffff?text=Industrial+Structure', alt: 'New Structure', category: 'Fabrication' },
     { id: 6, url: 'https://placehold.co/600x400/374151/ffffff?text=Maintenance+Crew', alt: 'Shutdown Maintenance', category: 'Maintenance' },
   ];
 
   // State
   activeFilter = signal<ImageCategory>('All'); 
+  selectedImage = signal<Image | null>(null);
 
   // Derived State (Computed Signal)
   filteredImages = computed(() => {
@@ -60,5 +61,20 @@ export class GalleryComponent {
   setFilter(category: ImageCategory) {
     // FIX: The component logic now correctly handles the filtering based on the strong type.
     this.activeFilter.set(category);
+  }
+
+  /**
+   * Opens the lightbox with the selected image.
+   * @param image The image to display in the lightbox.
+   */
+  openLightbox(image: Image) {
+    this.selectedImage.set(image);
+  }
+
+  /**
+   * Closes the lightbox.
+   */
+  closeLightbox() {
+    this.selectedImage.set(null);
   }
 }
