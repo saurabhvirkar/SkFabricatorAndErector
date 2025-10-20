@@ -13,18 +13,7 @@ import { FooterComponent } from './footer/footer.component';
     HeaderComponent,
     FooterComponent
   ],
-  template: `
-    <!-- Main layout using the standalone components -->
-    <app-header></app-header>
-    <main class="router-content">
-      <router-outlet></router-outlet>
-    </main>
-    <app-footer></app-footer>
-  `,
-  styles: [`
-    .router-content {
-      min-height: 80vh; /* Ensures footer stays at the bottom */
-    }
-  `]
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class App { }
+export class AppComponent { }
