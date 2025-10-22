@@ -62,7 +62,7 @@ using (var scope = app.Services.CreateScope())
         await context.Database.MigrateAsync();
         logger.LogInformation("Database migrations applied successfully.");
 
-        await SeedData.InitializeAsync(services);
+        await SeedData.InitializeAsync(services, builder.Configuration);
         logger.LogInformation("Database seeded successfully.");
     }
     catch (Exception ex)
