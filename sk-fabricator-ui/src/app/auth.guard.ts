@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   return authService.currentUserRole$.pipe(
     map(role => {
-      if (role && expectedRoles.includes(role)) {
+      if (role && expectedRoles.some(expectedRole => expectedRole.toLowerCase() === role.toLowerCase())) {
         return true;
       }
       return router.createUrlTree(['/login']);

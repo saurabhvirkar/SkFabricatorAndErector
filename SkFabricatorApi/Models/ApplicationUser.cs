@@ -4,6 +4,9 @@ namespace SkFabricatorApi.Models
 {
     public class ApplicationUser : IdentityUser
     {
-    public string? Role { get; set; } // "Admin" or "Manager"
+        // Add this property to store the user's primary role
+        public string? Role { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

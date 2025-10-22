@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using SkFabricatorApi.Data;
+using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
+using SkFabricatorApi.Repositories;
 using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace SkFabricatorApi.Controllers
 {
@@ -11,27 +10,27 @@ namespace SkFabricatorApi.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ProjectsController(AppDbContext context)
+        private readonly IProjectRepository _projectRepository;
+        public ProjectsController(IProjectRepository projectRepository)
         {
-            _context = context;
+            _projectRepository = projectRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var projects = await _context.Projects.ToListAsync();
+            var projects = await _projectRepository.GetAllAsync();
             return Ok(projects);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Add([FromBody] Project project)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            _context.Projects.Add(project);
-            await _context.SaveChangesAsync();
-            return Ok(project);
+            var newProject = await _projectRepository.AddAsync(project);
+            return CreatedAtAction(nameof(GetAll), new { id = newProject.Id }, newProject);
         }
     }
 }

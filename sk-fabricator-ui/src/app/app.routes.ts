@@ -10,9 +10,9 @@ import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: AdminLoginComponent },
+  { path: 'login', component: AdminLoginComponent }, // This is correct
   { 
-    path: 'inquiries', 
+    path: 'inquiries',
     component: InquiryDetailsComponent, 
     canActivate: [authGuard],
     data: { roles: ['admin', 'manager'] }

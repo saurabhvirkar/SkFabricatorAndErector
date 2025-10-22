@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { Inquiry } from './_models/inquiry.model';
+import { Observable } from 'rxjs';
+import { Inquiry } from './_models/inquiry.model'; // Assuming this model exists
+import { environment } from './environments/environment';
 
 /**
  * A service for handling external API calls like form submissions or admin login.
@@ -12,38 +13,34 @@ import { Inquiry } from './_models/inquiry.model';
 })
 export class ApiService {
   private http = inject(HttpClient);
-  // The proxy will forward requests starting with /api to your backend
-  private apiUrl = '/api';
+  // The proxy forwards requests starting with /api to your backend
+  private apiUrl = environment.apiUrl;
 
   /**
    * Submits the inquiry form data to the backend API.
    */
   submitInquiry(inquiryData: Inquiry): Observable<{ success: boolean, message: string }> {
-    debugger
-    return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/Inquiry`, inquiryData);
+    return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/inquiry`, inquiryData);
   }
   
   // Mock admin login
-  adminLogin(credentials: any): Observable<{ success: boolean, token?: string, message: string, role?: string }> {
-    console.log('Attempting admin login:', credentials);
-    if (credentials.username === 'admin' && credentials.password === 'admin') {
-      return of({ success: true, token: 'mock-jwt-token-admin', message: 'Login successful.', role: 'admin' });
-    }
-    return of({ success: false, message: 'Invalid username or password.' });
+  adminLogin(credentials: any): Observable<{ token: string, refreshToken: string, email: string, role: string }> {  
+    return this.http.post<{ token: string, refreshToken: string, email: string, role: string }>(`${this.apiUrl}/account/login`, credentials);
   }
 
-  // Mock get inquiries
+  // Refresh token
+  refreshToken(tokens: { accessToken: string | null, refreshToken: string | null }): Observable<{ token: string, refreshToken: string }> {
+    return this.http.post<{ token: string, refreshToken: string }>(`${this.apiUrl}/account/refresh-token`, tokens);
+  }
+
+  // Get inquiries from the backend (requires authorization)
   getInquiries(): Observable<Inquiry[]> {
-    const mockInquiries: Inquiry[] = [
-      { name: 'John Doe', email: 'john.doe@example.com', subject: 'Piping Project', message: 'Looking for a quote on a new piping installation.', phone: '123-456-7890', category: 'Piping', preferredContact: 'Email' },
-      { name: 'Jane Smith', email: 'jane.smith@example.com', subject: 'Fabrication Inquiry', message: 'Need custom steel fabrication for a warehouse.', phone: '987-654-3210', category: 'Fabrication', preferredContact: 'Phone' },
-    ];
-    return of(mockInquiries);
+    // The AuthInterceptor automatically adds the Authorization header.
+    return this.http.get<Inquiry[]>(`${this.apiUrl}/inquiry`);
   }
 
-  // Mock newsletter subscription
+  // Real newsletter subscription
   subscribeNewsletter(email: string): Observable<{ success: boolean, message: string }> {
-    console.log('Subscribing email:', email);
-    return of({ success: true, message: 'Subscription successful. Check your email to confirm.' });
+    return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/newsletter`, { email });
   }
 }

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using SkFabricatorApi.Data;
+using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
+using SkFabricatorApi.Repositories;
 using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace SkFabricatorApi.Controllers
 {
@@ -11,26 +10,27 @@ namespace SkFabricatorApi.Controllers
     [Route("api/[controller]")]
     public class NewsletterController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public NewsletterController(AppDbContext context)
+        private readonly INewsletterRepository _newsletterRepository;
+        public NewsletterController(INewsletterRepository newsletterRepository)
         {
-            _context = context;
+            _newsletterRepository = newsletterRepository;
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Subscribe([FromBody] NewsletterSubscription sub)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            _context.NewsletterSubscriptions.Add(sub);
-            await _context.SaveChangesAsync();
+            await _newsletterRepository.AddAsync(sub);
             return Ok(new { success = true });
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetAll()
         {
-            var subs = await _context.NewsletterSubscriptions.OrderByDescending(s => s.SubscribedAt).ToListAsync();
+            var subs = await _newsletterRepository.GetAllAsync();
             return Ok(subs);
         }
     }

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using SkFabricatorApi.Data;
+using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
+using SkFabricatorApi.Repositories;
 using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace SkFabricatorApi.Controllers
 {
@@ -11,27 +10,27 @@ namespace SkFabricatorApi.Controllers
     [Route("api/[controller]")]
     public class ServicesController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ServicesController(AppDbContext context)
+        private readonly IServiceRepository _serviceRepository;
+        public ServicesController(IServiceRepository serviceRepository)
         {
-            _context = context;
+            _serviceRepository = serviceRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var services = await _context.Services.ToListAsync();
+            var services = await _serviceRepository.GetAllAsync();
             return Ok(services);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Add([FromBody] Service service)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            _context.Services.Add(service);
-            await _context.SaveChangesAsync();
-            return Ok(service);
+            var newService = await _serviceRepository.AddAsync(service);
+            return CreatedAtAction(nameof(GetAll), new { id = newService.Id }, newService);
         }
     }
 }

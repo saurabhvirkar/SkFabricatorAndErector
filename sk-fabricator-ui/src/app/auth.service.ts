@@ -1,14 +1,16 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiService = inject(ApiService);
+  private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -19,7 +21,7 @@ export class AuthService {
 
   private hasToken(): boolean {
     if (isPlatformBrowser(this.platformId)) {
-      return !!localStorage.getItem('auth_token');
+      return !!localStorage.getItem('jwt_token');
     }
     return false;
   }
@@ -31,13 +33,40 @@ export class AuthService {
     return null;
   }
 
-  login(credentials: any): Observable<{ success: boolean; message: string; token?: string; role?: string }> {
+  getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('jwt_token');
+    }
+    return null;
+  }
+
+  getRefreshToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('refresh_token');
+    }
+    return null;
+  }
+
+  refreshToken(): Observable<any> {
+    const accessToken = this.getToken();
+    const refreshToken = this.getRefreshToken();
+    return this.apiService.refreshToken({ accessToken, refreshToken }).pipe(
+      tap((tokens: { token: string, refreshToken: string }) => {
+        this.storeTokens(tokens.token, tokens.refreshToken);
+      }),
+      catchError(error => {
+        this.logout(); // If refresh fails, log the user out
+        return throwError(() => error);
+      })
+    );
+  }
+
+  login(credentials: any): Observable<{ token: string, refreshToken: string, email: string, role: string }> {
     return this.apiService.adminLogin(credentials).pipe(
       tap(response => {
-        if (response.success && response.token && response.role) {
+        if (response && response.token && response.role) {
           if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('auth_token', response.token);
-            localStorage.setItem('user_role', response.role);
+            this.storeTokens(response.token, response.refreshToken, response.role);
           }
           this.isLoggedInSubject.next(true);
           this.currentUserRoleSubject.next(response.role);
@@ -48,11 +77,22 @@ export class AuthService {
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('refresh_token');
       localStorage.removeItem('user_role');
     }
     this.isLoggedInSubject.next(false);
     this.currentUserRoleSubject.next(null);
-    // Optionally, navigate to the home page or login page
+    this.router.navigate(['/login']);
+  }
+
+  private storeTokens(accessToken: string, refreshToken: string, role?: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('jwt_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken);
+      if (role) {
+        localStorage.setItem('user_role', role);
+      }
+    }
   }
 }

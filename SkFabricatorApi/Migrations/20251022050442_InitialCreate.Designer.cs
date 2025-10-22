@@ -11,8 +11,8 @@ using SkFabricatorApi.Data;
 namespace SkFabricatorApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250929105412_RemoveServiceTypeFromInquiry")]
-    partial class RemoveServiceTypeFromInquiry
+    [Migration("20251022050442_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,6 +190,12 @@ namespace SkFabricatorApi.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
@@ -232,6 +238,7 @@ namespace SkFabricatorApi.Migrations
 
                     b.Property<string>("Message")
                         .IsRequired()
+                        .HasMaxLength(2000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

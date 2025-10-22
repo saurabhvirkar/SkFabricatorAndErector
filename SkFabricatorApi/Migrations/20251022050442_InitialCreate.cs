@@ -31,6 +31,8 @@ namespace SkFabricatorApi.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     Role = table.Column<string>(type: "TEXT", nullable: true),
+                    RefreshToken = table.Column<string>(type: "TEXT", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -57,9 +59,13 @@ namespace SkFabricatorApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Message = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
+                    Subject = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    Category = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    PreferredContact = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    Message = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
                     SubmittedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
