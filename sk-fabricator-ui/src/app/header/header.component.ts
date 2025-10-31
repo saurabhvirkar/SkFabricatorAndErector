@@ -26,6 +26,7 @@ export class HeaderComponent {
   private router = inject(Router);
 
   isLoggedIn$ = this.authService.isLoggedIn$;
+  currentUserRole$ = this.authService.currentUserRole$;
   isMenuOpen = false;
 
   // Base navigation items

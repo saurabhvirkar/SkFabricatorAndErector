@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Services;
-using System;
 
 namespace SkFabricatorApi.Controllers
 {
@@ -19,26 +18,30 @@ namespace SkFabricatorApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> SubmitInquiry([FromBody] Inquiry inquiry)
+        public async Task<IActionResult> SubmitInquiryAsync([FromBody] Inquiry inquiry)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                await _inquiryService.CreateInquiryAsync(inquiry);
-                return Ok(new { success = true });
+                var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
+                // Assuming a GetInquiryById endpoint exists or will be created.
+                // For now, we return the created object without a location header.
+                return CreatedAtAction(nameof(GetInquiriesAsync), new { id = createdInquiry.Id }, createdInquiry);
             }
-            catch (Exception ex)
+            catch (Exception) // Consider creating a specific exception type for email failures
             {
-                // In a real app, you would log this exception.
-                return StatusCode(500, $"An internal error occurred: {ex.Message}");
+                // In a real app, you would log this exception with a proper logging framework.
+                return StatusCode(500, "An internal error occurred while processing your request.");
             }
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> GetInquiries()
+        public async Task<IActionResult> GetInquiriesAsync()
         {
             var inquiries = await _inquiryService.GetAllInquiriesAsync();
             return Ok(inquiries);

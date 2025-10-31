@@ -6,11 +6,13 @@ import { TeamComponent } from './pages/team/team.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
 import { InquiryDetailsComponent } from './pages/inquiry-details/inquiry-details.component';
+import { ServicesComponent } from './pages/services/services.component';
 import { authGuard } from './auth.guard';
+import { ClientsDetailsComponent } from './pages/clients-details/clients-details.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: AdminLoginComponent }, // This is correct
+  { path: 'login', component: AdminLoginComponent }, 
   { 
     path: 'inquiries',
     component: InquiryDetailsComponent, 
@@ -21,7 +23,6 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'team', component: TeamComponent },
   { path: 'gallery', component: GalleryComponent },
-  // Temporary routes for pages that are not yet built
-  { path: 'services', component: HomeComponent },
-  { path: 'clients', component: HomeComponent },
+  { path: 'services', component: ServicesComponent },
+  { path: 'clients', component: ClientsDetailsComponent },
 ];
