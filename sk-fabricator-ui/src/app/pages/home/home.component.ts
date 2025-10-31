@@ -27,10 +27,10 @@ export class HomeComponent implements OnDestroy {
 
   // Background slider properties
   backgroundSlides: string[] = [
-    'assets/photo1.jpg',
-    'https://placehold.co/1920x1080/1e40af/ffffff?text=Industrial+Site+2',
-    'https://placehold.co/1920x1080/166534/ffffff?text=Fabrication+Workshop',
-    'https://placehold.co/1920x1080/be123c/ffffff?text=Completed+Project',
+    'https://images.pexels.com/photos/7218568/pexels-photo-7218568.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1',
+    'https://images.pexels.com/photos/224924/pexels-photo-224924.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1',
+    'https://images.pexels.com/photos/4397773/pexels-photo-4397773.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1',
+    'https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1',
   ];
   currentSlideIndex = 0;
   private intervalId: any;

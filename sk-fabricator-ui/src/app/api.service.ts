@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Inquiry } from './_models/inquiry.model'; // Assuming this model exists
 import { environment } from './environments/environment';
+import { GalleryImage } from './_models/data.model';
 
 /**
  * A service for handling external API calls like form submissions or admin login.
@@ -53,4 +54,18 @@ export class ApiService {
   subscribeNewsletter(email: string): Observable<{ success: boolean, message: string }> {
     return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/newsletter`, { email });
   }
+
+  getImages(): Observable<GalleryImage[]> {
+      return this.http.get<GalleryImage[]>(this.apiUrl);
+    }
+  
+    uploadImage(formData: FormData): Observable<GalleryImage> {
+      // The HttpInterceptor will add the auth token
+      return this.http.post<GalleryImage>(this.apiUrl, formData);
+    }
+  
+    deleteImage(id: number): Observable<void> {
+      // The HttpInterceptor will add the auth token
+      return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
 }

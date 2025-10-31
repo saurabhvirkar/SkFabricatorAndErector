@@ -31,13 +31,15 @@ export class GalleryComponent {
   categories: ImageCategory[] = ['All', 'Piping', 'Fabrication', 'Erection', 'Maintenance'];
 
   // Gallery image data (replacing the previous 'allProjects')
-  private allImages: Image[] = [
-    { id: 1, url: 'assets/photo1.jpg', alt: 'Piping Installation', category: 'Piping' },
-    { id: 2, url: 'assets/photo2.jpg', alt: 'Equipment Erection', category: 'Erection' },
-    { id: 3, url: 'assets/photo3.jpg', alt: 'Storage Tank Fabrication', category: 'Fabrication' },
-    { id: 4, url: 'assets/photo4.jpg', alt: 'Onsite Welding Job', category: 'Maintenance' },
-    { id: 5, url: 'https://placehold.co/600x400/374151/ffffff?text=Industrial+Structure', alt: 'New Structure', category: 'Fabrication' },
-    { id: 6, url: 'https://placehold.co/600x400/374151/ffffff?text=Maintenance+Crew', alt: 'Shutdown Maintenance', category: 'Maintenance' },
+  private allImages: Image[] = [ // Updated with premium, relevant images
+    { id: 1, url: 'https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Industrial Piping System', category: 'Piping' },
+    { id: 2, url: 'https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Steel Structure Erection', category: 'Erection' },
+    { id: 3, url: 'https://images.pexels.com/photos/7218525/pexels-photo-7218525.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Precision Welding Fabrication', category: 'Fabrication' },
+    { id: 4, url: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'On-site Equipment Maintenance', category: 'Maintenance' },
+    { id: 5, url: 'https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Crane Lifting Steel Beam', category: 'Erection' },
+    { id: 6, url: 'https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Storage Tank Fabrication', category: 'Fabrication' },
+    { id: 7, url: 'https://images.pexels.com/photos/7218569/pexels-photo-7218569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Complex Pipe Network', category: 'Piping' },
+    { id: 8, url: 'https://images.pexels.com/photos/8346830/pexels-photo-8346830.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Industrial Plant Maintenance', category: 'Maintenance' },
   ];
 
   // State

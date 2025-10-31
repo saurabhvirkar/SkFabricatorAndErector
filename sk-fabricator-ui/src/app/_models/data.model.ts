@@ -24,7 +24,13 @@ export interface Service {
   id: number;
   name: string;
   summary: string;
-  icon: string; // Tailwind icon class or similar
+  icon: string; 
+  image: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };  
 }
 
 export interface Accolade {
@@ -39,4 +45,13 @@ export interface ClientDetails {
   id: number;
   name: string;
   imageUrl: string;
+}
+
+export type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
+
+export interface GalleryImage {
+  id: number;
+  url: string;
+  alt: string;
+  category: ImageCategory;
 }

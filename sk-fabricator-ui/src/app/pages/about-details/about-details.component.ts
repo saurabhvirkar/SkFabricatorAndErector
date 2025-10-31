@@ -17,11 +17,11 @@ export class AboutDetailsComponent implements OnDestroy { // Implements OnDestro
   private platformId = inject(PLATFORM_ID);
   
   // Array of images for the slider
-  slides: string[] = [
-    'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+1',
-    'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+2',
-    'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+3',
-    'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+4',
+  slides: string[] = [ // Updated with premium fabrication and erection images
+    'https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Large scale steel structure erection
+    'https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Interior of a fabrication workshop
+    'https://images.pexels.com/photos/224924/pexels-photo-224924.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Workers on a steel frame
+    'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'  // Close-up of a welder
   ];
 
   currentSlideIndex: number = 0;
@@ -57,7 +57,7 @@ export class AboutDetailsComponent implements OnDestroy { // Implements OnDestro
       }
       this.intervalId = setInterval(() => {
         this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
-      }, 5000); // Slide every 5 seconds
+      }, 3000); // Slide every 3 seconds
     }
   }
 

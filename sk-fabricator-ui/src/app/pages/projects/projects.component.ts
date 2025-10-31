@@ -27,12 +27,12 @@ export class ProjectsComponent {
 
   // Mock data to replace the DataService call
   private allProjects: Project[] = [
-    { id: 1, title: 'Refinery Expansion Phase II', category: 'Piping', description: 'Installation of high-pressure utility and process piping in a major refinery unit.', imageUrl: 'https://placehold.co/600x400/2f4f4f/ffffff?text=Piping+Project+1' },
-    { id: 2, title: 'Structural Steel Warehouse', category: 'Fabrication', description: 'Complete fabrication and delivery of structural steel for a new 50,000 sq ft warehouse.', imageUrl: 'https://placehold.co/600x400/696969/ffffff?text=Fabrication+Project+2' },
-    { id: 3, title: 'Petrochemical Plant Erection', category: 'Erection', description: 'Erection of two large distillation columns and associated equipment on site.', imageUrl: 'https://placehold.co/600x400/a9a9a9/ffffff?text=Erection+Project+3' },
-    { id: 4, title: 'Annual Boiler Maintenance', category: 'Maintenance', description: 'Scheduled major shutdown maintenance and overhaul for industrial boilers and heat exchangers.', imageUrl: 'https://placehold.co/600x400/20b2aa/ffffff?text=Maintenance+Project+4' },
-    { id: 5, title: 'New Storage Tank Farm', category: 'Fabrication', description: 'Design, fabrication, and field-welding of three API 650 storage tanks.', imageUrl: 'https://placehold.co/600x400/4682b4/ffffff?text=Fabrication+Project+5' },
-    { id: 6, title: 'Emergency Pipe Repair', category: 'Piping', description: 'Rapid response repair and replacement of a critical steam line section.', imageUrl: 'https://placehold.co/600x400/87cefa/ffffff?text=Piping+Project+6' },
+    { id: 1, title: 'Refinery Expansion Phase II', category: 'Piping', description: 'Installation of high-pressure utility and process piping in a major refinery unit.', imageUrl: 'https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
+    { id: 2, title: 'Structural Steel Warehouse', category: 'Fabrication', description: 'Complete fabrication and delivery of structural steel for a new 50,000 sq ft warehouse.', imageUrl: 'https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
+    { id: 3, title: 'Petrochemical Plant Erection', category: 'Erection', description: 'Erection of two large distillation columns and associated equipment on site.', imageUrl: 'https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
+    { id: 4, title: 'Annual Boiler Maintenance', category: 'Maintenance', description: 'Scheduled major shutdown maintenance and overhaul for industrial boilers and heat exchangers.', imageUrl: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
+    { id: 5, title: 'New Storage Tank Farm', category: 'Fabrication', description: 'Design, fabrication, and field-welding of three API 650 storage tanks.', imageUrl: 'https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
+    { id: 6, title: 'Emergency Pipe Repair', category: 'Piping', description: 'Rapid response repair and replacement of a critical steam line section.', imageUrl: 'https://images.pexels.com/photos/7218569/pexels-photo-7218569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
   ];
 
   // State

@@ -42,13 +42,22 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         @for (service of featuredServices; track service.id) {
-        <div class="group bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-blue-600">
-          <div class="text-5xl text-blue-600 mb-4 transition-transform duration-300 group-hover:scale-110">{{ service.icon }}</div>
+        <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-blue-600 overflow-hidden flex flex-col">
+          <div class="overflow-hidden">
+            <img 
+              [src]="service.image.src" 
+              [alt]="service.image.alt" 
+              [width]="service.image.width" 
+              [height]="service.image.height" 
+              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
           <h3 class="text-2xl font-bold text-gray-800 mb-3">{{ service.name }}</h3>
           <p class="text-gray-600 mb-4">{{ service.summary }}</p>
           <a routerLink="/services" class="inline-block text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors duration-300">
             Learn More <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
           </a>
+          </div>
         </div>
         }
       </div>
