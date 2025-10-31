@@ -1,6 +1,7 @@
 using SkFabricatorApi.Data;
 using SkFabricatorApi.Extensions;
 using SkFabricatorApi.Models;
+using SkFabricatorApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -16,6 +17,8 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
 // Add custom application services (Repositories, etc.)
 builder.Services.AddApplicationServices();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 // Add framework services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

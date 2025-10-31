@@ -11,5 +11,6 @@ namespace SkFabricatorApi.Data
     public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Service> Services { get; set; }
+    public DbSet<Photo> Photos { get; set; }
     }
 }
