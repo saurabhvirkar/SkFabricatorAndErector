@@ -16,26 +16,26 @@ namespace SkFabricatorApi.Controllers
             _inquiryService = inquiryService;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> SubmitInquiryAsync([FromBody] Inquiry inquiry)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+     [HttpPost]
+[AllowAnonymous]
+public async Task<IActionResult> SubmitInquiryAsync([FromBody] Inquiry inquiry)
+{
+    if (!ModelState.IsValid)
+    {
+        return BadRequest(ModelState);
+    }
 
-            try
-            {
-                var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
-                return CreatedAtAction(nameof(GetInquiryByIdAsync), new { id = createdInquiry.Id }, createdInquiry);
-            }
-            catch (Exception) // Consider creating a specific exception type for email failures
-            {
-                // In a real app, you would log this exception with a proper logging framework.
-                return StatusCode(500, "An internal error occurred while processing your request.");
-            }
-        }
+    try
+    {
+        var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
+        return CreatedAtRoute("GetInquiryByIdAsync", new { id = createdInquiry.Id }, createdInquiry);
+    }
+    catch (Exception)
+    {
+        return StatusCode(500, "An internal error occurred while processing your request.");
+    }
+}
+
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
@@ -70,7 +70,7 @@ namespace SkFabricatorApi.Controllers
                 return NotFound($"Inquiry with ID {id} not found.");
             }
 
-            return NoContent(); // Standard response for a successful DELETE
+            return NoContent();
         }
     }
 }

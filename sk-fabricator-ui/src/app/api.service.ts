@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { Inquiry } from './_models/inquiry.model'; // Assuming this model exists
 import { environment } from './environments/environment';
 
@@ -20,7 +20,12 @@ export class ApiService {
    * Submits the inquiry form data to the backend API.
    */
   submitInquiry(inquiryData: Inquiry): Observable<Inquiry> {
-    return this.http.post<Inquiry>(`${this.apiUrl}/inquiry`, inquiryData);
+    // We observe the full response to correctly handle the 201 Created status.
+    // Then, we map the response to return only the body, as the component expects.
+    return this.http.post<Inquiry>(`${this.apiUrl}/inquiry`, inquiryData, { observe: 'response' })
+      .pipe(
+        map((response: HttpResponse<Inquiry>) => response.body!)
+      );
   }
   
   // Mock admin login

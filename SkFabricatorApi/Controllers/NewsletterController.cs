@@ -23,7 +23,7 @@ namespace SkFabricatorApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var newSub = await _newsletterRepository.AddAsync(sub);
-            return CreatedAtAction(nameof(GetById), new { id = newSub.Id }, newSub);
+            return CreatedAtAction("GetNewsletterSubscriptionById", new { id = newSub.Id }, newSub);
         }
 
         [HttpGet]
