@@ -19,8 +19,8 @@ export class ApiService {
   /**
    * Submits the inquiry form data to the backend API.
    */
-  submitInquiry(inquiryData: Inquiry): Observable<{ success: boolean, message: string }> {
-    return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/inquiry`, inquiryData);
+  submitInquiry(inquiryData: Inquiry): Observable<Inquiry> {
+    return this.http.post<Inquiry>(`${this.apiUrl}/inquiry`, inquiryData);
   }
   
   // Mock admin login
@@ -37,6 +37,11 @@ export class ApiService {
   getInquiries(): Observable<Inquiry[]> {
     // The AuthInterceptor automatically adds the Authorization header.
     return this.http.get<Inquiry[]>(`${this.apiUrl}/inquiry`);
+  }
+
+  // Delete an inquiry by its ID
+  deleteInquiry(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/inquiry/${id}`);
   }
 
   // Real newsletter subscription

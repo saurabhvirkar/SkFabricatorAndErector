@@ -26,6 +26,13 @@
               {{ item.label }}
             </a>
           }
+          <!-- Conditional Inquiries Link -->
+          @if (isLoggedIn$ | async) {
+            <a routerLink="/inquiries" routerLinkActive="text-sk-primary border-b-2 border-sk-primary"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-sk-primary transition-colors duration-200">
+              Inquiries
+            </a>
+          }
         }
         <!-- Login/Logout Button -->
         @if (isLoggedIn$ | async) { 
@@ -78,6 +85,13 @@
             <a [routerLink]="item.link" routerLinkActive="bg-blue-50 text-sk-primary" (click)="toggleMenu()"
               class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
               {{ item.label }}
+            </a>
+          }
+          <!-- Conditional Inquiries Link for Mobile -->
+          @if (isLoggedIn$ | async) {
+            <a routerLink="/inquiries" routerLinkActive="bg-blue-50 text-sk-primary" (click)="toggleMenu()"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+              Inquiries
             </a>
           }
           <!-- Mobile Login/Logout -->

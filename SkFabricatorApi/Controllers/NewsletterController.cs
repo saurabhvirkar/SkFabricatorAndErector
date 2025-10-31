@@ -22,8 +22,8 @@ namespace SkFabricatorApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _newsletterRepository.AddAsync(sub);
-            return Ok(new { success = true });
+            var newSub = await _newsletterRepository.AddAsync(sub);
+            return CreatedAtAction(nameof(GetById), new { id = newSub.Id }, newSub);
         }
 
         [HttpGet]
@@ -32,6 +32,18 @@ namespace SkFabricatorApi.Controllers
         {
             var subs = await _newsletterRepository.GetAllAsync();
             return Ok(subs);
+        }
+
+        [HttpGet("{id}", Name = "GetNewsletterSubscriptionById")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var sub = await _newsletterRepository.GetByIdAsync(id);
+            if (sub == null)
+            {
+                return NotFound();
+            }
+            return Ok(sub);
         }
     }
 }

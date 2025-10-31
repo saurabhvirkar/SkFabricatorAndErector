@@ -25,5 +25,10 @@ namespace SkFabricatorApi.Repositories
             await _context.SaveChangesAsync();
             return subscription;
         }
+
+        public async Task<NewsletterSubscription?> GetByIdAsync(int id)
+        {
+            return await _context.NewsletterSubscriptions.FindAsync(id);
+        }
     }
 }

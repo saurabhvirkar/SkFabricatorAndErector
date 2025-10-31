@@ -8,5 +8,7 @@ namespace SkFabricatorApi.Services
     {
         Task<Inquiry> CreateInquiryAsync(Inquiry inquiry);
         Task<IEnumerable<Inquiry>> GetAllInquiriesAsync();
+        Task<Inquiry?> GetInquiryByIdAsync(int id);
+        Task<bool> DeleteInquiryAsync(int id);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DataService } from '../../_services/data.service';
 
@@ -8,12 +8,15 @@ import { DataService } from '../../_services/data.service';
   imports: [CommonModule],
   templateUrl: './about-details.component.html',
   styleUrls: ['./about-details.component.scss'],
+  // Added ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush, 
 })
-export class AboutDetailsComponent {
+export class AboutDetailsComponent implements OnDestroy { // Implements OnDestroy
   // Component setup
   private dataService = inject(DataService);
   private platformId = inject(PLATFORM_ID);
-   // Array of images for the slider
+  
+  // Array of images for the slider
   slides: string[] = [
     'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+1',
     'https://placehold.co/800x600/1e40af/ffffff?text=Piping+and+Fabrication+Site+2',

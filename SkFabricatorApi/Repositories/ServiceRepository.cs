@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SkFabricatorApi.Data;
 using SkFabricatorApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SkFabricatorApi.Repositories
 {
@@ -22,6 +20,11 @@ namespace SkFabricatorApi.Repositories
             _context.Services.Add(service);
             await _context.SaveChangesAsync();
             return service;
+        }
+
+        public async Task<Service?> GetByIdAsync(int id)
+        {
+            return await _context.Services.FindAsync(id);
         }
     }
 }

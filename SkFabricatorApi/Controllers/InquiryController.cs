@@ -28,9 +28,7 @@ namespace SkFabricatorApi.Controllers
             try
             {
                 var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
-                // Assuming a GetInquiryById endpoint exists or will be created.
-                // For now, we return the created object without a location header.
-                return CreatedAtAction(nameof(GetInquiriesAsync), new { id = createdInquiry.Id }, createdInquiry);
+                return CreatedAtAction(nameof(GetInquiryByIdAsync), new { id = createdInquiry.Id }, createdInquiry);
             }
             catch (Exception) // Consider creating a specific exception type for email failures
             {
@@ -45,6 +43,34 @@ namespace SkFabricatorApi.Controllers
         {
             var inquiries = await _inquiryService.GetAllInquiriesAsync();
             return Ok(inquiries);
+        }
+
+        [HttpGet("{id}", Name = "GetInquiryByIdAsync")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> GetInquiryByIdAsync(int id)
+        {
+            var inquiry = await _inquiryService.GetInquiryByIdAsync(id);
+
+            if (inquiry == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(inquiry);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> DeleteInquiryAsync(int id)
+        {
+            var success = await _inquiryService.DeleteInquiryAsync(id);
+
+            if (!success)
+            {
+                return NotFound($"Inquiry with ID {id} not found.");
+            }
+
+            return NoContent(); // Standard response for a successful DELETE
         }
     }
 }

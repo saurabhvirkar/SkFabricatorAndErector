@@ -29,5 +29,16 @@ namespace SkFabricatorApi.Repositories
                 .OrderByDescending(i => i.SubmittedAt)
                 .ToListAsync();
         }
+
+        public async Task<Inquiry?> GetByIdAsync(int id)
+        {
+            return await _context.Inquiries.FindAsync(id);
+        }
+
+        public async Task DeleteAsync(Inquiry inquiry)
+        {
+            _context.Inquiries.Remove(inquiry);
+            await _context.SaveChangesAsync();
+        }
     }
 }

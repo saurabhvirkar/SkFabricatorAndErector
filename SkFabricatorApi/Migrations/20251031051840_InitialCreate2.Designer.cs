@@ -11,8 +11,8 @@ using SkFabricatorApi.Data;
 namespace SkFabricatorApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251022050442_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251031051840_InitialCreate2")]
+    partial class InitialCreate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

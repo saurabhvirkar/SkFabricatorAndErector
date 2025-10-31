@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkFabricatorApi.Controllers
@@ -23,6 +24,19 @@ namespace SkFabricatorApi.Controllers
             return Ok(projects);
         }
 
+        [HttpGet("{id}", Name = "GetProjectById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            // This assumes your repository can fetch by ID.
+            // We will need to add GetByIdAsync to IProjectRepository and ProjectRepository.
+            var project = await _projectRepository.GetByIdAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            return Ok(project);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Add([FromBody] Project project)
@@ -30,7 +44,7 @@ namespace SkFabricatorApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var newProject = await _projectRepository.AddAsync(project);
-            return CreatedAtAction(nameof(GetAll), new { id = newProject.Id }, newProject);
+            return CreatedAtAction("GetProjectById", new { id = newProject.Id }, newProject);
         }
     }
 }

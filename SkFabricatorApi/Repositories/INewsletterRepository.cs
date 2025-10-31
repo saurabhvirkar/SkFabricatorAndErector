@@ -8,5 +8,6 @@ namespace SkFabricatorApi.Repositories
     {
         Task<IEnumerable<NewsletterSubscription>> GetAllAsync();
         Task<NewsletterSubscription> AddAsync(NewsletterSubscription subscription);
+        Task<NewsletterSubscription?> GetByIdAsync(int id);
     }
 }

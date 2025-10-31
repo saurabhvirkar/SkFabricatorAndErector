@@ -1,5 +1,6 @@
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
@@ -13,23 +14,52 @@ namespace SkFabricatorApi.Services
     {
         private readonly IInquiryRepository _inquiryRepository;
         private readonly IConfiguration _config;
+        private readonly ILogger<InquiryService> _logger;
 
-        public InquiryService(IInquiryRepository inquiryRepository, IConfiguration config)
+        public InquiryService(IInquiryRepository inquiryRepository, IConfiguration config, ILogger<InquiryService> logger)
         {
             _inquiryRepository = inquiryRepository;
             _config = config;
+            _logger = logger;
         }
 
         public async Task<Inquiry> CreateInquiryAsync(Inquiry inquiry)
         {
             var newInquiry = await _inquiryRepository.AddAsync(inquiry);
-            await SendEmailAsync(newInquiry);
+
+            // Try to send the email, but don't let it block the user response.
+            // If it fails, log the error for administrative review.
+            try
+            {
+                await SendEmailAsync(newInquiry);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send inquiry notification email for inquiry ID {InquiryId}.", newInquiry.Id);
+            }
             return newInquiry;
         }
 
         public async Task<IEnumerable<Inquiry>> GetAllInquiriesAsync()
         {
             return await _inquiryRepository.GetAllAsync();
+        }
+
+        public async Task<Inquiry?> GetInquiryByIdAsync(int id)
+        {
+            return await _inquiryRepository.GetByIdAsync(id);
+        }
+
+        public async Task<bool> DeleteInquiryAsync(int id)
+        {
+            var inquiryToDelete = await _inquiryRepository.GetByIdAsync(id);
+            if (inquiryToDelete == null)
+            {
+                return false; // Inquiry not found
+            }
+
+            await _inquiryRepository.DeleteAsync(inquiryToDelete);
+            return true; // Deletion successful
         }
 
         private async Task SendEmailAsync(Inquiry inquiry)

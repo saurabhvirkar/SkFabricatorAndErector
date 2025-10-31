@@ -23,5 +23,10 @@ namespace SkFabricatorApi.Repositories
             await _context.SaveChangesAsync();
             return project;
         }
+
+        public async Task<Project?> GetByIdAsync(int id)
+        {
+            return await _context.Projects.FindAsync(id);
+        }
     }
 }

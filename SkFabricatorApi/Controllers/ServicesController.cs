@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkFabricatorApi.Controllers
@@ -23,6 +24,19 @@ namespace SkFabricatorApi.Controllers
             return Ok(services);
         }
 
+        [HttpGet("{id}", Name = "GetServiceById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            // This assumes your repository can fetch by ID.
+            // We will need to add GetByIdAsync to IServiceRepository and ServiceRepository.
+            var service = await _serviceRepository.GetByIdAsync(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            return Ok(service);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Add([FromBody] Service service)
@@ -30,7 +44,7 @@ namespace SkFabricatorApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var newService = await _serviceRepository.AddAsync(service);
-            return CreatedAtAction(nameof(GetAll), new { id = newService.Id }, newService);
+            return CreatedAtAction("GetServiceById", new { id = newService.Id }, newService);
         }
     }
 }

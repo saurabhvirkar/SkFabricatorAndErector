@@ -1,4 +1,5 @@
 export interface Inquiry {
+  id?: number;
   name: string;
   email: string;
   phone?: string; // Optional field in C# model
@@ -6,4 +7,5 @@ export interface Inquiry {
   category?: string; // New field from C# model
   preferredContact?: string; // New field from C# model
   message: string;
+  submittedAt?: Date | string;
 }

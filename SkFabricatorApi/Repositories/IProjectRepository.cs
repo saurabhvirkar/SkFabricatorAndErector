@@ -8,5 +8,6 @@ namespace SkFabricatorApi.Repositories
     {
         Task<IEnumerable<Project>> GetAllAsync();
         Task<Project> AddAsync(Project project);
+        Task<Project?> GetByIdAsync(int id);
     }
 }

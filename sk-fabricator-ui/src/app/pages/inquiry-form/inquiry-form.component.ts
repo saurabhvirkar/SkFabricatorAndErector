@@ -65,10 +65,8 @@ export class InquiryFormComponent {
     // 2. API Service Integration
     this.apiService.submitInquiry(inquiryData).subscribe({
       next: (res) => {
-        debugger
         this.submissionStatus.set('success');
-        // The backend returns { success: true } without a message, so we provide one here.
-        this.responseMessage.set('Your inquiry has been sent successfully! We will get back to you shortly.');
+        this.responseMessage.set('Your inquiry has been sent successfully! We will get back to you shortly.'); // The backend now returns the created object. We can use it if needed.
         // Reset the form to its initial state, preserving defaults
         this.inquiryForm.reset({
           category: '',
@@ -76,7 +74,6 @@ export class InquiryFormComponent {
         });
       },
       error: (err) => {
-        debugger
         // 3. Error Handling for network/server issues
         this.submissionStatus.set('error');
         // Use the error message from the API if available, otherwise show a generic one.
