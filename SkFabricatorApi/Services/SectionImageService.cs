@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SkFabricatorApi.Services
 {
-    public class PhotoService : IPhotoService
+    public class SectionImageService : ISectionImageService
     {
         private readonly Cloudinary _cloudinary;
-        private readonly IPhotoRepository _photoRepository;
+        private readonly ISectionImageRepository _sectionImageRepository;
 
-        public PhotoService(IOptions<CloudinarySettings> config, IPhotoRepository photoRepository)
+        public SectionImageService(IOptions<CloudinarySettings> config, ISectionImageRepository sectionImageRepository)
         {
             var acc = new Account(
                 config.Value.CloudName,
@@ -22,10 +22,10 @@ namespace SkFabricatorApi.Services
                 config.Value.ApiSecret
             );
             _cloudinary = new Cloudinary(acc);
-            _photoRepository = photoRepository;
+            _sectionImageRepository = sectionImageRepository;
         }
 
-        public async Task<Photo> AddPhotoAsync(IFormFile file, string category)
+        public async Task<SectionImage> AddSectionImageAsync(IFormFile file, string sectionName)
         {
             var uploadResult = new ImageUploadResult();
 
@@ -44,28 +44,28 @@ namespace SkFabricatorApi.Services
                 throw new System.Exception(uploadResult.Error.Message);
             }
 
-            var photo = new Photo
+            var sectionImage = new SectionImage
             {
                 Url = uploadResult.SecureUrl.AbsoluteUri,
                 PublicId = uploadResult.PublicId,
-                Category = category
+                SectionName = sectionName
             };
 
-            return await _photoRepository.AddPhotoAsync(photo);
+            return await _sectionImageRepository.AddSectionImageAsync(sectionImage);
         }
 
-        public async Task<bool> DeletePhotoAsync(int photoId)
-        { 
-            var photo = await _photoRepository.GetPhotoByIdAsync(photoId);
+        public async Task<bool> DeleteSectionImageAsync(int id)
+        {
+            var sectionImage = await _sectionImageRepository.GetSectionImageByIdAsync(id);
 
-            if (photo == null)
+            if (sectionImage == null)
             {
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(photo.PublicId))
+            if (!string.IsNullOrEmpty(sectionImage.PublicId))
             {
-                var deleteParams = new DeletionParams(photo.PublicId);
+                var deleteParams = new DeletionParams(sectionImage.PublicId);
                 var result = await _cloudinary.DestroyAsync(deleteParams);
                 if (result.Error != null)
                 {
@@ -74,13 +74,17 @@ namespace SkFabricatorApi.Services
                 }
             }
 
-            return await _photoRepository.DeletePhotoAsync(photoId);
+            return await _sectionImageRepository.DeleteSectionImageAsync(id);
         }
 
-        public async Task<IEnumerable<Photo>> GetPhotosAsync(string category = null)
+        public async Task<IEnumerable<SectionImage>> GetSectionImagesBySectionNameAsync(string sectionName)
         {
-            return await _photoRepository.GetPhotosAsync(category);
+            return await _sectionImageRepository.GetSectionImagesBySectionNameAsync(sectionName);
+        }
+
+        public async Task<IEnumerable<SectionImage>> GetAllSectionImagesAsync()
+        {
+            return await _sectionImageRepository.GetAllSectionImagesAsync();
         }
     }
 }
-

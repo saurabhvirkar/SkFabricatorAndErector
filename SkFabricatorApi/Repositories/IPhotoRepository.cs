@@ -8,7 +8,7 @@ namespace SkFabricatorApi.Repositories
     {
         Task<Photo> AddPhotoAsync(Photo photo);
         Task<bool> DeletePhotoAsync(int photoId);
-        Task<Photo> GetPhotoByIdAsync(int photoId);
-        Task<IEnumerable<Photo>> GetPhotosAsync();
+        Task<Photo?> GetPhotoByIdAsync(int photoId);
+        Task<IEnumerable<Photo>> GetPhotosAsync(string category = null);
     }
 }

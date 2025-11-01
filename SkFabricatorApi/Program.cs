@@ -1,13 +1,10 @@
 using SkFabricatorApi.Data;
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
-using SkFabricatorApi.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Service Registration ---
-
 // Add persistence services (DbContext, Identity)
 builder.Services.AddPersistenceServices(builder.Configuration);
 // Configure JWT Settings

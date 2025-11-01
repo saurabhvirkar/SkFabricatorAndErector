@@ -1,14 +1,13 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { DataService } from '../../_services/data.service';
+import { ApiService } from '../../api.service';
+import { SectionImage } from '../../_models/section-image.model';
+import { Service } from '../../_models/data.model'; // Import the correct Service interface
 
-// Define the Service interface to include imageUrl
-interface Service {
-  id: number;
-  name: string;
-  summary: string;
-  icon: string;
-  imageUrl: string;
+interface DynamicService extends Service {
+  dynamicImageUrl?: string; // Add dynamicImageUrl to the extended interface
 }
 
 @Component({
@@ -20,12 +19,35 @@ interface Service {
   // Added ChangeDetectionStrategy.OnPush
   changeDetection: ChangeDetectionStrategy.OnPush, 
 })
-export class ServicesComponent {
-  // Local service data with added imageUrl properties
-  allServices: Service[] = [ // Updated with premium, relevant images
-    { id: 1, name: 'Structural Fabrication', summary: 'High-precision fabrication of steel structures, from simple frames to complex industrial modules.', icon: '🔧', imageUrl: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 2, name: 'Piping Solutions', summary: 'Comprehensive services for process and utility piping, including design, fabrication, and installation.', icon: '🔩', imageUrl: 'https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 3, name: 'Site Erection', summary: 'Safe and efficient on-site erection of heavy equipment, steel structures, and modular assemblies.', icon: '🏗️', imageUrl: 'https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 4, name: 'Plant Maintenance', summary: 'Reliable shutdown, turnaround, and routine maintenance services to ensure operational continuity.', icon: '⚙️', imageUrl: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }
-  ];
+export class ServicesComponent implements OnInit {
+  private dataService = inject(DataService);
+  private apiService = inject(ApiService);
+
+  staticServices: Service[] = [];
+  dynamicServices = signal<DynamicService[]>([]);
+
+  ngOnInit(): void {
+    this.staticServices = this.dataService.getServices();
+    this.loadServiceImages();
+  }
+
+  loadServiceImages(): void {
+    this.apiService.getSectionImagesBySectionName('ServicesComponent').subscribe({
+      next: (sectionImages) => {
+        const combinedServices: DynamicService[] = this.staticServices.map((service, index) => {
+          const dynamicImage = sectionImages[index]; // Simple mapping by index
+          return {
+            ...service,
+            dynamicImageUrl: dynamicImage ? dynamicImage.url : service.image.src // Use dynamic if available, else static
+          };
+        });
+        this.dynamicServices.set(combinedServices);
+      },
+      error: (err) => {
+        console.error('Failed to load service images for ServicesComponent', err);
+        // Fallback to static images if API call fails
+        this.dynamicServices.set(this.staticServices.map(s => ({ ...s, dynamicImageUrl: s.image.src })));
+      }
+    });
+  }
 }

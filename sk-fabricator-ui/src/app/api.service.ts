@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { Inquiry } from './_models/inquiry.model'; // Assuming this model exists
 import { environment } from './environments/environment';
 import { GalleryImage } from './_models/data.model';
+import { SectionImage } from './_models/section-image.model'; // Import SectionImage
 
 /**
  * A service for handling external API calls like form submissions or admin login.
@@ -55,17 +56,41 @@ export class ApiService {
     return this.http.post<{ success: boolean, message: string }>(`${this.apiUrl}/newsletter`, { email });
   }
 
-  getImages(): Observable<GalleryImage[]> {
-      return this.http.get<GalleryImage[]>(this.apiUrl);
+  // Gallery Image Management
+  getImages(category?: string): Observable<GalleryImage[]> {
+    let url = `${this.apiUrl}/gallery`;
+    if (category && category !== 'All') {
+      url += `?category=${category}`;
     }
+    return this.http.get<GalleryImage[]>(url);
+  }
   
-    uploadImage(formData: FormData): Observable<GalleryImage> {
+    uploadImage(formData: FormData, category: string): Observable<GalleryImage> {
       // The HttpInterceptor will add the auth token
-      return this.http.post<GalleryImage>(this.apiUrl, formData);
+      formData.append('category', category);
+      return this.http.post<GalleryImage>(`${this.apiUrl}/gallery/add-photo`, formData);
     }
   
     deleteImage(id: number): Observable<void> {
       // The HttpInterceptor will add the auth token
-      return this.http.delete<void>(`${this.apiUrl}/${id}`);
+      return this.http.delete<void>(`${this.apiUrl}/gallery/delete-photo/${id}`);
     }
+
+  // Section Image Management
+  uploadSectionImage(formData: FormData, sectionName: string): Observable<SectionImage> {
+    formData.append('sectionName', sectionName);
+    return this.http.post<SectionImage>(`${this.apiUrl}/sectionimage/add-image`, formData);
+  }
+
+  deleteSectionImage(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/sectionimage/delete-image/${id}`);
+  }
+
+  getSectionImagesBySectionName(sectionName: string): Observable<SectionImage[]> {
+    return this.http.get<SectionImage[]>(`${this.apiUrl}/sectionimage/${sectionName}`);
+  }
+
+  getAllSectionImages(): Observable<SectionImage[]> {
+    return this.http.get<SectionImage[]>(`${this.apiUrl}/sectionimage`);
+  }
 }

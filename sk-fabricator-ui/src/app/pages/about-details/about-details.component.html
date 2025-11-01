@@ -15,10 +15,10 @@
 
       <!-- Right Column: Image Slider -->
       <div class="relative h-96 w-full overflow-hidden rounded-lg shadow-2xl">
-        @for (slide of slides; track slide; let i = $index) {
+        @for (slide of sectionImages(); track slide.id; let i = $index) {
           <div 
             class="absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out"
-            [style.background-image]="'url(' + slide + ')'"
+            [style.background-image]="'url(' + slide.url + ')'"
             [class.opacity-100]="currentSlideIndex === i"
             [class.opacity-0]="currentSlideIndex !== i">
           </div>
@@ -32,7 +32,7 @@
         </button>
         <!-- Dot Indicators -->
         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-          @for (slide of slides; track slide; let i = $index) {
+          @for (slide of sectionImages(); track slide.id; let i = $index) {
             <button (click)="goToSlide(i)" class="h-3 w-3 rounded-full transition" [ngClass]="{'bg-white': currentSlideIndex === i, 'bg-white/50': currentSlideIndex !== i}"></button>
           }
         </div>

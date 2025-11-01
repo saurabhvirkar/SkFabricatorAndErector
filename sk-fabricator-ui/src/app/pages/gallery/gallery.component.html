@@ -10,6 +10,31 @@
   
   <main class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+      @if (isLoggedIn() && isAdminOrManager()) {
+        <div class="upload-section bg-white p-6 rounded-lg shadow-md mb-10">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Upload New Image</h2>
+          <div class="mb-4">
+            <label for="imageCategory" class="block text-sm font-medium text-gray-700">Category</label>
+            <select id="imageCategory" (change)="onCategorySelected($event)" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+              <option [value]="null" disabled selected>Select a category</option>
+              @for (category of uploadCategories(); track category) {
+                <option [value]="category">{{ category }}</option>
+              }
+            </select>
+          </div>
+          <input type="file" (change)="onFileSelected($event)" class="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-full file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-700
+            hover:file:bg-blue-100
+          "/>
+          <button (click)="onUpload()" [disabled]="!selectedFile || !selectedCategoryForUpload()" class="mt-4 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition duration-300 disabled:opacity-50">
+            Upload Image
+          </button>
+        </div>
+      }
       
       <div class="flex justify-center flex-wrap gap-3 mb-10">
         @for (category of categories; track category) {
@@ -26,20 +51,25 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (image of filteredImages(); track image.id) {
+        @for (image of images(); track image.id) {
           <div class="rounded-xl shadow-lg overflow-hidden relative group cursor-pointer hover:shadow-2xl transition duration-300" 
                (click)="openLightbox(image)">
-            <img [src]="image.url" [alt]="image.alt"
+            <img [src]="image.url" alt="Gallery Image"
                  class="w-full h-64 object-cover transition duration-500 group-hover:scale-105">
             
             <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
               <div class="text-white text-center p-4">
-                <p class="text-xl font-bold">{{ image.alt }}</p>
-                <span class="text-xs uppercase font-semibold text-blue-600 bg-white px-3 py-1 rounded-full mt-2 inline-block shadow-md">
-                  {{ image.category }}
-                </span>
+                <p class="text-xl font-bold">View Image</p>
               </div>
             </div>
+
+            @if (isLoggedIn() && isAdminOrManager()) {
+              <button (click)="$event.stopPropagation(); onDeletePhoto(image.id)" class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300" aria-label="Delete Image">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 11-2 0v6a1 1 0 112 0V8z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            }
           </div>
         } @empty {
           <div class="col-span-full text-center py-10 text-gray-500 text-lg">
@@ -56,10 +86,9 @@
         <button (click)="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl font-bold z-50 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-80 transition duration-300" aria-label="Close Lightbox">
           &times;
         </button>
-        <img [src]="selectedImage()?.url" [alt]="selectedImage()?.alt" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" (click)="$event.stopPropagation()">
+        <img [src]="selectedImage()?.url" alt="Lightbox Image" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" (click)="$event.stopPropagation()">
         <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4 text-center rounded-b-lg">
-          <p class="text-xl font-semibold">{{ selectedImage()?.alt }}</p>
-          <span class="text-sm text-blue-300">{{ selectedImage()?.category }}</span>
+          <p class="text-xl font-semibold">Image</p>
         </div>
       </div>
     </div>

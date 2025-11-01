@@ -1,7 +1,7 @@
 <div class="projects-page min-w-full">
   <!-- Page Header -->
   <header class="relative bg-gray-900 text-white pt-24 pb-28 bg-cover bg-center"
-          style="background-image: linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url('https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+          [style.backgroundImage]="headerImage() ? 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(' + headerImage() + ')' : 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)'">
     <div class="absolute inset-0 bg-indigo-900 opacity-80"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div class="relative">
@@ -31,7 +31,7 @@
         @for (project of filteredProjects(); track project.id) {
           <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2">
             <div class="h-56 overflow-hidden">
-              <img [src]="project.imageUrl" [alt]="project.title"
+              <img [src]="project.dynamicImageUrl" [alt]="project.title"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
             </div>
             <div class="p-6">

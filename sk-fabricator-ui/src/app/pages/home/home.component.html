@@ -2,10 +2,10 @@
   <!-- Hero Section -->
   <section class="relative text-white overflow-hidden">
     <!-- Background Image Slider -->
-    @for (slide of backgroundSlides; track slide; let i = $index) {
+    @for (slide of backgroundSlides(); track slide.id; let i = $index) {
       <div 
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-        [style.background-image]="'url(' + slide + ')'"
+        [style.background-image]="'url(' + slide.url + ')'"
         [class.opacity-100]="currentSlideIndex === i"
         [class.opacity-0]="currentSlideIndex !== i"
         role="img"

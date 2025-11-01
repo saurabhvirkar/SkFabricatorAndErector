@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { Project } from '../../_models/data.model';
+import { ApiService } from '../../api.service';
+import { SectionImage } from '../../_models/section-image.model';
+import { DataService } from '../../_services/data.service';
 
 /**
  * Define the strict union type for project categories.
@@ -7,6 +10,10 @@ import { Project } from '../../_models/data.model';
  * the categories array and the signal match the setFilter function signature.
  */
 type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
+
+interface DynamicProject extends Project {
+  dynamicImageUrl?: string;
+}
 
 /**
  * The main application component.
@@ -18,22 +25,19 @@ type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintena
   styleUrls: ['./projects.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectsComponent {
+export class ProjectsComponent implements OnInit {
+  private apiService = inject(ApiService);
+  private dataService = inject(DataService);
+
   // Static Data & Setup
   currentYear = new Date().getFullYear();
   
   // Use the strict type for the categories array
   categories: ProjectCategory[] = ['All', 'Piping', 'Fabrication', 'Erection', 'Maintenance'];
 
-  // Mock data to replace the DataService call
-  private allProjects: Project[] = [
-    { id: 1, title: 'Refinery Expansion Phase II', category: 'Piping', description: 'Installation of high-pressure utility and process piping in a major refinery unit.', imageUrl: 'https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 2, title: 'Structural Steel Warehouse', category: 'Fabrication', description: 'Complete fabrication and delivery of structural steel for a new 50,000 sq ft warehouse.', imageUrl: 'https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 3, title: 'Petrochemical Plant Erection', category: 'Erection', description: 'Erection of two large distillation columns and associated equipment on site.', imageUrl: 'https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 4, title: 'Annual Boiler Maintenance', category: 'Maintenance', description: 'Scheduled major shutdown maintenance and overhaul for industrial boilers and heat exchangers.', imageUrl: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 5, title: 'New Storage Tank Farm', category: 'Fabrication', description: 'Design, fabrication, and field-welding of three API 650 storage tanks.', imageUrl: 'https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { id: 6, title: 'Emergency Pipe Repair', category: 'Piping', description: 'Rapid response repair and replacement of a critical steam line section.', imageUrl: 'https://images.pexels.com/photos/7218569/pexels-photo-7218569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-  ];
+  staticProjects: Project[] = [];
+  dynamicProjects = signal<DynamicProject[]>([]);
+  headerImage = signal<string | null>(null);
 
   // State
   // The type of the signal now correctly uses the union type
@@ -43,11 +47,50 @@ export class ProjectsComponent {
   filteredProjects = computed(() => {
     const filter = this.activeFilter();
     if (filter === 'All') {
-      return this.allProjects;
+      return this.dynamicProjects();
     }
     // Type check passes because 'filter' is guaranteed to be one of the literal strings
-    return this.allProjects.filter(p => p.category === filter);
+    return this.dynamicProjects().filter(p => p.category === filter);
   });
+
+  ngOnInit(): void {
+    this.staticProjects = this.dataService.getProjects();
+    this.loadProjectImages();
+    this.loadHeaderImage();
+  }
+
+  loadProjectImages(): void {
+    this.apiService.getSectionImagesBySectionName('ProjectsComponent').subscribe({
+      next: (sectionImages) => {
+        const combinedProjects: DynamicProject[] = this.staticProjects.map((project, index) => {
+          const dynamicImage = sectionImages[index]; // Simple mapping by index
+          return {
+            ...project,
+            dynamicImageUrl: dynamicImage ? dynamicImage.url : project.imageUrl // Use dynamic if available, else static
+          };
+        });
+        this.dynamicProjects.set(combinedProjects);
+      },
+      error: (err) => {
+        console.error('Failed to load project images for ProjectsComponent', err);
+        // Fallback to static images if API call fails
+        this.dynamicProjects.set(this.staticProjects.map(p => ({ ...p, dynamicImageUrl: p.imageUrl })));
+      }
+    });
+  }
+
+  loadHeaderImage(): void {
+    this.apiService.getSectionImagesBySectionName('ProjectsComponentHeader').subscribe({
+      next: (images) => {
+        if (images.length > 0) {
+          this.headerImage.set(images[0].url);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load header image for ProjectsComponent', err);
+      }
+    });
+  }
 
   /**
    * Updates the active filter and triggers the computed signal to update the list.
@@ -58,3 +101,4 @@ export class ProjectsComponent {
     this.activeFilter.set(category);
   }
 }
+

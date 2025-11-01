@@ -25,4 +25,16 @@ export const routes: Routes = [
   { path: 'gallery', component: GalleryComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'clients', component: ClientsDetailsComponent },
+  {
+    path: 'admin/image-management',
+    loadComponent: () => import('./pages/admin/image-management/image-management.component').then(m => m.ImageManagementComponent),
+    canActivate: [authGuard],
+    data: { roles: ['Admin', 'Manager'] }
+  },
+  {
+    path: 'admin/section-image-management',
+    loadComponent: () => import('./pages/admin/section-image-management/section-image-management.component').then(m => m.SectionImageManagementComponent),
+    canActivate: [authGuard],
+    data: { roles: ['Admin', 'Manager'] }
+  },
 ];

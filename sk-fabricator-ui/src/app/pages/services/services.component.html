@@ -12,9 +12,9 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @for (service of allServices; track service.id) {
+        @for (service of dynamicServices(); track service.id) {
           <div class="relative bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 overflow-hidden group bg-cover bg-center"
-               [style.backgroundImage]="'url(' + service.imageUrl + ')'">
+               [style.backgroundImage]="'url(' + service.dynamicImageUrl + ')'">
             <!-- Overlay for text readability -->
             <div class="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-70 transition-all duration-300"></div>
             <div class="relative z-10 text-white">

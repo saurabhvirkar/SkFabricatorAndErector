@@ -11,9 +11,9 @@
   <main class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 items-center justify-center">
-        @for (client of clientDetails; track client.id) {
+        @for (clientImage of clientImages(); track clientImage.id) {
           <div class="bg-white rounded-xl shadow-lg flex justify-center items-center h-28 p-4 transition duration-300 hover:shadow-2xl hover:scale-[1.02] overflow-hidden border border-gray-100">
-            <img [src]="client.imageUrl" [alt]="client.name + ' Logo'"
+            <img [src]="clientImage.url" [alt]="clientImage.sectionName + ' Image'"
                  class="max-w-full max-h-full object-contain transition duration-500 hover:opacity-80">
           </div>
         }

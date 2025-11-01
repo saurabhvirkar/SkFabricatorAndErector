@@ -1,17 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ApiService } from '../../api.service';
+import { AuthService } from '../../auth.service';
+import { GalleryImage } from '../../_models/data.model';
+import { CommonModule } from '@angular/common';
 
 /**
  * Define the strict union type for image categories.
  * This ensures type safety and resolves the compiler error in the template.
  */
 type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
-
-interface Image {
-  id: number;
-  url: string;
-  alt: string;
-  category: ImageCategory;
-}
 
 /**
  * The main application component, now serving as the Work Gallery showcase.
@@ -23,53 +21,119 @@ interface Image {
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnInit {
+  private apiService = inject(ApiService);
+  private authService = inject(AuthService);
+
   // Static Data & Setup
   currentYear = new Date().getFullYear();
   
   // Use the strict type for the categories array
   categories: ImageCategory[] = ['All', 'Piping', 'Fabrication', 'Erection', 'Maintenance'];
 
-  // Gallery image data (replacing the previous 'allProjects')
-  private allImages: Image[] = [ // Updated with premium, relevant images
-    { id: 1, url: 'https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Industrial Piping System', category: 'Piping' },
-    { id: 2, url: 'https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Steel Structure Erection', category: 'Erection' },
-    { id: 3, url: 'https://images.pexels.com/photos/7218525/pexels-photo-7218525.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Precision Welding Fabrication', category: 'Fabrication' },
-    { id: 4, url: 'https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'On-site Equipment Maintenance', category: 'Maintenance' },
-    { id: 5, url: 'https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Crane Lifting Steel Beam', category: 'Erection' },
-    { id: 6, url: 'https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Storage Tank Fabrication', category: 'Fabrication' },
-    { id: 7, url: 'https://images.pexels.com/photos/7218569/pexels-photo-7218569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Complex Pipe Network', category: 'Piping' },
-    { id: 8, url: 'https://images.pexels.com/photos/8346830/pexels-photo-8346830.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Industrial Plant Maintenance', category: 'Maintenance' },
-  ];
+  // Gallery image data
+  images = signal<GalleryImage[]>([]);
+  selectedFile: File | null = null;
+  selectedCategoryForUpload = signal<ImageCategory | null>(null);
 
   // State
   activeFilter = signal<ImageCategory>('All'); 
-  selectedImage = signal<Image | null>(null);
+  selectedImage = signal<GalleryImage | null>(null);
 
-  // Derived State (Computed Signal)
-  filteredImages = computed(() => {
-    const filter = this.activeFilter();
-    if (filter === 'All') {
-      return this.allImages;
-    }
-    // Filter logic uses the strictly typed signal value
-    return this.allImages.filter(img => img.category === filter);
+  // Convert observables to signals
+  isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
+  currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
+
+  uploadCategories = computed(() => this.categories.filter(c => c !== 'All'));
+
+  isAdminOrManager = computed(() => {
+    const role = this.currentUserRole();
+    return role === 'Admin' || role === 'Manager';
   });
+
+  ngOnInit(): void {
+    this.loadImages();
+  }
+
+  loadImages(): void {
+    this.apiService.getImages(this.activeFilter()).subscribe({
+      next: (images) => {
+        this.images.set(images);
+      },
+      error: (err) => {
+        console.error('Failed to load images', err);
+      }
+    });
+  }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0] ?? null;
+  }
+
+  onCategorySelected(event: any): void {
+    this.selectedCategoryForUpload.set(event.target.value);
+  }
+
+  onUpload(): void {
+    if (!this.selectedFile) {
+      alert('Please select a file first!');
+      return;
+    }
+    if (!this.selectedCategoryForUpload()) {
+      alert('Please select a category for the image!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+
+    this.apiService.uploadImage(formData, this.selectedCategoryForUpload()!).subscribe({
+      next: () => {
+        alert('Image uploaded successfully!');
+        this.selectedFile = null;
+        this.selectedCategoryForUpload.set(null);
+        this.loadImages(); // Reload images to show the new one
+        
+        // Reset the file input element
+        const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      },
+      error: (err) => {
+        console.error('Upload failed', err);
+        alert('Image upload failed!');
+      }
+    });
+  }
+
+  onDeletePhoto(id: number): void {
+    if (confirm('Are you sure you want to delete this image?')) {
+      this.apiService.deleteImage(id).subscribe({
+        next: () => {
+          alert('Image deleted successfully!');
+          this.loadImages(); // Reload images to update the list
+        },
+        error: (err) => {
+          console.error('Delete failed', err);
+          alert('Image deletion failed!');
+        }
+      });
+    }
+  }
 
   /**
    * Updates the active filter and triggers the computed signal to update the list.
    * @param category The category to filter by (strictly typed).
    */
   setFilter(category: ImageCategory) {
-    // FIX: The component logic now correctly handles the filtering based on the strong type.
     this.activeFilter.set(category);
+    this.loadImages();
   }
 
   /**
    * Opens the lightbox with the selected image.
    * @param image The image to display in the lightbox.
    */
-  openLightbox(image: Image) {
+  openLightbox(image: GalleryImage) {
     this.selectedImage.set(image);
   }
 

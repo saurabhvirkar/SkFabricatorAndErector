@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkFabricatorApi.Services;
 using System.Threading.Tasks;
+using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Controllers
 {
@@ -19,16 +20,21 @@ namespace SkFabricatorApi.Controllers
 
         [HttpPost("add-photo")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> AddPhoto(IFormFile file)
+        public async Task<IActionResult> AddPhoto([FromForm] AddPhotoRequestDto request)
         {
-            if (file == null || file.Length == 0)
+            if (request.File == null || request.File.Length == 0)
             {
                 return BadRequest("No file uploaded.");
             }
 
+            if (string.IsNullOrEmpty(request.Category))
+            {
+                return BadRequest("Category is required.");
+            }
+
             try
             {
-                var photo = await _photoService.AddPhotoAsync(file);
+                var photo = await _photoService.AddPhotoAsync(request.File, request.Category);
                 return Ok(photo);
             }
             catch (System.Exception ex)
@@ -37,8 +43,8 @@ namespace SkFabricatorApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Manager")]
         [HttpDelete("delete-photo/{photoId}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeletePhoto(int photoId)
         {
             var result = await _photoService.DeletePhotoAsync(photoId);
@@ -53,9 +59,9 @@ namespace SkFabricatorApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetImages()
+        public async Task<IActionResult> GetImages([FromQuery] string category = null)
         {
-            var photos = await _photoService.GetPhotosAsync();
+            var photos = await _photoService.GetPhotosAsync(category);
             return Ok(photos);
         }
     }

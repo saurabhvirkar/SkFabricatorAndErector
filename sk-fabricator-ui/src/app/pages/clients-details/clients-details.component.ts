@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit, signal } from '@angular/core';
 import { DataService } from '../../_services/data.service';
-import { ClientDetails } from '../../_models/data.model';
+import { ApiService } from '../../api.service';
+import { SectionImage } from '../../_models/section-image.model';
 
 @Component({
   standalone: true,
@@ -12,8 +13,24 @@ import { ClientDetails } from '../../_models/data.model';
   // Set to OnPush for performance, aligning with modern Angular practices
   changeDetection: ChangeDetectionStrategy.OnPush 
 })
-export class ClientsDetailsComponent {
+export class ClientsDetailsComponent implements OnInit {
   private dataService = inject(DataService);
-  // Ensure data is accessed directly from the service or a signal/observable pipeline
-  clientDetails: ClientDetails[] = this.dataService.getClientDetails(); 
+  private apiService = inject(ApiService);
+
+  clientImages = signal<SectionImage[]>([]);
+
+  ngOnInit(): void {
+    this.loadClientImages();
+  }
+
+  loadClientImages(): void {
+    this.apiService.getSectionImagesBySectionName('ClientsDetailsComponent').subscribe({
+      next: (images) => {
+        this.clientImages.set(images);
+      },
+      error: (err) => {
+        console.error('Failed to load client images for ClientsDetailsComponent', err);
+      }
+    });
+  }
 }

@@ -52,6 +52,7 @@ export type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Mai
 export interface GalleryImage {
   id: number;
   url: string;
-  alt: string;
+  isMain: boolean;
+  publicId: string;
   category: ImageCategory;
 }

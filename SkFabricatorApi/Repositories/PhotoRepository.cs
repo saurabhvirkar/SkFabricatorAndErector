@@ -34,14 +34,19 @@ namespace SkFabricatorApi.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Photo> GetPhotoByIdAsync(int photoId)
+        public async Task<Photo?> GetPhotoByIdAsync(int photoId)
         {
             return await _context.Photos.FindAsync(photoId);
         }
 
-        public async Task<IEnumerable<Photo>> GetPhotosAsync()
+        public async Task<IEnumerable<Photo>> GetPhotosAsync(string category = null)
         {
-            return await _context.Photos.ToListAsync();
+            if (string.IsNullOrEmpty(category))
+            {
+                return await _context.Photos.ToListAsync();
+            }
+
+            return await _context.Photos.Where(p => p.Category == category).ToListAsync();
         }
     }
 }
