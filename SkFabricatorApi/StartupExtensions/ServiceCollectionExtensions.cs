@@ -9,7 +9,7 @@ using SkFabricatorApi.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-namespace SkFabricatorApi.Extensions
+namespace SkFabricatorApi.StartupExtensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -67,6 +67,8 @@ namespace SkFabricatorApi.Extensions
             services.AddScoped<IProjectRepository, ProjectRepository>(); // Already present, but good to confirm
             services.AddScoped<IServiceRepository, ServiceRepository>(); // Already present, but good to confirm
             services.AddScoped<INewsletterRepository, NewsletterRepository>(); // Already present, but good to confirm
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IPhotoService, PhotoService>();
             return services;
         }
     }

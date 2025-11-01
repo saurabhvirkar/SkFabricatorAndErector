@@ -1,12 +1,7 @@
 using MailKit.Net.Smtp;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using MimeKit;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SkFabricatorApi.Services
 {

@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SkFabricatorApi.Data;
-using SkFabricatorApi.Models;
 using SkFabricatorApi.Services;
 using System.Threading.Tasks;
 
@@ -12,79 +8,54 @@ namespace SkFabricatorApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    //[Authorize(Roles = "Admin")]
     public class GalleryController : ControllerBase
     {
         private readonly IPhotoService _photoService;
-        private readonly AppDbContext _context;
 
-        public GalleryController(IPhotoService photoService, AppDbContext context)
+        public GalleryController(IPhotoService photoService)
         {
             _photoService = photoService;
-            _context = context;
         }
 
         [HttpPost("add-photo")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> AddPhoto(IFormFile file)
         {
-            var result = await _photoService.AddPhotoAsync(file);
-
-            if (result.Error != null)
+            if (file == null || file.Length == 0)
             {
-                return BadRequest(result.Error.Message);
+                return BadRequest("No file uploaded.");
             }
 
-            var photo = new Photo
+            try
             {
-                Url = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId
-            };
-
-            _context.Photos.Add(photo);
-
-            if (await _context.SaveChangesAsync() > 0)
-            {
+                var photo = await _photoService.AddPhotoAsync(file);
                 return Ok(photo);
             }
-
-            return BadRequest("Problem adding photo");
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<IActionResult> DeletePhoto(int photoId)
         {
-            var photo = await _context.Photos.FindAsync(photoId);
+            var result = await _photoService.DeletePhotoAsync(photoId);
 
-            if (photo == null)
-            {
-                return NotFound();
-            }
-
-            if (photo.PublicId != null)
-            {
-                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
-
-                if (result.Error != null)
-                {
-                    return BadRequest(result.Error.Message);
-                }
-            }
-
-            _context.Photos.Remove(photo);
-
-            if (await _context.SaveChangesAsync() > 0)
+            if (result)
             {
                 return Ok();
             }
 
-            return BadRequest("Failed to delete the photo");
+            return NotFound("Photo not found or failed to delete.");
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetImages()
         {
-            var photos = await _context.Photos.ToListAsync();
+            var photos = await _photoService.GetPhotosAsync();
             return Ok(photos);
         }
     }

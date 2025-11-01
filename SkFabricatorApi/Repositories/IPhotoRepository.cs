@@ -1,14 +1,14 @@
-using Microsoft.AspNetCore.Http;
 using SkFabricatorApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Services
+namespace SkFabricatorApi.Repositories
 {
-    public interface IPhotoService
+    public interface IPhotoRepository
     {
-        Task<Photo> AddPhotoAsync(IFormFile file);
+        Task<Photo> AddPhotoAsync(Photo photo);
         Task<bool> DeletePhotoAsync(int photoId);
+        Task<Photo> GetPhotoByIdAsync(int photoId);
         Task<IEnumerable<Photo>> GetPhotosAsync();
     }
 }
