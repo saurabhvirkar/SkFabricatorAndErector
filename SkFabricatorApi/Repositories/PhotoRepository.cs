@@ -39,7 +39,7 @@ namespace SkFabricatorApi.Repositories
             return await _context.Photos.FindAsync(photoId);
         }
 
-        public async Task<IEnumerable<Photo>> GetPhotosAsync(string category = null)
+        public async Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null)
         {
             if (string.IsNullOrEmpty(category))
             {

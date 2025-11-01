@@ -59,7 +59,7 @@ namespace SkFabricatorApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetImages([FromQuery] string category = null)
+        public async Task<IActionResult> GetImages([FromQuery] string? category = null)
         {
             var photos = await _photoService.GetPhotosAsync(category);
             return Ok(photos);

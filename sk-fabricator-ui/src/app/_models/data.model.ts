@@ -3,6 +3,9 @@ export interface TeamMember {
   name: string;
   role: string;
   imageUrl: string;
+  email?: string;
+  linkedInUrl?: string;
+  details?: string;
 }
 
 /**
@@ -17,20 +20,15 @@ export interface Project {
   title: string;
   category: ProjectCategory;
   description: string;
-  imageUrl: string;
+  image: string;
 }
 
 export interface Service {
   id: number;
   name: string;
   summary: string;
-  icon: string; 
-  image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };  
+  icon: string;
+  imageUrl: string;
 }
 
 export interface Accolade {

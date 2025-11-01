@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, PLATFORM_ID, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, PLATFORM_ID, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AccoladesComponent } from '../../accolades/accolades.component';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
@@ -7,6 +7,10 @@ import { RouterLink } from '@angular/router';
 import { AboutDetailsComponent } from '../about-details/about-details.component';
 import { ApiService } from '../../api.service';
 import { SectionImage } from '../../_models/section-image.model';
+import { Service } from '../../_models/service.model';
+import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+import { AuthService } from '../../auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +21,7 @@ import { SectionImage } from '../../_models/section-image.model';
     InquiryFormComponent,
     RouterLink,
     AboutDetailsComponent,
+    SectionImageManagerComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -24,9 +29,18 @@ import { SectionImage } from '../../_models/section-image.model';
 export class HomeComponent implements OnInit, OnDestroy {
   private dataService = inject(DataService);
   private apiService = inject(ApiService);
+  private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
 
-  featuredServices = this.dataService.getServices().slice(0, 3);
+  isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
+  currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
+
+  isAdminOrManager = computed(() => {
+    const role = this.currentUserRole();
+    return role === 'Admin' || role === 'Manager';
+  });
+
+  featuredServices = signal<Service[]>([]);
 
   // Background slider properties
   backgroundSlides = signal<SectionImage[]>([]);
@@ -35,6 +49,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadBackgroundSlides();
+    this.loadFeaturedServices();
+  }
+
+  loadFeaturedServices(): void {
+    this.apiService.getServices().subscribe({
+      next: (services) => {
+        this.featuredServices.set(services.slice(0, 3));
+      },
+      error: (err) => {
+        console.error('Failed to load featured services', err);
+      }
+    });
   }
 
   loadBackgroundSlides(): void {

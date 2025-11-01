@@ -12,9 +12,9 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @for (service of dynamicServices(); track service.id) {
+        @for (service of services(); track service.id) {
           <div class="relative bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 overflow-hidden group bg-cover bg-center"
-               [style.backgroundImage]="'url(' + service.dynamicImageUrl + ')'">
+               [style.backgroundImage]="'url(' + service.imageUrl + ')'">
             <!-- Overlay for text readability -->
             <div class="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-70 transition-all duration-300"></div>
             <div class="relative z-10 text-white">
@@ -44,6 +44,123 @@
       <div id="inquiry" class="mt-20">
         <app-inquiry-form></app-inquiry-form>
       </div>
+
+      @if (isLoggedIn() && isAdminOrManager()) {
+        <div class="flex justify-center mt-8">
+          <button (click)="toggleAddServiceForm()"
+                  class="px-6 py-3 rounded-full font-semibold text-white transition-all duration-200"
+                  [ngClass]="showAddServiceForm() ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'">
+            {{ showAddServiceForm() ? 'Cancel Add Service' : 'Add New Service' }}
+          </button>
+        </div>
+
+        @if (showAddServiceForm()) {
+          <div class="mt-8 p-6 bg-white rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">Add New Service</h3>
+            <form (ngSubmit)="onAddService(serviceForm, fileInput.files)" #serviceForm="ngForm">
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+              <input type="text" id="name" name="name" ngModel required
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="summary" class="block text-sm font-medium text-gray-700">Summary</label>
+              <textarea id="summary" name="summary" ngModel required
+                        rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="icon" class="block text-sm font-medium text-gray-700">Icon (Emoji or URL)</label>
+              <input type="text" id="icon" name="icon" ngModel required
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="file" class="block text-sm font-medium text-gray-700">Image</label>
+              <input type="file" id="file" name="file" #fileInput required
+                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </div>
+            <button type="submit" [disabled]="!serviceForm.valid"
+                    class="px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+              Submit Service
+            </button>
+          </form>
+          </div>
+        }
+        <app-section-image-manager [sectionName]="'ServicesComponent'"></app-section-image-manager>
+      }
     </div>
   </main>
 </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  @for (service of services(); track service.id) {
+    <div class="relative bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 overflow-hidden group bg-cover bg-center"
+         [style.backgroundImage]="'url(' + service.imageUrl + ')'">
+      <!-- Overlay for text readability -->
+      <div class="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-70 transition-all duration-300"></div>
+      <div class="relative z-10 text-white">
+        <div class="text-6xl text-blue-300 mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-black bg-opacity-20">
+          {{ service.icon }}
+        </div>
+        <h2 class="text-2xl font-bold mb-3">{{ service.name }}</h2>
+        <p class="text-gray-200 mb-4">{{ service.summary }}</p>
+        <ul class="text-sm text-gray-300 space-y-2 border-l-2 border-blue-500 pl-4">
+          <li>Specialized welding techniques.</li>
+          <li>Advanced project management.</li>
+          <li>Commitment to safety and quality.</li>
+        </ul>
+      </div>
+    </div>
+    @if (isLoggedIn() && isAdminOrManager()) {
+      <div class="p-6 bg-gray-50">
+        <div class="flex justify-center mt-4 space-x-4">
+          <button (click)="toggleEditServiceForm(service)" class="px-4 py-2 rounded-full font-semibold text-white bg-yellow-500 hover:bg-yellow-600 transition-all duration-200">Edit</button>
+          <button (click)="deleteService(service.id)" class="px-4 py-2 rounded-full font-semibold text-white bg-red-600 hover:bg-red-700 transition-all duration-200">Delete</button>
+        </div>
+        <form (ngSubmit)="onImageUpload(service.id, fileInput.files)" #imageUploadForm="ngForm">
+          <div class="mb-4">
+            <label for="file" class="block text-sm font-medium text-gray-700">Upload Image</label>
+            <input type="file" #fileInput>
+          </div>
+          <button type="submit"
+                  class="px-4 py-2 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200">
+            Upload Image
+          </button>
+        </form>
+      </div>
+    }
+  }
+</div>
+
+@if (editingService()) {
+  <div class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg">
+      <h3 class="text-2xl font-bold text-gray-900 mb-6">Edit Service</h3>
+      <form (ngSubmit)="onUpdateService(editForm, editingService()!)" #editForm="ngForm">
+        <div class="mb-4">
+          <label for="edit-name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" id="edit-name" name="name" [(ngModel)]="editingService()!.name" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="mb-4">
+          <label for="edit-summary" class="block text-sm font-medium text-gray-700">Summary</label>
+          <textarea id="edit-summary" name="summary" [(ngModel)]="editingService()!.summary" required
+                    rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="edit-icon" class="block text-sm font-medium text-gray-700">Icon (Emoji or URL)</label>
+          <input type="text" id="edit-icon" name="icon" [(ngModel)]="editingService()!.icon" required
+                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button type="button" (click)="toggleEditServiceForm(null)"
+                  class="px-6 py-3 rounded-full font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all duration-200">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="!editForm.valid"
+                  class="px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Update Service
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

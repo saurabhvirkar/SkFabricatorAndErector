@@ -77,7 +77,7 @@ namespace SkFabricatorApi.Services
             return await _photoRepository.DeletePhotoAsync(photoId);
         }
 
-        public async Task<IEnumerable<Photo>> GetPhotosAsync(string category = null)
+        public async Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null)
         {
             return await _photoRepository.GetPhotosAsync(category);
         }

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
+using SkFabricatorApi.Services;
+using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Controllers;
 
@@ -10,9 +12,12 @@ namespace SkFabricatorApi.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly IProjectRepository _projectRepository;
-    public ProjectsController(IProjectRepository projectRepository)
+    private readonly IProjectService _projectService;
+
+    public ProjectsController(IProjectRepository projectRepository, IProjectService projectService)
     {
         _projectRepository = projectRepository;
+        _projectService = projectService;
     }
 
     [HttpGet]
@@ -37,12 +42,44 @@ public class ProjectsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Add([FromBody] Project project)
+    public async Task<IActionResult> Add([FromForm] AddProjectRequestDto request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        var newProject = await _projectRepository.AddAsync(project);
-        return CreatedAtAction("GetProjectById", new { id = newProject.Id }, newProject);
+        try
+        {
+            var newProject = await _projectService.AddProjectAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = newProject.Id }, newProject);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("add-image")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> AddProjectImage([FromForm] AddProjectImageRequestDto request)
+    {
+        try
+        {
+            var project = await _projectService.AddProjectImageAsync(request.ProjectId, request.File);
+            return Ok(project);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _projectService.DeleteProjectAsync(id);
+        if (result)
+        {
+            return Ok();
+        }
+        return NotFound();
     }
 }
 

@@ -39,6 +39,10 @@
       </div>
     </div>
 
+    @if (isLoggedIn() && isAdminOrManager()) {
+      <app-section-image-manager [sectionName]="'AboutDetailsComponent'"></app-section-image-manager>
+    }
+
     <!-- Our Commitment Section -->
     <section class="mt-24">
       <div class="text-center mb-16">

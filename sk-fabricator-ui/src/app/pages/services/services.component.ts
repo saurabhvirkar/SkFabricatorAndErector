@@ -1,19 +1,19 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models/data.model'; // Import the correct Service interface
-
-interface DynamicService extends Service {
-  dynamicImageUrl?: string; // Add dynamicImageUrl to the extended interface
-}
+import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+import { AuthService } from '../../auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, InquiryFormComponent],
+  imports: [CommonModule, InquiryFormComponent, SectionImageManagerComponent, FormsModule, NgClass],
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
   // Added ChangeDetectionStrategy.OnPush
@@ -22,32 +22,120 @@ interface DynamicService extends Service {
 export class ServicesComponent implements OnInit {
   private dataService = inject(DataService);
   private apiService = inject(ApiService);
+  private authService = inject(AuthService);
 
-  staticServices: Service[] = [];
-  dynamicServices = signal<DynamicService[]>([]);
+  isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
+  currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
+
+  isAdminOrManager = computed(() => {
+    const role = this.currentUserRole();
+    return role === 'Admin' || role === 'Manager';
+  });
+
+  services = signal<Service[]>([]); // Renamed from dynamicServices
+  showAddServiceForm = signal<boolean>(false); // New signal for form visibility
+  editingService = signal<Service | null>(null);
+
+  newService: Service = { id: 0, name: '', summary: '', icon: '', imageUrl: '' };
 
   ngOnInit(): void {
-    this.staticServices = this.dataService.getServices();
-    this.loadServiceImages();
+    this.loadServices();
   }
 
-  loadServiceImages(): void {
-    this.apiService.getSectionImagesBySectionName('ServicesComponent').subscribe({
-      next: (sectionImages) => {
-        const combinedServices: DynamicService[] = this.staticServices.map((service, index) => {
-          const dynamicImage = sectionImages[index]; // Simple mapping by index
-          return {
-            ...service,
-            dynamicImageUrl: dynamicImage ? dynamicImage.url : service.image.src // Use dynamic if available, else static
-          };
-        });
-        this.dynamicServices.set(combinedServices);
+  loadServices(): void {
+    this.apiService.getServices().subscribe({
+      next: (services) => {
+        this.services.set(services);
       },
       error: (err) => {
-        console.error('Failed to load service images for ServicesComponent', err);
-        // Fallback to static images if API call fails
-        this.dynamicServices.set(this.staticServices.map(s => ({ ...s, dynamicImageUrl: s.image.src })));
+        console.error('Failed to load services', err);
       }
     });
+  }
+
+  toggleAddServiceForm(): void {
+    this.showAddServiceForm.update(value => !value);
+  }
+
+  toggleEditServiceForm(service: Service | null): void {
+    this.editingService.set(service);
+  }
+
+  onAddService(form: any, files: FileList | null): void {
+    if (form.valid && files && files.length > 0) {
+      const formData = new FormData();
+      formData.append('name', form.value.name);
+      formData.append('summary', form.value.summary);
+      formData.append('icon', form.value.icon);
+      formData.append('file', files[0]);
+
+      this.apiService.addService(formData).subscribe({
+        next: (service) => {
+          this.services.update(services => [...services, service]);
+          this.toggleAddServiceForm(); // Hide form after submission
+          form.reset();
+        },
+        error: (err) => {
+          console.error('Failed to add service', err);
+        }
+      });
+    }
+  }
+
+  onUpdateService(form: any, service: Service): void {
+    if (form.valid) {
+      this.apiService.updateService(service.id, form.value).subscribe({
+        next: (updatedService) => {
+          this.services.update(services => {
+            const index = services.findIndex(s => s.id === updatedService.id);
+            if (index !== -1) {
+              services[index] = updatedService;
+            }
+            return [...services];
+          });
+          this.toggleEditServiceForm(null);
+        },
+        error: (err) => {
+          console.error('Failed to update service', err);
+        }
+      });
+    }
+  }
+
+  deleteService(serviceId: number): void {
+    if (confirm('Are you sure you want to delete this service?')) {
+      this.apiService.deleteService(serviceId).subscribe({
+        next: () => {
+          this.services.update(services => services.filter(s => s.id !== serviceId));
+        },
+        error: (err) => {
+          console.error('Failed to delete service', err);
+        }
+      });
+    }
+  }
+
+  onImageUpload(serviceId: number, files: FileList | null): void {
+    if (files && files.length > 0) {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('serviceId', serviceId.toString());
+
+      this.apiService.addServiceImage(formData).subscribe({
+        next: (updatedService) => {
+          this.services.update(services => {
+            const index = services.findIndex(s => s.id === updatedService.id);
+            if (index !== -1) {
+              services[index] = updatedService;
+            }
+            return [...services];
+          });
+        },
+        error: (err) => {
+          console.error('Failed to upload image', err);
+        }
+      });
+    }
   }
 }

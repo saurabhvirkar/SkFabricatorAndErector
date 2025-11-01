@@ -65,13 +65,16 @@ namespace SkFabricatorApi.StartupExtensions
             services.AddScoped<IInquiryRepository, InquiryRepository>();
             services.AddScoped<IInquiryService, InquiryService>();
             services.AddScoped<IProjectRepository, ProjectRepository>(); // Already present, but good to confirm
+            services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IServiceRepository, ServiceRepository>(); // Already present, but good to confirm
+            services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<INewsletterRepository, NewsletterRepository>(); // Already present, but good to confirm
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<ISectionImageRepository, SectionImageRepository>();
             services.AddScoped<ISectionImageService, SectionImageService>();
             services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IClientDetailsRepository, ClientDetailsRepository>();
             return services;
         }

@@ -13,26 +13,37 @@
   <main class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        @for (member of dynamicTeamMembers(); track member.id) {
+        @for (member of teamMembers(); track member.id) {
           <div class="group bg-white rounded-xl shadow-lg text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
             <div class="relative h-40 bg-blue-200 rounded-t-xl">
-              <img [src]="member.dynamicImageUrl" [alt]="member.name"
+              <img [src]="member.imageUrl" [alt]="member.name"
                     class="w-32 h-32 object-cover rounded-full mx-auto absolute -bottom-16 left-1/2 transform -translate-x-1/2 border-4 border-white shadow-lg">
             </div>
             <div class="pt-20 p-6">
               <h2 class="text-xl font-bold text-gray-900">{{ member.name }}</h2>
               <p class="text-sm font-medium text-blue-600 mb-3">{{ member.role }}</p>
               <p class="text-gray-600 text-sm mb-4">
-                Dedicated to providing integrated solutions and maximizing project value.
+                {{ member.details || 'Dedicated to providing integrated solutions and maximizing project value.' }}
               </p>
               <div class="flex justify-center space-x-4">
-                <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
+                @if (member.email) {
+                  <a [href]="'mailto:' + member.email" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
+                  </a>
+                }
+                @if (member.linkedInUrl) {
+                  <a [href]="member.linkedInUrl" target="_blank" class="text-gray-400 hover:text-blue-600 transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </a>
+                }
               </div>
+              @if (isLoggedIn() && isAdminOrManager()) {
+                <div class="mt-4">
+                  <button (click)="onDeleteTeamMember(member.id)" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-200">
+                    Delete
+                  </button>
+                </div>
+              }
             </div>
           </div>
         }
@@ -53,5 +64,56 @@
         </a>
       </div>
     </div>
+    @if (isLoggedIn() && isAdminOrManager()) {
+      <div class="flex justify-center mt-8">
+        <button (click)="toggleAddTeamMemberForm()"
+                class="px-6 py-3 rounded-full font-semibold text-white transition-all duration-200"
+                [ngClass]="showAddTeamMemberForm() ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'">
+          {{ showAddTeamMemberForm() ? 'Cancel Add Team Member' : 'Add New Team Member' }}
+        </button>
+      </div>
+
+      @if (showAddTeamMemberForm()) {
+        <div class="mt-8 p-6 bg-white rounded-xl shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Add New Team Member</h3>
+          <form (ngSubmit)="onAddTeamMember(teamMemberForm, fileInput.files)" #teamMemberForm="ngForm">
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+              <input type="text" id="name" name="name" ngModel required
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+              <input type="text" id="role" name="role" ngModel required
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <input type="email" id="email" name="email" ngModel
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="linkedInUrl" class="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+              <input type="url" id="linkedInUrl" name="linkedInUrl" ngModel
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="details" class="block text-sm font-medium text-gray-700">Details</label>
+              <textarea id="details" name="details" ngModel rows="3"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="file" class="block text-sm font-medium text-gray-700">Image</label>
+              <input type="file" id="file" name="file" #fileInput required
+                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </div>
+            <button type="submit" [disabled]="!teamMemberForm.valid"
+                    class="px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+              Submit Team Member
+            </button>
+          </form>
+        </div>
+      }
+    }
   </section>
 </div>

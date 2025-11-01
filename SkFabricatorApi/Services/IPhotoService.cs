@@ -9,6 +9,6 @@ namespace SkFabricatorApi.Services
     {
         Task<Photo> AddPhotoAsync(IFormFile file, string category);
         Task<bool> DeletePhotoAsync(int photoId);
-        Task<IEnumerable<Photo>> GetPhotosAsync(string category = null);
+        Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null);
     }
 }

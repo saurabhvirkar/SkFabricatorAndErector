@@ -31,10 +31,5 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: { roles: ['Admin', 'Manager'] }
   },
-  {
-    path: 'admin/section-image-management',
-    loadComponent: () => import('./pages/admin/section-image-management/section-image-management.component').then(m => m.SectionImageManagementComponent),
-    canActivate: [authGuard],
-    data: { roles: ['Admin', 'Manager'] }
-  },
+
 ];

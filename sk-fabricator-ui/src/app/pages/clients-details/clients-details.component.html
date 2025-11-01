@@ -28,6 +28,10 @@
           Contact Us Today
         </a>
       </section>
+
+      @if (isLoggedIn() && isAdminOrManager()) {
+        <app-section-image-manager [sectionName]="'ClientsDetailsComponent'"></app-section-image-manager>
+      }
     </div>
   </main>
 </div>

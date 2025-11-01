@@ -18,72 +18,42 @@ export class DataService {
       name: 'Mechanical & Industrial Piping',
       summary: 'Industrial piping contracting and fabrication for SS, Fire, Gas (PNG/LPG), Petrol/Diesel, Steam, Nitrogen, Chiller & Air lines. Jacketed piping design & installation.',
       icon: '🔧',
-      image: {
-        src: 'https://images.pexels.com/photos/459762/pexels-photo-459762.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'A complex network of industrial pipes and valves in a factory',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/459762/pexels-photo-459762.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 2,
       name: 'Structure Fabrication & Erection',
       summary: 'Structural steel fabrication and erection (I-Beam, angles, channels, platforms, pipe supports, access ladders) for plants and buildings.',
       icon: '🏗️',
-      image: {
-        src: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'A welder in protective gear working on a large steel structure, creating bright sparks',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 3,
       name: 'Storage Tank Manufacturing',
       summary: 'Design, manufacture and installation of MS/SS storage tanks — oil, water, petroleum, juice, low & high pressure tanks, square and cylindrical tanks.',
       icon: '🛢️',
-      image: {
-        src: 'https://images.pexels.com/photos/3807743/pexels-photo-3807743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'Large white industrial storage tanks under a clear blue sky',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/3807743/pexels-photo-3807743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 4,
       name: 'Plant Maintenance & Shutdown Works',
       summary: 'Onsite repair, maintenance and major shutdown services for rotating and reciprocating equipment, including bearing replacement, seal/coupling work, onsite machining and welding.',
       icon: '🔩',
-      image: {
-        src: 'https://images.pexels.com/photos/8346833/pexels-photo-8346833.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'An engineer in a hard hat inspecting gauges and machinery inside a plant',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/8346833/pexels-photo-8346833.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 5,
       name: 'Specialized Insulation',
       summary: 'Pipe & tank insulation: steam insulation, hot & cold insulation, reactor/tank insulation and Armaflex cold insulation to reduce heat loss and energy cost.',
       icon: '🧰',
-      image: {
-        src: 'https://images.pexels.com/photos/8346761/pexels-photo-8346761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'Close-up of freshly insulated industrial pipes with silver foil casing',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/8346761/pexels-photo-8346761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 6,
       name: 'SS Magnetic Filters',
       summary: 'Magnetic filters for separation of iron particles from liquid/semi-liquid flows — easy to clean and available in varied sizes.',
       icon: '🧲',
-      image: {
-        src: 'https://images.pexels.com/photos/5969793/pexels-photo-5969793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        alt: 'A shiny stainless steel industrial component with intricate parts',
-        width: 600,
-        height: 400
-      }
+      imageUrl: 'https://images.pexels.com/photos/5969793/pexels-photo-5969793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     }
   ];
 
@@ -99,12 +69,12 @@ export class DataService {
   ];
 
   private projects: Project[] = [
-    { id: 1, title: 'Chemical Plant Piping', category: 'Piping', description: 'Installation of high-pressure stainless steel piping systems for a chemical processing plant.', imageUrl: 'https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-    { id: 2, title: 'Warehouse Structural Erection', category: 'Erection', description: 'Erection of heavy steel framework for a new 50,000 sq. ft. manufacturing unit.', imageUrl: 'https://images.pexels.com/photos/7218525/pexels-photo-7218525.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-    { id: 3, title: 'Oil Storage Tank Fabrication', category: 'Fabrication', description: 'Complete fabrication and on-site assembly of large-capacity crude oil storage tanks.', imageUrl: 'https://images.pexels.com/photos/289824/pexels-photo-289824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-    { id: 4, title: 'Power Plant Maintenance', category: 'Maintenance', description: 'Turbine and generator maintenance during a scheduled plant shutdown, ensuring operational reliability.', imageUrl: 'https://images.pexels.com/photos/256517/pexels-photo-256517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-    { id: 5, title: 'Automated Factory Assembly Line', category: 'Erection', description: 'Installation and commissioning of a fully automated robotic assembly line.', imageUrl: 'https://images.pexels.com/photos/4475523/pexels-photo-4475523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
-    { id: 6, title: 'Gas Pipeline Network', category: 'Piping', description: 'Fabrication and laying of a cross-country natural gas pipeline network.', imageUrl: 'https://images.pexels.com/photos/247600/pexels-photo-247600.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }
+    { id: 1, title: 'Chemical Plant Piping', category: 'Piping', description: 'Installation of high-pressure stainless steel piping systems for a chemical processing plant.', image: 'https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+    { id: 2, title: 'Warehouse Structural Erection', category: 'Erection', description: 'Erection of heavy steel framework for a new 50,000 sq. ft. manufacturing unit.', image: 'https://images.pexels.com/photos/7218525/pexels-photo-7218525.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+    { id: 3, title: 'Oil Storage Tank Fabrication', category: 'Fabrication', description: 'Complete fabrication and on-site assembly of large-capacity crude oil storage tanks.', image: 'https://images.pexels.com/photos/289824/pexels-photo-289824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+    { id: 4, title: 'Power Plant Maintenance', category: 'Maintenance', description: 'Turbine and generator maintenance during a scheduled plant shutdown, ensuring operational reliability.', image: 'https://images.pexels.com/photos/256517/pexels-photo-256517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+    { id: 5, title: 'Automated Factory Assembly Line', category: 'Erection', description: 'Installation and commissioning of a fully automated robotic assembly line.', image: 'https://images.pexels.com/photos/4475523/pexels-photo-4475523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
+    { id: 6, title: 'Gas Pipeline Network', category: 'Piping', description: 'Fabrication and laying of a cross-country natural gas pipeline network.', image: 'https://images.pexels.com/photos/247600/pexels-photo-247600.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }
   ];
 
   private accolades: Accolade[] = [

@@ -1,13 +1,16 @@
-import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy, OnDestroy, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
 import { SectionImage } from '../../_models/section-image.model';
+import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+import { AuthService } from '../../auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-about-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SectionImageManagerComponent],
   templateUrl: './about-details.component.html',
   styleUrls: ['./about-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,7 +18,16 @@ import { SectionImage } from '../../_models/section-image.model';
 export class AboutDetailsComponent implements OnInit, OnDestroy {
   private dataService = inject(DataService);
   private apiService = inject(ApiService);
+  private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+
+  isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
+  currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
+
+  isAdminOrManager = computed(() => {
+    const role = this.currentUserRole();
+    return role === 'Admin' || role === 'Manager';
+  });
   
   sectionImages = signal<SectionImage[]>([]);
   currentSlideIndex: number = 0;
@@ -27,13 +39,13 @@ export class AboutDetailsComponent implements OnInit, OnDestroy {
 
   loadSliderImages(): void {
     this.apiService.getSectionImagesBySectionName('AboutDetailsComponent').subscribe({
-      next: (images) => {
+      next: (images: SectionImage[]) => {
         this.sectionImages.set(images);
         if (isPlatformBrowser(this.platformId) && images.length > 0) {
           this.startAutoSlide();
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load slider images for AboutDetailsComponent', err);
       }
     });

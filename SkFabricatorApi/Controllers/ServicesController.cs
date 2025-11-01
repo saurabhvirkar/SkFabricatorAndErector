@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
+using SkFabricatorApi.Services;
+using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Controllers;
 
@@ -10,9 +12,12 @@ namespace SkFabricatorApi.Controllers;
 public class ServicesController : ControllerBase
 {
     private readonly IServiceRepository _serviceRepository;
-    public ServicesController(IServiceRepository serviceRepository)
+    private readonly IServiceService _serviceService;
+
+    public ServicesController(IServiceRepository serviceRepository, IServiceService serviceService)
     {
         _serviceRepository = serviceRepository;
+        _serviceService = serviceService;
     }
 
     [HttpGet]
@@ -37,11 +42,60 @@ public class ServicesController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Add([FromBody] Service service)
+    public async Task<IActionResult> Add([FromForm] AddServiceRequestDto request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        var newService = await _serviceRepository.AddAsync(service);
-        return CreatedAtAction("GetServiceById", new { id = newService.Id }, newService);
+        try
+        {
+            var newService = await _serviceService.AddServiceAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = newService.Id }, newService);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Update(int id, [FromBody] Service service)
+    {
+        if (id != service.Id)
+        {
+            return BadRequest();
+        }
+
+        await _serviceRepository.UpdateAsync(service);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var service = await _serviceRepository.GetByIdAsync(id);
+        if (service == null)
+        {
+            return NotFound();
+        }
+
+        await _serviceRepository.DeleteAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpPost("add-image")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> AddServiceImage([FromForm] AddServiceImageRequestDto request)
+    {
+        try
+        {
+            var service = await _serviceService.AddServiceImageAsync(request.ServiceId, request.File);
+            return Ok(service);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

@@ -26,5 +26,22 @@ namespace SkFabricatorApi.Repositories
         {
             return await _context.Services.FindAsync(id);
         }
+
+        public async Task<Service> UpdateAsync(Service service)
+        {
+            _context.Entry(service).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return service;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var service = await _context.Services.FindAsync(id);
+            if (service != null)
+            {
+                _context.Services.Remove(service);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

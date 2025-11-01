@@ -30,6 +30,10 @@
     </div>
   </section>
 
+    @if (isLoggedIn() && isAdminOrManager()) {
+      <app-section-image-manager [sectionName]="'HomeComponent'"></app-section-image-manager>
+    }
+
   <!-- Accolades Section -->
   <app-accolades class="bg-gray-100"></app-accolades>
 
@@ -41,14 +45,12 @@
         <p class="text-lg text-gray-600 mt-2">Committed to quality services with top-notch equipment and specialized teams.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        @for (service of featuredServices; track service.id) {
+        @for (service of featuredServices(); track service.id) {
         <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-blue-600 overflow-hidden flex flex-col">
           <div class="overflow-hidden">
             <img 
-              [src]="service.image.src" 
-              [alt]="service.image.alt" 
-              [width]="service.image.width" 
-              [height]="service.image.height" 
+              [src]="service.imageUrl" 
+              [alt]="service.name" 
               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
           </div>
           <div class="p-6 flex flex-col flex-grow">
