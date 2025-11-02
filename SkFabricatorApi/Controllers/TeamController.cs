@@ -82,4 +82,24 @@ public class TeamController : ControllerBase
         }
         return NotFound();
     }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateTeamMemberRequestDto request)
+    {
+        try
+        {
+            var updatedTeamMember = await _teamService.UpdateTeamMemberAsync(id, request);
+            if (updatedTeamMember == null)
+            {
+                return NotFound();
+            }
+            return Ok(updatedTeamMember);
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex, "Error updating team member");
+            return BadRequest(ex.Message);
+        }
+    }
 }

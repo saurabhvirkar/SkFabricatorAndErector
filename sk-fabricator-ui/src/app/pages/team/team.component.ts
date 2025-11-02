@@ -31,6 +31,8 @@ export class TeamComponent implements OnInit {
 
   teamMembers = signal<TeamMember[]>([]); // Renamed from dynamicTeamMembers
   showAddTeamMemberForm = signal<boolean>(false); // New signal for form visibility
+  editTeamMember = signal<TeamMember | null>(null); // Signal to hold the team member being edited
+  isEditing = computed(() => this.editTeamMember() !== null); // Computed signal for edit mode
 
   newTeamMember: TeamMember = { id: 0, name: '', role: '', imageUrl: '' };
 
@@ -71,6 +73,31 @@ export class TeamComponent implements OnInit {
         },
         error: (err) => {
           console.error('Failed to add team member', err);
+        }
+      });
+    }
+  }
+
+  startEdit(teamMember: TeamMember): void {
+    this.editTeamMember.set({ ...teamMember }); // Create a copy to avoid direct mutation
+  }
+
+  cancelEdit(): void {
+    this.editTeamMember.set(null);
+  }
+
+  onUpdateTeamMember(): void {
+    const memberToUpdate = this.editTeamMember();
+    if (memberToUpdate && memberToUpdate.id) {
+      this.apiService.updateTeamMember(memberToUpdate.id, memberToUpdate).subscribe({
+        next: (updatedMember) => {
+          this.teamMembers.update(members =>
+            members.map(m => (m.id === updatedMember.id ? updatedMember : m))
+          );
+          this.cancelEdit();
+        },
+        error: (err) => {
+          console.error('Failed to update team member', err);
         }
       });
     }

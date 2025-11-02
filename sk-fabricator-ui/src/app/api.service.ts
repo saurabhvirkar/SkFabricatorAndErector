@@ -139,6 +139,11 @@ export class ApiService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
+  updateTeamMember(id: number, teamMemberData: TeamMember): Observable<TeamMember> {
+    return this.http.put<TeamMember>(`${this.baseUrl}/team/${id}`, teamMemberData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   // Clients
   getClientDetails(): Observable<ClientDetails[]> {
     return this.http.get<ClientDetails[]>(`${this.baseUrl}/clients`)
@@ -177,8 +182,9 @@ export class ApiService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  uploadSectionImage(imageData: FormData): Observable<SectionImage> {
-    return this.http.post<SectionImage>(`${this.baseUrl}/section-image/upload`, imageData, { headers: this.getHeaders() })
+  uploadSectionImage(imageData: FormData, sectionName: string): Observable<SectionImage> {
+    imageData.append('sectionName', sectionName);
+    return this.http.post<SectionImage>(`${this.baseUrl}/section-image/add-image`, imageData, { headers: this.getHeaders() })
       .pipe(catchError(err => this.handleError(err)));
   }
 

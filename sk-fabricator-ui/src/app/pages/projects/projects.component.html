@@ -1,15 +1,13 @@
-<div class="projects-page min-w-full">
+<div class="projects-page min-w-full pt-16">
   <!-- Page Header -->
-  <header class="relative bg-gray-900 text-white pt-24 pb-28 bg-cover bg-center"
+  <header class="relative bg-gray-900 text-white pt-32 pb-36 bg-cover bg-center"
           [style.backgroundImage]="headerImage() ? 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(' + headerImage() + ')' : 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)'">
     <div class="absolute inset-0 bg-indigo-900 opacity-80"></div>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="relative">
-        <h1 class="text-4xl font-extrabold mb-3 animate-fade-in-down">Our Completed Projects</h1>
-        <p class="text-lg text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
-          A showcase of our commitment to quality, speed, and precision across various industrial sectors.
-        </p>
-      </div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <h1 class="text-5xl font-extrabold mb-4 animate-fade-in-down">Our Completed Projects</h1>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
+        A showcase of our commitment to quality, speed, and precision across various industrial sectors.
+      </p>
     </div>
   </header>
   
@@ -29,17 +27,17 @@
       <!-- Projects Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @for (project of filteredProjects(); track project.id) {
-          <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2">
+          <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2 border-b-4 border-blue-600">
             <div class="h-56 overflow-hidden">
               <img [src]="project.image" [alt]="project.title"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
             </div>
             <div class="p-6">
-              <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2 px-3 py-1 rounded-full bg-blue-100">
+              <span class="inline-block text-sm font-semibold uppercase tracking-wider text-blue-600 mb-3 px-3 py-1 rounded-full bg-blue-100">
                 {{ project.category }}
               </span>
-              <h2 class="text-xl font-bold text-gray-900 mb-2">{{ project.title }}</h2>
-              <p class="text-gray-600 text-sm">{{ project.description }}</p>
+              <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ project.title }}</h2>
+              <p class="text-gray-700 text-base leading-relaxed">{{ project.description }}</p>
               @if (isLoggedIn() && isAdminOrManager()) {
                 <div class="mt-4">
                   <button (click)="onDeleteProject(project.id)" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-200">

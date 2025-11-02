@@ -1,4 +1,4 @@
-<div class="home-page min-w-full">
+<div class="home-page min-w-full pt-16">
   <!-- Hero Section -->
   <section class="relative text-white overflow-hidden">
     <!-- Background Image Slider -->
@@ -13,13 +13,13 @@
       ></div>
     }
 
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center py-32 md:py-48">
-      <div class="max-w-3xl">
+      <div class="max-w-3xl text-center mx-auto">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 animate-fade-in-up">
           Expert Contractors for Industrial Piping, Fabrication, and Erection
         </h1>
-        <p class="text-lg md:text-xl text-gray-200 mb-8 animate-fade-in-up animation-delay-300">
+        <p class="text-lg md:text-xl text-gray-100 mb-8 animate-fade-in-up animation-delay-300">
           Integrated solutions for structural design, fabrication, piping, and plant maintenance for leading industrial sectors.
         </p>
         <a routerLink="/projects"
@@ -41,22 +41,22 @@
   <section class="py-20 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-4xl font-extrabold text-gray-900">Our Core Services</h2>
-        <p class="text-lg text-gray-600 mt-2">Committed to quality services with top-notch equipment and specialized teams.</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-3 animate-fade-in-down animation-delay-100">Our Core Services</h2>
+        <p class="text-lg text-gray-600 mt-2 animate-fade-in-up animation-delay-200">Committed to quality services with top-notch equipment and specialized teams.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         @for (service of featuredServices(); track service.id) {
         <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-blue-600 overflow-hidden flex flex-col">
-          <div class="overflow-hidden">
+          <div class="h-56 overflow-hidden">
             <img 
               [src]="service.imageUrl" 
               [alt]="service.name" 
-              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
           </div>
           <div class="p-6 flex flex-col flex-grow">
-          <h3 class="text-2xl font-bold text-gray-800 mb-3">{{ service.name }}</h3>
-          <p class="text-gray-600 mb-4">{{ service.summary }}</p>
-          <a routerLink="/services" class="inline-block text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors duration-300">
+          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ service.name }}</h3>
+          <p class="text-gray-600 text-sm mb-3 leading-relaxed">{{ service.summary }}</p>
+          <a routerLink="/services" class="inline-block text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors duration-300 mt-auto">
             Learn More <span class="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
           </a>
           </div>

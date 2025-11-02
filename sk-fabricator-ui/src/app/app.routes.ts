@@ -9,6 +9,9 @@ import { InquiryDetailsComponent } from './pages/inquiry-details/inquiry-details
 import { ServicesComponent } from './pages/services/services.component';
 import { authGuard } from './auth.guard';
 import { ClientsDetailsComponent } from './pages/clients-details/clients-details.component';
+import { SectionImageManagementComponent } from './pages/admin/section-image-management/section-image-management.component';
+import { SectionImageManagerComponent } from './pages/admin/section-image-manager/section-image-manager.component';
+import { ImageManagementComponent } from './pages/admin/image-management/image-management.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,10 +29,22 @@ export const routes: Routes = [
   { path: 'services', component: ServicesComponent },
   { path: 'clients', component: ClientsDetailsComponent },
   {
-    path: 'admin/image-management',
-    loadComponent: () => import('./pages/admin/image-management/image-management.component').then(m => m.ImageManagementComponent),
+    path: 'admin/section-images',
+    component: SectionImageManagementComponent,
     canActivate: [authGuard],
-    data: { roles: ['Admin', 'Manager'] }
+    data: { roles: ['admin', 'manager'] }
+  },
+  {
+    path: 'admin/section-image-manager',
+    component: SectionImageManagerComponent,
+    canActivate: [authGuard],
+    data: { roles: ['admin', 'manager'] }
+  },
+  {
+    path: 'admin/image-management',
+    component: ImageManagementComponent,
+    canActivate: [authGuard],
+    data: { roles: ['admin', 'manager'] }
   },
 
 ];

@@ -59,7 +59,7 @@ export class SectionImageManagerComponent implements OnInit {
     formData.append('file', this.selectedFile, this.selectedFile.name);
     formData.append('sectionName', this.sectionName);
 
-    this.apiService.uploadSectionImage(formData).subscribe({
+    this.apiService.uploadSectionImage(formData, this.sectionName).subscribe({
       next: () => {
         alert('Image uploaded successfully!');
         this.selectedFile = null;

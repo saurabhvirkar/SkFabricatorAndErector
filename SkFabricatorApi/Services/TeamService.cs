@@ -119,5 +119,22 @@ namespace SkFabricatorApi.Services
 
             return await _teamRepository.DeleteAsync(id);
         }
+
+        public async Task<TeamMember?> UpdateTeamMemberAsync(int id, UpdateTeamMemberRequestDto request)
+        {
+            var teamMember = await _teamRepository.GetByIdAsync(id);
+            if (teamMember == null)
+            {
+                return null;
+            }
+
+            teamMember.Name = request.Name;
+            teamMember.Role = request.Role;
+            teamMember.Email = request.Email;
+            teamMember.LinkedInUrl = request.LinkedInUrl;
+            teamMember.Details = request.Details;
+
+            return await _teamRepository.UpdateAsync(teamMember);
+        }
     }
 }
