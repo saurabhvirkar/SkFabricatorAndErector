@@ -1,7 +1,6 @@
 <div class="projects-page min-w-full pt-16">
   <!-- Page Header -->
-  <header class="relative bg-gray-900 text-white pt-32 pb-36 bg-cover bg-center"
-          [style.backgroundImage]="headerImage() ? 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(' + headerImage() + ')' : 'linear-gradient(rgba(23, 37, 84, 0.8), rgba(23, 37, 84, 0.8)), url(https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)'">
+  <header class="relative bg-gray-900 text-white pt-20 pb-20 bg-cover bg-center">
     <div class="absolute inset-0 bg-indigo-900 opacity-80"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <h1 class="text-5xl font-extrabold mb-4 animate-fade-in-down">Our Completed Projects</h1>
@@ -39,7 +38,10 @@
               <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ project.title }}</h2>
               <p class="text-gray-700 text-base leading-relaxed">{{ project.description }}</p>
               @if (isLoggedIn() && isAdminOrManager()) {
-                <div class="mt-4">
+                <div class="mt-4 flex justify-center space-x-2">
+                  <button (click)="startEdit(project)" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-200">
+                    Edit
+                  </button>
                   <button (click)="onDeleteProject(project.id)" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-200">
                     Delete
                   </button>
@@ -54,6 +56,44 @@
           </div>
         }
       </div>
+
+      @if (isEditing()) {
+        <div class="mt-8 p-6 bg-white rounded-xl shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Edit Project</h3>
+          <form (ngSubmit)="onUpdateProject()" #editForm="ngForm">
+            <div class="mb-4">
+              <label for="editTitle" class="block text-sm font-medium text-gray-700">Title</label>
+              <input type="text" id="editTitle" name="title" [(ngModel)]="editProject()!.title" required
+                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+              <label for="editDescription" class="block text-sm font-medium text-gray-700">Description</label>
+              <textarea id="editDescription" name="description" [(ngModel)]="editProject()!.description" required
+                        rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="editCategory" class="block text-sm font-medium text-gray-700">Category</label>
+              <select id="editCategory" name="category" [(ngModel)]="editProject()!.category" required
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Select a category</option>
+                @for (cat of categories.slice(1); track cat) {
+                  <option [value]="cat">{{ cat }}</option>
+                }
+              </select>
+            </div>
+            <div class="flex justify-end space-x-4">
+              <button type="button" (click)="cancelEdit()"
+                      class="px-6 py-3 rounded-full font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all duration-200">
+                Cancel
+              </button>
+              <button type="submit" [disabled]="!editForm.valid"
+                      class="px-6 py-3 rounded-full font-semibold text-white bg-green-600 hover:bg-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      }
 
       @if (isLoggedIn() && isAdminOrManager()) {
         <div class="flex justify-center mt-8">
@@ -100,44 +140,7 @@
           </form>
           </div>
         }
-        <app-section-image-manager [sectionName]="'ProjectsComponent'"></app-section-image-manager>
       }
     </div>
   </main>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  @for (project of filteredProjects(); track project.id) {
-    <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2">
-      <div class="h-56 overflow-hidden">
-        <img [src]="project.image" [alt]="project.title"
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-      </div>
-      <div class="p-6">
-        <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2 px-3 py-1 rounded-full bg-blue-100">
-          {{ project.category }}
-        </span>
-        <h2 class="text-xl font-bold text-gray-900 mb-2">{{ project.title }}</h2>
-        <p class="text-gray-600 text-sm">{{ project.description }}</p>
-      </div>
-      @if (isLoggedIn() && isAdminOrManager()) {
-        <div class="p-6 bg-gray-50">
-          <form (ngSubmit)="onImageUpload(project.id, fileInput.files)" #imageUploadForm="ngForm">
-            <div class="mb-4">
-              <label for="file" class="block text-sm font-medium text-gray-700">Upload Image</label>
-              <input type="file" #fileInput>
-            </div>
-            <button type="submit"
-                    class="px-4 py-2 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200">
-              Upload Image
-            </button>
-          </form>
-        </div>
-      }
-    </div>
-  } @empty {
-    <div class="col-span-full text-center py-16 text-gray-500">
-      <p class="text-2xl font-semibold">No projects found.</p>
-      <p class="mt-2">Please try another category.</p>
-    </div>
-  }
 </div>

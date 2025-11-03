@@ -3,7 +3,7 @@ import { Project } from '../../_models/data.model';
 import { ApiService } from '../../api.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { DataService } from '../../_services/data.service';
-import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, NgClass } from '@angular/common';
@@ -23,7 +23,7 @@ type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintena
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [CommonModule, SectionImageManagerComponent, FormsModule, NgClass],
+  imports: [CommonModule, FormsModule, NgClass],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,8 +51,9 @@ export class ProjectsComponent implements OnInit {
   categories: ProjectCategory[] = ['All', 'Piping', 'Fabrication', 'Erection', 'Maintenance'];
 
   projects = signal<Project[]>([]); // Renamed from dynamicProjects
-  headerImage = signal<string | null>(null);
   showAddProjectForm = signal<boolean>(false); // New signal for form visibility
+  editProject = signal<Project | null>(null); // Signal to hold the project being edited
+  isEditing = computed(() => this.editProject() !== null); // Computed signal for edit mode
 
   // State
   // The type of the signal now correctly uses the union type
@@ -70,7 +71,6 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects(); // Load projects from API
-    this.loadHeaderImage();
   }
 
   loadProjects(): void {
@@ -84,18 +84,7 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  loadHeaderImage(): void {
-    this.apiService.getSectionImagesBySectionName('ProjectsComponentHeader').subscribe({
-      next: (images) => {
-        if (images.length > 0) {
-          this.headerImage.set(images[0].url);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to load header image for ProjectsComponent', err);
-      }
-    });
-  }
+
 
   /**
    * Updates the active filter and triggers the computed signal to update the list.
@@ -131,25 +120,26 @@ export class ProjectsComponent implements OnInit {
     }
   }
 
-  onImageUpload(projectId: number, files: FileList | null): void {
-    if (files && files.length > 0) {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('projectId', projectId.toString());
+  startEdit(project: Project): void {
+    this.editProject.set({ ...project }); // Create a copy to avoid direct mutation
+  }
 
-      this.apiService.addProjectImage(formData).subscribe({
+  cancelEdit(): void {
+    this.editProject.set(null);
+  }
+
+  onUpdateProject(): void {
+    const projectToUpdate = this.editProject();
+    if (projectToUpdate && projectToUpdate.id) {
+      this.apiService.updateProject(projectToUpdate.id, projectToUpdate).subscribe({
         next: (updatedProject) => {
-          this.projects.update(projects => {
-            const index = projects.findIndex(p => p.id === updatedProject.id);
-            if (index !== -1) {
-              projects[index] = updatedProject;
-            }
-            return [...projects];
-          });
+          this.projects.update(projects =>
+            projects.map(p => (p.id === updatedProject.id ? updatedProject : p))
+          );
+          this.cancelEdit();
         },
         error: (err) => {
-          console.error('Failed to upload image', err);
+          console.error('Failed to update project', err);
         }
       });
     }
@@ -159,7 +149,6 @@ export class ProjectsComponent implements OnInit {
     if (confirm('Are you sure you want to delete this project?')) {
       this.apiService.deleteProject(projectId).subscribe({
         next: () => {
-          alert('Project deleted successfully!');
           this.projects.update(projects => projects.filter(p => p.id !== projectId));
         },
         error: (err) => {

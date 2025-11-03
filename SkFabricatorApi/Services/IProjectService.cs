@@ -9,5 +9,6 @@ namespace SkFabricatorApi.Services
         Task<Project> AddProjectImageAsync(int projectId, IFormFile file);
         Task<Project> AddProjectAsync(AddProjectRequestDto request);
         Task<bool> DeleteProjectAsync(int id);
+        Task<Project> UpdateProjectAsync(Project project);
     }
 }

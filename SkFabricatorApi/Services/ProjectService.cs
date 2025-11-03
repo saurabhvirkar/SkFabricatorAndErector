@@ -107,5 +107,10 @@ namespace SkFabricatorApi.Services
 
             return await _projectRepository.DeleteAsync(id);
         }
+
+        public async Task<Project> UpdateProjectAsync(Project project)
+        {
+            return await _projectRepository.UpdateAsync(project);
+        }
     }
 }

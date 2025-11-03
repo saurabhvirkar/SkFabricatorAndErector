@@ -118,6 +118,11 @@ export class ApiService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
+  updateProject(projectId: number, projectData: any): Observable<Project> {
+    return this.http.put<Project>(`${this.baseUrl}/projects/${projectId}`, projectData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   // Team
   getTeamMembers(): Observable<TeamMember[]> {
     return this.http.get<TeamMember[]>(`${this.baseUrl}/team`)

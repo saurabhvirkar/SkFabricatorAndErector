@@ -81,5 +81,25 @@ public class ProjectsController : ControllerBase
         }
         return NotFound();
     }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Update(int id, [FromBody] Project project)
+    {
+        if (id != project.Id)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            var updatedProject = await _projectService.UpdateProjectAsync(project);
+            return Ok(updatedProject);
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
 
