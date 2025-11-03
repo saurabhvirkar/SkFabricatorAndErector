@@ -5,7 +5,7 @@
     @for (slide of backgroundSlides(); track slide.id; let i = $index) {
       <div 
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-        [style.background-image]="'url(' + slide.url + ')'"
+        [style.background-image]="'url(' + slide.imageUrl + ')'"
         [class.opacity-100]="currentSlideIndex === i"
         [class.opacity-0]="currentSlideIndex !== i"
         role="img"
@@ -17,10 +17,10 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center py-32 md:py-48">
       <div class="max-w-3xl text-center mx-auto">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 animate-fade-in-up">
-          Expert Contractors for Industrial Piping, Fabrication, and Erection
+          {{ heroTitle() }}
         </h1>
         <p class="text-lg md:text-xl text-gray-100 mb-8 animate-fade-in-up animation-delay-300">
-          Integrated solutions for structural design, fabrication, piping, and plant maintenance for leading industrial sectors.
+          {{ heroDescription() }}
         </p>
         <a routerLink="/projects"
           class="inline-block px-8 py-4 text-lg font-semibold bg-blue-600 rounded-lg hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105 shadow-lg animate-fade-in-up animation-delay-600">
@@ -30,9 +30,78 @@
     </div>
   </section>
 
-    @if (isLoggedIn() && isAdminOrManager()) {
-      <app-section-image-manager [sectionName]="'HomeComponent'"></app-section-image-manager>
-    }
+
+
+  @if (isLoggedIn() && isAdminOrManager()) {
+    <section class="bg-gray-100 py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">Manage Home Slider</h3>
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <h4 class="text-xl font-semibold text-gray-800 mb-4">Add New Slider Item</h4>
+          <form #addForm="ngForm" (ngSubmit)="onAddHomeSlider(addForm.value.title, addForm.value.description, addFileInput.files)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="newTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                <input type="text" id="newTitle" name="title" ngModel required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+              </div>
+              <div>
+                <label for="newDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="newDescription" name="description" ngModel required rows="3"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"></textarea>
+              </div>
+            </div>
+            <div class="flex items-center mb-4">
+              <input type="file" #addFileInput accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+            </div>
+            <button type="submit" [disabled]="!addForm.valid" class="px-6 py-2 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+              Add Slider Item
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-8">
+          <h4 class="text-xl font-semibold text-gray-800 mb-4">Current Slider Items</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for (slide of backgroundSlides(); track slide.id) {
+              <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col">
+                <img [src]="slide.imageUrl" [alt]="slide.title" class="w-full h-40 object-cover rounded-md mb-4">
+                <form #updateForm="ngForm" (ngSubmit)="onUpdateHomeSlider(slide.id, updateForm.value.title, updateForm.value.description)">
+                  <div class="mb-3">
+                    <label [for]="'title-' + slide.id" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input [id]="'title-' + slide.id" type="text" name="title" [(ngModel)]="slide.title" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                  </div>
+                  <div class="mb-3">
+                    <label [for]="'description-' + slide.id" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea [id]="'description-' + slide.id" name="description" [(ngModel)]="slide.description" required rows="2"
+                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"></textarea>
+                  </div>
+                  <div class="flex justify-between items-center mt-4">
+                    <button type="submit" [disabled]="!updateForm.valid" class="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                      Update
+                    </button>
+                    <button (click)="onDeleteHomeSlider(slide.id)" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-200">
+                      Delete
+                    </button>
+                  </div>
+                </form>
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                  <h5 class="text-md font-semibold text-gray-800 mb-2">Change Image</h5>
+                  <form #imageUploadForm="ngForm" (ngSubmit)="onAddHomeSliderImage(slide.id, imageUploadInput.files)">
+                    <input type="file" #imageUploadInput accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-2"/>
+                    <button type="submit" [disabled]="!imageUploadInput.files || imageUploadInput.files.length === 0" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                      Upload New Image
+                    </button>
+                  </form>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  }
 
   <!-- Accolades Section -->
   <app-accolades class="bg-gray-100"></app-accolades>

@@ -9,5 +9,6 @@ namespace SkFabricatorApi.Models
         public string? Name { get; set; }
         [Required]
         public string? ImageUrl { get; set; }
+        public string? ClientUrl { get; set; }
     }
 }

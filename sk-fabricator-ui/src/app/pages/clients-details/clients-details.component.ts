@@ -1,26 +1,30 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
 import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
-import { SectionImage } from '../../_models/section-image.model';
-import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+import { ClientDetails } from '../../_models/data.model';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
   selector: 'app-clients-details',
-  imports: [CommonModule, SectionImageManagerComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './clients-details.component.html',
   styleUrls: ['./clients-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientsDetailsComponent implements OnInit {
-  private dataService = inject(DataService);
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
 
-  clientImages = signal<SectionImage[]>([]);
+  clients = signal<ClientDetails[]>([]);
+  showAddClientForm = signal<boolean>(false);
+  editClient = signal<ClientDetails | null>(null);
+  isEditing = computed(() => this.editClient() !== null);
+
+  newClient: ClientDetails = { id: 0, name: '', imageUrl: '', clientUrl: '' };
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
   currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
@@ -31,17 +35,103 @@ export class ClientsDetailsComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadClientImages();
+    this.loadClients();
   }
 
-  loadClientImages(): void {
-    this.apiService.getSectionImagesBySectionName('ClientsDetailsComponent').subscribe({
-      next: (images: SectionImage[]) => {
-        this.clientImages.set(images);
+  loadClients(): void {
+    this.apiService.getClientDetails().subscribe({
+      next: (clients: ClientDetails[]) => {
+        this.clients.set(clients);
       },
       error: (err: any) => {
-        console.error('Failed to load client images for ClientsDetailsComponent', err);
+        console.error('Failed to load clients', err);
       }
     });
+  }
+
+  toggleAddClientForm(): void {
+    this.showAddClientForm.update(value => !value);
+  }
+
+  onAddClient(form: any, files: FileList | null): void {
+    if (form.valid && files && files.length > 0) {
+      const formData = new FormData();
+      formData.append('name', form.value.name);
+      formData.append('clientUrl', form.value.clientUrl);
+      formData.append('file', files[0]);
+
+      this.apiService.addClient(formData).subscribe({
+        next: (client) => {
+          this.clients.update(clients => [...clients, client]);
+          this.toggleAddClientForm();
+          form.reset();
+        },
+        error: (err) => {
+          console.error('Failed to add client', err);
+        }
+      });
+    }
+  }
+
+  startEdit(client: ClientDetails): void {
+    this.editClient.set({ ...client });
+  }
+
+  cancelEdit(): void {
+    this.editClient.set(null);
+  }
+
+  onUpdateClient(): void {
+    const clientToUpdate = this.editClient();
+    if (clientToUpdate && clientToUpdate.id) {
+      this.apiService.updateClient(clientToUpdate.id, clientToUpdate).subscribe({
+        next: (updatedClient) => {
+          this.clients.update(clients =>
+            clients.map(c => (c.id === updatedClient.id ? updatedClient : c))
+          );
+          this.cancelEdit();
+        },
+        error: (err) => {
+          console.error('Failed to update client', err);
+        }
+      });
+    }
+  }
+
+  onDeleteClient(id: number): void {
+    if (confirm('Are you sure you want to delete this client?')) {
+      this.apiService.deleteClient(id).subscribe({
+        next: () => {
+          this.clients.update(clients => clients.filter(c => c.id !== id));
+        },
+        error: (err) => {
+          console.error('Failed to delete client', err);
+        }
+      });
+    }
+  }
+
+  onImageUpload(clientId: number, files: FileList | null): void {
+    if (files && files.length > 0) {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('clientId', clientId.toString());
+
+      this.apiService.addClientImage(formData).subscribe({
+        next: (updatedClient) => {
+          this.clients.update(clients => {
+            const index = clients.findIndex(c => c.id === updatedClient.id);
+            if (index !== -1) {
+              clients[index] = updatedClient;
+            }
+            return [...clients];
+          });
+        },
+        error: (err) => {
+          console.error('Failed to upload image', err);
+        }
+      });
+    }
   }
 }

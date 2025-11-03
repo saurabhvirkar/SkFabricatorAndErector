@@ -76,6 +76,9 @@ namespace SkFabricatorApi.StartupExtensions
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IClientDetailsRepository, ClientDetailsRepository>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IHomeSliderRepository, HomeSliderRepository>();
+            services.AddScoped<IHomeSliderService, HomeSliderService>();
             return services;
         }
     }

@@ -25,10 +25,19 @@ export interface Project {
 
 export interface Service {
   id: number;
-  name: string;
-  summary: string;
+  title: string;
+  description: string;
   icon: string;
   imageUrl: string;
+  name?: string;
+  summary?: string;
+}
+
+export interface ClientDetails {
+  id: number;
+  name: string;
+  imageUrl: string;
+  clientUrl?: string;
 }
 
 export interface Accolade {

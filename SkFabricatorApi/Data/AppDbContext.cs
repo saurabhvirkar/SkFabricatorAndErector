@@ -15,5 +15,6 @@ namespace SkFabricatorApi.Data
     public DbSet<SectionImage> SectionImages { get; set; }
     public DbSet<TeamMember> TeamMembers { get; set; }
     public DbSet<ClientDetails> ClientDetails { get; set; }
+    public DbSet<HomeSlider> HomeSliders { get; set; }
     }
 }

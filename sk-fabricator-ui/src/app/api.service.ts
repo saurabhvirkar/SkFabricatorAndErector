@@ -11,6 +11,7 @@ import { TeamMember } from './_models/data.model';
 import { ClientDetails } from './_models/data.model';
 import { GalleryImage } from './_models/data.model';
 import { SectionImage } from './_models/section-image.model';
+import { HomeSlider } from './_models/home-slider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -155,6 +156,26 @@ export class ApiService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
+  addClient(clientData: FormData): Observable<ClientDetails> {
+    return this.http.post<ClientDetails>(`${this.baseUrl}/clients`, clientData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  deleteClient(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/clients/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  addClientImage(imageData: FormData): Observable<ClientDetails> {
+    return this.http.post<ClientDetails>(`${this.baseUrl}/clients/add-image`, imageData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  updateClient(id: number, clientData: ClientDetails): Observable<ClientDetails> {
+    return this.http.put<ClientDetails>(`${this.baseUrl}/clients/${id}`, clientData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
   // Gallery
   getPhotos(): Observable<GalleryImage[]> {
     return this.http.get<GalleryImage[]>(`${this.baseUrl}/gallery`)
@@ -195,6 +216,38 @@ export class ApiService {
 
   deleteSectionImage(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/section-image/${id}`, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  // Home Slider
+  getHomeSliders(): Observable<HomeSlider[]> {
+    return this.http.get<HomeSlider[]>(`${this.baseUrl}/home-slider`)
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  addHomeSlider(homeSliderData: { title: string, description: string }): Observable<HomeSlider> {
+    return this.http.post(`${this.baseUrl}/home-slider`, homeSliderData, { headers: this.getHeaders(), responseType: 'text' })
+      .pipe(
+        map(response => JSON.parse(response) as HomeSlider),
+        catchError(err => this.handleError(err))
+      );
+  }
+
+  addHomeSliderImage(imageData: FormData): Observable<HomeSlider> {
+    return this.http.post(`${this.baseUrl}/home-slider/add-image`, imageData, { headers: this.getHeaders(), responseType: 'text' })
+      .pipe(
+        map(response => JSON.parse(response) as HomeSlider),
+        catchError(err => this.handleError(err))
+      );
+  }
+
+  updateHomeSlider(id: number, homeSliderData: { title: string, description: string }): Observable<HomeSlider> {
+    return this.http.put<HomeSlider>(`${this.baseUrl}/home-slider/${id}`, homeSliderData, { headers: this.getHeaders() })
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  deleteHomeSlider(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/home-slider/${id}`, { headers: this.getHeaders() })
       .pipe(catchError(err => this.handleError(err)));
   }
 

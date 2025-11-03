@@ -5,7 +5,7 @@ import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models/data.model'; // Import the correct Service interface
-import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, InquiryFormComponent, SectionImageManagerComponent, FormsModule, NgClass],
+  imports: [CommonModule, InquiryFormComponent, FormsModule, NgClass],
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
   // Added ChangeDetectionStrategy.OnPush
@@ -36,7 +36,7 @@ export class ServicesComponent implements OnInit {
   showAddServiceForm = signal<boolean>(false); // New signal for form visibility
   editingService = signal<Service | null>(null);
 
-  newService: Service = { id: 0, name: '', summary: '', icon: '', imageUrl: '' };
+  newService: Service = { id: 0, title: '', description: '', icon: '', imageUrl: '' };
 
   ngOnInit(): void {
     this.loadServices();
@@ -64,8 +64,8 @@ export class ServicesComponent implements OnInit {
   onAddService(form: any, files: FileList | null): void {
     if (form.valid && files && files.length > 0) {
       const formData = new FormData();
-      formData.append('name', form.value.name);
-      formData.append('summary', form.value.summary);
+      formData.append('title', form.value.title);
+      formData.append('description', form.value.description);
       formData.append('icon', form.value.icon);
       formData.append('file', files[0]);
 

@@ -4,7 +4,7 @@ import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
 import { TeamMember } from '../../_models/data.model';
 import { SectionImage } from '../../_models/section-image.model';
-import { SectionImageManagerComponent } from '../admin/section-image-manager/section-image-manager.component';
+
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
