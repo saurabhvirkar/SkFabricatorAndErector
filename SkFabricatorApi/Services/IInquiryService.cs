@@ -1,14 +1,11 @@
 using SkFabricatorApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Services
+namespace SkFabricatorApi.Services;
+
+public interface IInquiryService
 {
-    public interface IInquiryService
-    {
-        Task<Inquiry> CreateInquiryAsync(Inquiry inquiry);
-        Task<IEnumerable<Inquiry>> GetAllInquiriesAsync();
-        Task<Inquiry?> GetInquiryByIdAsync(int id);
-        Task<bool> DeleteInquiryAsync(int id);
-    }
+    Task<Inquiry> CreateInquiryAsync(Inquiry inquiry);
+    Task<IEnumerable<Inquiry>> GetAllInquiriesAsync();
+    Task<Inquiry?> GetInquiryByIdAsync(int id);
+    Task<bool> DeleteInquiryAsync(int id);
 }

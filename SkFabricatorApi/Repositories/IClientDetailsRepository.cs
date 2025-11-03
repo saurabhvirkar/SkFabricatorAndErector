@@ -1,15 +1,12 @@
 using SkFabricatorApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Repositories
+namespace SkFabricatorApi.Repositories;
+
+public interface IClientDetailsRepository
 {
-    public interface IClientDetailsRepository
-    {
-        Task<IEnumerable<ClientDetails>> GetAllAsync();
-        Task<ClientDetails> AddAsync(ClientDetails clientDetails);
-        Task<ClientDetails?> GetByIdAsync(int id);
-        Task UpdateAsync(ClientDetails clientDetails);
-        Task<bool> DeleteAsync(int id);
-    }
+    Task<IEnumerable<ClientDetails>> GetAllAsync();
+    Task<ClientDetails> AddAsync(ClientDetails clientDetails);
+    Task<ClientDetails?> GetByIdAsync(int id);
+    Task UpdateAsync(ClientDetails clientDetails);
+    Task<bool> DeleteAsync(int id);
 }

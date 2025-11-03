@@ -1,14 +1,13 @@
-using Microsoft.AspNetCore.Http;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Models.DTOs;
 
-namespace SkFabricatorApi.Services
+namespace SkFabricatorApi.Services;
+
+public interface IProjectService
 {
-    public interface IProjectService
-    {
-        Task<Project> AddProjectImageAsync(int projectId, IFormFile file);
-        Task<Project> AddProjectAsync(AddProjectRequestDto request);
-        Task<bool> DeleteProjectAsync(int id);
-        Task<Project> UpdateProjectAsync(Project project);
-    }
+    Task<Project> AddProjectImageAsync(int projectId, IFormFile file);
+    Task<Project> AddProjectAsync(AddProjectRequestDto request);
+    Task<bool> DeleteProjectAsync(int id);
+    Task<Project> UpdateProjectAsync(Project project);
 }
+

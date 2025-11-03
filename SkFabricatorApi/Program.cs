@@ -1,4 +1,3 @@
-using SkFabricatorApi.Data;
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
 

@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
+namespace SkFabricatorApi.Models.DTOs;
 
-namespace SkFabricatorApi.Models.DTOs
+public class AddTeamMemberImageRequestDto
 {
-    public class AddTeamMemberImageRequestDto
-    {
-        public int TeamMemberId { get; set; }
-        public IFormFile File { get; set; } = null!;
-    }
+    public int TeamMemberId { get; set; }
+    public IFormFile File { get; set; } = null!;
 }
+

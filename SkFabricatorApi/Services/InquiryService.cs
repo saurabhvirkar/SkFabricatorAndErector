@@ -3,70 +3,70 @@ using MimeKit;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
 
-namespace SkFabricatorApi.Services
+namespace SkFabricatorApi.Services;
+
+public class InquiryService : IInquiryService
 {
-    public class InquiryService : IInquiryService
+    private readonly IInquiryRepository _inquiryRepository;
+    private readonly IConfiguration _config;
+    private readonly ILogger<InquiryService> _logger;
+
+    public InquiryService(IInquiryRepository inquiryRepository, IConfiguration config, ILogger<InquiryService> logger)
     {
-        private readonly IInquiryRepository _inquiryRepository;
-        private readonly IConfiguration _config;
-        private readonly ILogger<InquiryService> _logger;
+        _inquiryRepository = inquiryRepository;
+        _config = config;
+        _logger = logger;
+    }
 
-        public InquiryService(IInquiryRepository inquiryRepository, IConfiguration config, ILogger<InquiryService> logger)
+    public async Task<Inquiry> CreateInquiryAsync(Inquiry inquiry)
+    {
+        var newInquiry = await _inquiryRepository.AddAsync(inquiry);
+
+        // Try to send the email, but don't let it block the user response.
+        // If it fails, log the error for administrative review.
+        try
         {
-            _inquiryRepository = inquiryRepository;
-            _config = config;
-            _logger = logger;
+            await SendEmailAsync(newInquiry);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send inquiry notification email for inquiry ID {InquiryId}.", newInquiry.Id);
+        }
+        return newInquiry;
+    }
+
+    public async Task<IEnumerable<Inquiry>> GetAllInquiriesAsync()
+    {
+        return await _inquiryRepository.GetAllAsync();
+    }
+
+    public async Task<Inquiry?> GetInquiryByIdAsync(int id)
+    {
+        return await _inquiryRepository.GetByIdAsync(id);
+    }
+
+    public async Task<bool> DeleteInquiryAsync(int id)
+    {
+        var inquiryToDelete = await _inquiryRepository.GetByIdAsync(id);
+        if (inquiryToDelete == null)
+        {
+            return false; // Inquiry not found
         }
 
-        public async Task<Inquiry> CreateInquiryAsync(Inquiry inquiry)
+        await _inquiryRepository.DeleteAsync(inquiryToDelete);
+        return true; // Deletion successful
+    }
+
+    private async Task SendEmailAsync(Inquiry inquiry)
+    {
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("SK Fabricator Site", _config["Email:From"]));
+        message.To.Add(new MailboxAddress("Admin", _config["Email:To"]));
+        message.Subject = $"New Inquiry from {inquiry.Name}";
+
+        message.Body = new TextPart("plain")
         {
-            var newInquiry = await _inquiryRepository.AddAsync(inquiry);
-
-            // Try to send the email, but don't let it block the user response.
-            // If it fails, log the error for administrative review.
-            try
-            {
-                await SendEmailAsync(newInquiry);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to send inquiry notification email for inquiry ID {InquiryId}.", newInquiry.Id);
-            }
-            return newInquiry;
-        }
-
-        public async Task<IEnumerable<Inquiry>> GetAllInquiriesAsync()
-        {
-            return await _inquiryRepository.GetAllAsync();
-        }
-
-        public async Task<Inquiry?> GetInquiryByIdAsync(int id)
-        {
-            return await _inquiryRepository.GetByIdAsync(id);
-        }
-
-        public async Task<bool> DeleteInquiryAsync(int id)
-        {
-            var inquiryToDelete = await _inquiryRepository.GetByIdAsync(id);
-            if (inquiryToDelete == null)
-            {
-                return false; // Inquiry not found
-            }
-
-            await _inquiryRepository.DeleteAsync(inquiryToDelete);
-            return true; // Deletion successful
-        }
-
-        private async Task SendEmailAsync(Inquiry inquiry)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("SK Fabricator Site", _config["Email:From"]));
-            message.To.Add(new MailboxAddress("Admin", _config["Email:To"]));
-            message.Subject = $"New Inquiry from {inquiry.Name}";
-
-            message.Body = new TextPart("plain")
-            {
-                Text = $@"📩 New Inquiry Received:
+            Text = $@"📩 New Inquiry Received:
 
 Name: {inquiry.Name}
 Email: {inquiry.Email}
@@ -78,13 +78,12 @@ Message:
 {inquiry.Message}
 
 Submitted At: {inquiry.SubmittedAt:yyyy-MM-dd HH:mm:ss}"
-            };
+        };
 
-            using var client = new SmtpClient();
-            await client.ConnectAsync(_config["Email:SmtpServer"], int.Parse(_config["Email:SmtpPort"]!), MailKit.Security.SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(_config["Email:Username"], _config["Email:Password"]);
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
-        }
+        using var client = new SmtpClient();
+        await client.ConnectAsync(_config["Email:SmtpServer"], int.Parse(_config["Email:SmtpPort"]!), MailKit.Security.SecureSocketOptions.StartTls);
+        await client.AuthenticateAsync(_config["Email:Username"], _config["Email:Password"]);
+        await client.SendAsync(message);
+        await client.DisconnectAsync(true);
     }
 }

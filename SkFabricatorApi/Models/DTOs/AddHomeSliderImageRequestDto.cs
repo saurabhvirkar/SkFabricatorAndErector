@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Http;
+namespace SkFabricatorApi.Models.DTOs;
 
-namespace SkFabricatorApi.Models.DTOs
+public class AddHomeSliderImageRequestDto
 {
-    public class AddHomeSliderImageRequestDto
-    {
-        public int HomeSliderId { get; set; }
-        public IFormFile File { get; set; }
-    }
+    public int HomeSliderId { get; set; }
+    public IFormFile File { get; set; }
 }

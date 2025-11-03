@@ -1,8 +1,7 @@
-namespace SkFabricatorApi.Models.DTOs
+namespace SkFabricatorApi.Models.DTOs;
+
+public class AddClientImageRequestDto
 {
-    public class AddClientImageRequestDto
-    {
-        public int ClientId { get; set; }
-        public IFormFile? File { get; set; }
-    }
+    public int ClientId { get; set; }
+    public IFormFile? File { get; set; }
 }

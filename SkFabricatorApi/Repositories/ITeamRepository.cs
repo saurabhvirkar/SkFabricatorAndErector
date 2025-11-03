@@ -1,15 +1,12 @@
 using SkFabricatorApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Repositories
+namespace SkFabricatorApi.Repositories;
+
+public interface ITeamRepository
 {
-    public interface ITeamRepository
-    {
-        Task<IEnumerable<TeamMember>> GetAllAsync();
-        Task<TeamMember> AddAsync(TeamMember teamMember);
-        Task<TeamMember> UpdateAsync(TeamMember teamMember);
-        Task<TeamMember?> GetByIdAsync(int id);
-        Task<bool> DeleteAsync(int id);
-    }
+    Task<IEnumerable<TeamMember>> GetAllAsync();
+    Task<TeamMember> AddAsync(TeamMember teamMember);
+    Task<TeamMember> UpdateAsync(TeamMember teamMember);
+    Task<TeamMember?> GetByIdAsync(int id);
+    Task<bool> DeleteAsync(int id);
 }

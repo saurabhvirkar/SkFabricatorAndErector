@@ -1,90 +1,87 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Services
+
+namespace SkFabricatorApi.Services;
+
+public class SectionImageService : ISectionImageService
 {
-    public class SectionImageService : ISectionImageService
+    private readonly Cloudinary _cloudinary;
+    private readonly ISectionImageRepository _sectionImageRepository;
+
+    public SectionImageService(IOptions<CloudinarySettings> config, ISectionImageRepository sectionImageRepository)
     {
-        private readonly Cloudinary _cloudinary;
-        private readonly ISectionImageRepository _sectionImageRepository;
+        var acc = new Account(
+            config.Value.CloudName,
+            config.Value.ApiKey,
+            config.Value.ApiSecret
+        );
+        _cloudinary = new Cloudinary(acc);
+        _sectionImageRepository = sectionImageRepository;
+    }
 
-        public SectionImageService(IOptions<CloudinarySettings> config, ISectionImageRepository sectionImageRepository)
+    public async Task<SectionImage> AddSectionImageAsync(IFormFile file, string sectionName)
+    {
+        var uploadResult = new ImageUploadResult();
+
+        if (file.Length > 0)
         {
-            var acc = new Account(
-                config.Value.CloudName,
-                config.Value.ApiKey,
-                config.Value.ApiSecret
-            );
-            _cloudinary = new Cloudinary(acc);
-            _sectionImageRepository = sectionImageRepository;
-        }
-
-        public async Task<SectionImage> AddSectionImageAsync(IFormFile file, string sectionName)
-        {
-            var uploadResult = new ImageUploadResult();
-
-            if (file.Length > 0)
+            using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
             {
-                using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream)
-                };
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
-            }
-
-            if (uploadResult.Error != null)
-            {
-                throw new System.Exception(uploadResult.Error.Message);
-            }
-
-            var sectionImage = new SectionImage
-            {
-                Url = uploadResult.SecureUrl.AbsoluteUri,
-                PublicId = uploadResult.PublicId,
-                SectionName = sectionName
+                File = new FileDescription(file.FileName, stream)
             };
-
-            return await _sectionImageRepository.AddSectionImageAsync(sectionImage);
+            uploadResult = await _cloudinary.UploadAsync(uploadParams);
         }
 
-        public async Task<bool> DeleteSectionImageAsync(int id)
+        if (uploadResult.Error != null)
         {
-            var sectionImage = await _sectionImageRepository.GetSectionImageByIdAsync(id);
+            throw new System.Exception(uploadResult.Error.Message);
+        }
 
-            if (sectionImage == null)
+        var sectionImage = new SectionImage
+        {
+            Url = uploadResult.SecureUrl.AbsoluteUri,
+            PublicId = uploadResult.PublicId,
+            SectionName = sectionName
+        };
+
+        return await _sectionImageRepository.AddSectionImageAsync(sectionImage);
+    }
+
+    public async Task<bool> DeleteSectionImageAsync(int id)
+    {
+        var sectionImage = await _sectionImageRepository.GetSectionImageByIdAsync(id);
+
+        if (sectionImage == null)
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(sectionImage.PublicId))
+        {
+            var deleteParams = new DeletionParams(sectionImage.PublicId);
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+            if (result.Error != null)
             {
+                // Log the error or handle it as needed
                 return false;
             }
-
-            if (!string.IsNullOrEmpty(sectionImage.PublicId))
-            {
-                var deleteParams = new DeletionParams(sectionImage.PublicId);
-                var result = await _cloudinary.DestroyAsync(deleteParams);
-                if (result.Error != null)
-                {
-                    // Log the error or handle it as needed
-                    return false;
-                }
-            }
-
-            return await _sectionImageRepository.DeleteSectionImageAsync(id);
         }
 
-        public async Task<IEnumerable<SectionImage>> GetSectionImagesBySectionNameAsync(string sectionName)
-        {
-            return await _sectionImageRepository.GetSectionImagesBySectionNameAsync(sectionName);
-        }
+        return await _sectionImageRepository.DeleteSectionImageAsync(id);
+    }
 
-        public async Task<IEnumerable<SectionImage>> GetAllSectionImagesAsync()
-        {
-            return await _sectionImageRepository.GetAllSectionImagesAsync();
-        }
+    public async Task<IEnumerable<SectionImage>> GetSectionImagesBySectionNameAsync(string sectionName)
+    {
+        return await _sectionImageRepository.GetSectionImagesBySectionNameAsync(sectionName);
+    }
+
+    public async Task<IEnumerable<SectionImage>> GetAllSectionImagesAsync()
+    {
+        return await _sectionImageRepository.GetAllSectionImagesAsync();
     }
 }

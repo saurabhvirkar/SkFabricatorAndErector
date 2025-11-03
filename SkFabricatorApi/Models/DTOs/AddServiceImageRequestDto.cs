@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Http;
+namespace SkFabricatorApi.Models.DTOs;
 
-namespace SkFabricatorApi.Models.DTOs
+public class AddServiceImageRequestDto
 {
-    public class AddServiceImageRequestDto
-    {
-        public int ServiceId { get; set; }
-        public IFormFile File { get; set; } = null!;
-    }
+    public int ServiceId { get; set; }
+    public IFormFile File { get; set; } = null!;
 }

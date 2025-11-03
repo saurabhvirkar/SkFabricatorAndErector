@@ -1,52 +1,49 @@
 using Microsoft.EntityFrameworkCore;
 using SkFabricatorApi.Data;
 using SkFabricatorApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SkFabricatorApi.Repositories
+namespace SkFabricatorApi.Repositories;
+
+public class PhotoRepository : IPhotoRepository
 {
-    public class PhotoRepository : IPhotoRepository
+    private readonly AppDbContext _context;
+
+    public PhotoRepository(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public PhotoRepository(AppDbContext context)
+    public async Task<Photo> AddPhotoAsync(Photo photo)
+    {
+        _context.Photos.Add(photo);
+        await _context.SaveChangesAsync();
+        return photo;
+    }
+
+    public async Task<bool> DeletePhotoAsync(int photoId)
+    {
+        var photo = await _context.Photos.FindAsync(photoId);
+        if (photo == null)
         {
-            _context = context;
+            return false;
         }
 
-        public async Task<Photo> AddPhotoAsync(Photo photo)
+        _context.Photos.Remove(photo);
+        return await _context.SaveChangesAsync() > 0;
+    }
+
+    public async Task<Photo?> GetPhotoByIdAsync(int photoId)
+    {
+        return await _context.Photos.FindAsync(photoId);
+    }
+
+    public async Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null)
+    {
+        if (string.IsNullOrEmpty(category))
         {
-            _context.Photos.Add(photo);
-            await _context.SaveChangesAsync();
-            return photo;
+            return await _context.Photos.ToListAsync();
         }
 
-        public async Task<bool> DeletePhotoAsync(int photoId)
-        {
-            var photo = await _context.Photos.FindAsync(photoId);
-            if (photo == null)
-            {
-                return false;
-            }
-
-            _context.Photos.Remove(photo);
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Photo?> GetPhotoByIdAsync(int photoId)
-        {
-            return await _context.Photos.FindAsync(photoId);
-        }
-
-        public async Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null)
-        {
-            if (string.IsNullOrEmpty(category))
-            {
-                return await _context.Photos.ToListAsync();
-            }
-
-            return await _context.Photos.Where(p => p.Category == category).ToListAsync();
-        }
+        return await _context.Photos.Where(p => p.Category == category).ToListAsync();
     }
 }

@@ -1,10 +1,9 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SkFabricatorApi.Models
+namespace SkFabricatorApi.Models;
+
+public class Inquiry
 {
-    public class Inquiry
-    {   
     public int Id { get; set; }
 
     [Required, MaxLength(100)]
@@ -29,5 +28,4 @@ namespace SkFabricatorApi.Models
     public string Message { get; set; } = string.Empty;
 
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
-    }
 }
