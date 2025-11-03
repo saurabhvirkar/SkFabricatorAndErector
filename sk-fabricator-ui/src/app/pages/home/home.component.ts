@@ -2,18 +2,16 @@ import { Component, inject, OnDestroy, PLATFORM_ID, OnInit, signal, computed } f
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AccoladesComponent } from '../../accolades/accolades.component';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
-import { DataService } from '../../_services/data.service';
 import { RouterLink } from '@angular/router';
 import { AboutDetailsComponent } from '../about-details/about-details.component';
-import { ApiService } from '../../api.service';
-import { SectionImage } from '../../_models/section-image.model';
+import { ServiceService } from '../../_services/service.service';
 import { Service } from '../../_models/data.model';
 import { HomeSlider } from '../../_models/home-slider.model';
 import { FormsModule } from '@angular/forms';
 import { switchMap, of } from 'rxjs';
-
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { HomeSliderService } from '../../_services/home-slider.service';
 
 @Component({
   selector: 'app-home',
@@ -30,8 +28,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private dataService = inject(DataService);
-  private apiService = inject(ApiService);
+  private serviceService = inject(ServiceService);
+  private homeSliderService = inject(HomeSliderService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
 
@@ -59,19 +57,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   loadFeaturedServices(): void {
-    this.apiService.getServices().subscribe({
-      next: (services) => {
+    this.serviceService.getServices().subscribe({
+      next: (services: Service[]) => {
         this.featuredServices.set(services.slice(0, 3));
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load featured services', err);
       }
     });
   }
 
   loadBackgroundSlides(): void {
-    this.apiService.getHomeSliders().subscribe({
-      next: (sliders) => {
+    this.homeSliderService.getHomeSliders().subscribe({
+      next: (sliders: HomeSlider[]) => {
         this.backgroundSlides.set(sliders);
         if (sliders.length > 0) {
           this.heroTitle.set(sliders[0].title);
@@ -81,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.startAutoSlide();
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load home slider items', err);
       }
     });
@@ -93,13 +91,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.apiService.addHomeSlider({ title, description }).pipe(
+    this.homeSliderService.addHomeSlider({ title, description }).pipe(
       switchMap((newSlider: HomeSlider) => {
         if (file && file.length > 0) {
           const formData = new FormData();
           formData.append('file', file[0]);
           formData.append('homeSliderId', newSlider.id.toString());
-          return this.apiService.addHomeSliderImage(formData);
+          return this.homeSliderService.addHomeSliderImage(formData);
         } else {
           return of(newSlider);
         }
@@ -124,7 +122,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.error('Title and Description are required.');
       return;
     }
-    this.apiService.updateHomeSlider(id, { title, description }).subscribe({
+    this.homeSliderService.updateHomeSlider(id, { title, description }).subscribe({
       next: (updatedSlider: HomeSlider) => {
         this.backgroundSlides.update(sliders =>
           sliders.map(s => (s.id === id ? updatedSlider : s))
@@ -143,7 +141,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onDeleteHomeSlider(id: number): void {
     if (confirm('Are you sure you want to delete this home slider item?')) {
-      this.apiService.deleteHomeSlider(id).subscribe({
+      this.homeSliderService.deleteHomeSlider(id).subscribe({
         next: () => {
           this.backgroundSlides.update(sliders => sliders.filter(s => s.id !== id));
           // If the deleted slide was the current hero slide, update hero text from the new first slide
@@ -155,7 +153,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.heroDescription.set('');
           }
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Failed to delete home slider item', err);
         }
       });
@@ -172,7 +170,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     formData.append('file', file[0]);
     formData.append('homeSliderId', homeSliderId.toString());
 
-    this.apiService.addHomeSliderImage(formData).subscribe({
+    this.homeSliderService.addHomeSliderImage(formData).subscribe({
       next: (updatedSlider: HomeSlider) => {
         this.backgroundSlides.update(sliders =>
           sliders.map(s => (s.id === homeSliderId ? updatedSlider : s))
@@ -183,7 +181,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.heroDescription.set(updatedSlider.description);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to upload image for home slider', err);
       }
     });

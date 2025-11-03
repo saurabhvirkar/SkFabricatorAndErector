@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../api.service';
 import { AuthService } from '../../../auth.service';
 import { SectionImage } from '../../../_models/section-image.model';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { SectionImageService } from '../../../_services/section-image.service';
 
 @Component({
   selector: 'app-image-management',
@@ -15,7 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageManagementComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private sectionImgService = inject(SectionImageService);
   private authService = inject(AuthService);
 
   sections = [
@@ -51,7 +51,7 @@ export class ImageManagementComponent implements OnInit {
   loadSectionImages(): void {
     const section = this.selectedSection();
     if (section) {
-      this.apiService.getSectionImagesBySectionName(section).subscribe({
+      this.sectionImgService.getSectionImagesBySectionName(section).subscribe({
         next: (images: SectionImage[]) => {
           this.sectionImages.set(images);
         },
@@ -77,7 +77,7 @@ export class ImageManagementComponent implements OnInit {
     formData.append('file', this.selectedFile, this.selectedFile.name);
     formData.append('sectionName', this.selectedSection()!); // Add sectionName to formData
 
-    this.apiService.uploadSectionImage(formData, this.selectedSection()!).subscribe({
+    this.sectionImgService.uploadSectionImage(formData, this.selectedSection()!).subscribe({
       next: (image: SectionImage) => {
         alert('Image uploaded successfully!');
         this.selectedFile = null;
@@ -92,7 +92,7 @@ export class ImageManagementComponent implements OnInit {
 
   onDeleteImage(id: number): void {
     if (confirm('Are you sure you want to delete this image?')) {
-      this.apiService.deleteSectionImage(id).subscribe({
+      this.sectionImgService.deleteSectionImage(id).subscribe({
         next: () => {
           alert('Image deleted successfully!');
           this.loadSectionImages(); // Reload images for the current section

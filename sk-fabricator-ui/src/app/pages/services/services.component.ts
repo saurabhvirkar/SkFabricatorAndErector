@@ -2,7 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } 
 import { CommonModule, NgClass } from '@angular/common';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { DataService } from '../../_services/data.service';
-import { ApiService } from '../../api.service';
+import { ServiceService } from '../../_services/service.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models/data.model'; // Import the correct Service interface
 
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ServicesComponent implements OnInit {
   private dataService = inject(DataService);
-  private apiService = inject(ApiService);
+  private serviceService = inject(ServiceService);
   private authService = inject(AuthService);
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
@@ -36,14 +36,14 @@ export class ServicesComponent implements OnInit {
   showAddServiceForm = signal<boolean>(false); // New signal for form visibility
   editingService = signal<Service | null>(null);
 
-  newService: Service = { id: 0, title: '', description: '', icon: '', imageUrl: '' };
+  newService: Service = { id: 0, name: '', summary: '', icon: '', imageUrl: '' };
 
   ngOnInit(): void {
     this.loadServices();
   }
 
   loadServices(): void {
-    this.apiService.getServices().subscribe({
+    this.serviceService.getServices().subscribe({
       next: (services) => {
         this.services.set(services);
       },
@@ -64,12 +64,12 @@ export class ServicesComponent implements OnInit {
   onAddService(form: any, files: FileList | null): void {
     if (form.valid && files && files.length > 0) {
       const formData = new FormData();
-      formData.append('title', form.value.title);
-      formData.append('description', form.value.description);
-      formData.append('icon', form.value.icon);
-      formData.append('file', files[0]);
+      formData.append('Name', form.value.name);
+      formData.append('Summary', form.value.summary);
+      formData.append('Icon', form.value.icon);
+      formData.append('File', files[0]);
 
-      this.apiService.addService(formData).subscribe({
+      this.serviceService.addService(formData).subscribe({
         next: (service) => {
           this.services.update(services => [...services, service]);
           this.toggleAddServiceForm(); // Hide form after submission
@@ -84,7 +84,14 @@ export class ServicesComponent implements OnInit {
 
   onUpdateService(form: any, service: Service): void {
     if (form.valid) {
-      this.apiService.updateService(service.id, form.value).subscribe({
+      const updatedServiceData = {
+        id: service.id,
+        name: form.value.name,
+        summary: form.value.summary,
+        icon: form.value.icon,
+        imageUrl: service.imageUrl // Keep the existing image URL
+      };
+      this.serviceService.updateService(service.id, updatedServiceData).subscribe({
         next: (updatedService) => {
           this.services.update(services => {
             const index = services.findIndex(s => s.id === updatedService.id);
@@ -104,7 +111,7 @@ export class ServicesComponent implements OnInit {
 
   deleteService(serviceId: number): void {
     if (confirm('Are you sure you want to delete this service?')) {
-      this.apiService.deleteService(serviceId).subscribe({
+      this.serviceService.deleteService(serviceId).subscribe({
         next: () => {
           this.services.update(services => services.filter(s => s.id !== serviceId));
         },
@@ -119,10 +126,10 @@ export class ServicesComponent implements OnInit {
     if (files && files.length > 0) {
       const file = files[0];
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('serviceId', serviceId.toString());
+      formData.append('File', file);
+      formData.append('ServiceId', serviceId.toString());
 
-      this.apiService.addServiceImage(formData).subscribe({
+      this.serviceService.addServiceImage(formData).subscribe({
         next: (updatedService) => {
           this.services.update(services => {
             const index = services.findIndex(s => s.id === updatedService.id);

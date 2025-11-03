@@ -1,13 +1,10 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { DataService } from '../../_services/data.service';
-import { ApiService } from '../../api.service';
 import { TeamMember } from '../../_models/data.model';
-import { SectionImage } from '../../_models/section-image.model';
-
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { TeamService } from '../../_services/team.service';
 
 @Component({
   selector: 'app-team',
@@ -17,8 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
-  private dataService = inject(DataService);
-  private apiService = inject(ApiService);
+  private teamService = inject(TeamService);
   private authService = inject(AuthService);
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
@@ -41,7 +37,7 @@ export class TeamComponent implements OnInit {
   }
 
   loadTeamMembers(): void {
-    this.apiService.getTeamMembers().subscribe({
+    this.teamService.getTeamMembers().subscribe({
       next: (teamMembers) => {
         this.teamMembers.set(teamMembers);
       },
@@ -65,7 +61,7 @@ export class TeamComponent implements OnInit {
       formData.append('details', form.value.details);
       formData.append('file', files[0]);
 
-      this.apiService.addTeamMember(formData).subscribe({
+      this.teamService.addTeamMember(formData).subscribe({
         next: (teamMember) => {
           this.teamMembers.update(members => [...members, teamMember]);
           this.toggleAddTeamMemberForm(); // Hide form after submission
@@ -89,7 +85,7 @@ export class TeamComponent implements OnInit {
   onUpdateTeamMember(): void {
     const memberToUpdate = this.editTeamMember();
     if (memberToUpdate && memberToUpdate.id) {
-      this.apiService.updateTeamMember(memberToUpdate.id, memberToUpdate).subscribe({
+      this.teamService.updateTeamMember(memberToUpdate.id, memberToUpdate).subscribe({
         next: (updatedMember) => {
           this.teamMembers.update(members =>
             members.map(m => (m.id === updatedMember.id ? updatedMember : m))
@@ -105,7 +101,7 @@ export class TeamComponent implements OnInit {
 
   onDeleteTeamMember(id: number): void {
     if (confirm('Are you sure you want to delete this team member?')) {
-      this.apiService.deleteTeamMember(id).subscribe({
+      this.teamService.deleteTeamMember(id).subscribe({
         next: () => {
           this.teamMembers.update(members => members.filter(m => m.id !== id));
         },
@@ -123,7 +119,7 @@ export class TeamComponent implements OnInit {
       formData.append('file', file);
       formData.append('teamMemberId', teamMemberId.toString());
 
-      this.apiService.addTeamMemberImage(formData).subscribe({
+      this.teamService.addTeamMemberImage(formData).subscribe({
         next: (updatedTeamMember) => {
           this.teamMembers.update(members => {
             const index = members.findIndex(m => m.id === updatedTeamMember.id);
@@ -140,4 +136,3 @@ export class TeamComponent implements OnInit {
     }
   }
 }
-

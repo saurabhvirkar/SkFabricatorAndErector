@@ -1,9 +1,7 @@
-// src/app/inquiry-form/inquiry-form.component.ts (UPDATED)
-
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../api.service';
+import { InquiryService } from '../../_services/inquiry.service';
 import { Inquiry } from '../../_models/inquiry.model';
 import { ContactMapComponent } from '../contact-map/contact-map.component';
 
@@ -17,7 +15,7 @@ import { ContactMapComponent } from '../contact-map/contact-map.component';
 export class InquiryFormComponent {
   private fb = inject(FormBuilder);
   // Integration Point: Injects the service responsible for API communication
-  private apiService = inject(ApiService); 
+  private inquiryService = inject(InquiryService); 
 
   // Signals for managing submission state and response message
   submissionStatus = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -63,7 +61,7 @@ export class InquiryFormComponent {
     };
 
     // 2. API Service Integration
-    this.apiService.submitInquiry(inquiryData).subscribe({
+    this.inquiryService.submitInquiry(inquiryData).subscribe({
       next: (res) => {
         this.submissionStatus.set('success');
         this.responseMessage.set('Your inquiry has been sent successfully! We will get back to you shortly.'); // The backend now returns the created object. We can use it if needed.

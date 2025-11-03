@@ -15,43 +15,43 @@ export class DataService {
   private services: Service[] = [
     {
       id: 1,
-      title: 'Mechanical & Industrial Piping',
-      description: 'Industrial piping contracting and fabrication for SS, Fire, Gas (PNG/LPG), Petrol/Diesel, Steam, Nitrogen, Chiller & Air lines. Jacketed piping design & installation.',
+      name: 'Mechanical & Industrial Piping',
+      summary: 'Industrial piping contracting and fabrication for SS, Fire, Gas (PNG/LPG), Petrol/Diesel, Steam, Nitrogen, Chiller & Air lines. Jacketed piping design & installation.',
       icon: '🔧',
       imageUrl: 'https://images.pexels.com/photos/459762/pexels-photo-459762.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 2,
-      title: 'Structure Fabrication & Erection',
-      description: 'Structural steel fabrication and erection (I-Beam, angles, channels, platforms, pipe supports, access ladders) for plants and buildings.',
+      name: 'Structure Fabrication & Erection',
+      summary: 'Structural steel fabrication and erection (I-Beam, angles, channels, platforms, pipe supports, access ladders) for plants and buildings.',
       icon: '🏗️',
       imageUrl: 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 3,
-      title: 'Storage Tank Manufacturing',
-      description: 'Design, manufacture and installation of MS/SS storage tanks — oil, water, petroleum, juice, low & high pressure tanks, square and cylindrical tanks.',
+      name: 'Storage Tank Manufacturing',
+      summary: 'Design, manufacture and installation of MS/SS storage tanks — oil, water, petroleum, juice, low & high pressure tanks, square and cylindrical tanks.',
       icon: '🛢️',
       imageUrl: 'https://images.pexels.com/photos/3807743/pexels-photo-3807743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 4,
-      title: 'Plant Maintenance & Shutdown Works',
-      description: 'Onsite repair, maintenance and major shutdown services for rotating and reciprocating equipment, including bearing replacement, seal/coupling work, onsite machining and welding.',
+      name: 'Plant Maintenance & Shutdown Works',
+      summary: 'Onsite repair, maintenance and major shutdown services for rotating and reciprocating equipment, including bearing replacement, seal/coupling work, onsite machining and welding.',
       icon: '🔩',
       imageUrl: 'https://images.pexels.com/photos/8346833/pexels-photo-8346833.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 5,
-      title: 'Specialized Insulation',
-      description: 'Pipe & tank insulation: steam insulation, hot & cold insulation, reactor/tank insulation and Armaflex cold insulation to reduce heat loss and energy cost.',
+      name: 'Specialized Insulation',
+      summary: 'Pipe & tank insulation: steam insulation, hot & cold insulation, reactor/tank insulation and Armaflex cold insulation to reduce heat loss and energy cost.',
       icon: '🧰',
       imageUrl: 'https://images.pexels.com/photos/8346761/pexels-photo-8346761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     },
     {
       id: 6,
-      title: 'SS Magnetic Filters',
-      description: 'Magnetic filters for separation of iron particles from liquid/semi-liquid flows — easy to clean and available in varied sizes.',
+      name: 'SS Magnetic Filters',
+      summary: 'Magnetic filters for separation of iron particles from liquid/semi-liquid flows — easy to clean and available in varied sizes.',
       icon: '🧲',
       imageUrl: 'https://images.pexels.com/photos/5969793/pexels-photo-5969793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     }

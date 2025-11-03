@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
-import { ApiService } from '../../api.service';
 import { ClientDetails } from '../../_models/data.model';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { ClientService } from '../../_services/client.service';
 
 @Component({
   standalone: true,
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientsDetailsComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private clientService = inject(ClientService);
   private authService = inject(AuthService);
 
   clients = signal<ClientDetails[]>([]);
@@ -38,7 +38,7 @@ export class ClientsDetailsComponent implements OnInit {
   }
 
   loadClients(): void {
-    this.apiService.getClientDetails().subscribe({
+    this.clientService.getClientDetails().subscribe({
       next: (clients: ClientDetails[]) => {
         this.clients.set(clients);
       },
@@ -62,7 +62,7 @@ export class ClientsDetailsComponent implements OnInit {
       formData.append('clientUrl', this.newClient.clientUrl || '');
       formData.append('file', files[0]);
 
-      this.apiService.addClient(formData).subscribe({
+      this.clientService.addClient(formData).subscribe({
         next: (client) => {
           this.clients.update(clients => [...clients, client]);
           this.toggleAddClientForm();
@@ -90,7 +90,7 @@ export class ClientsDetailsComponent implements OnInit {
       const updateDto = { ...clientToUpdate };
       // If image update is separate, handle it in onImageUpload
 
-      this.apiService.updateClient(clientToUpdate.id, updateDto).subscribe({
+      this.clientService.updateClient(clientToUpdate.id, updateDto).subscribe({
         next: (updatedClient) => {
           this.clients.update(clients =>
             clients.map(c => (c.id === updatedClient.id ? updatedClient : c))
@@ -106,7 +106,7 @@ export class ClientsDetailsComponent implements OnInit {
 
   onDeleteClient(id: number): void {
     if (confirm('Are you sure you want to delete this client?')) {
-      this.apiService.deleteClient(id).subscribe({
+      this.clientService.deleteClient(id).subscribe({
         next: () => {
           this.clients.update(clients => clients.filter(c => c.id !== id));
         },
@@ -124,7 +124,7 @@ export class ClientsDetailsComponent implements OnInit {
       formData.append('file', file);
       formData.append('clientId', clientId.toString());
 
-      this.apiService.addClientImage(formData).subscribe({
+      this.clientService.addClientImage(formData).subscribe({
         next: (updatedClient) => {
           this.clients.update(clients => {
             const index = clients.findIndex(c => c.id === updatedClient.id);

@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { Project } from '../../_models/data.model';
-import { ApiService } from '../../api.service';
-import { SectionImage } from '../../_models/section-image.model';
+import { ProjectService } from '../../_services/project.service';
 import { DataService } from '../../_services/data.service';
-
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, NgClass } from '@angular/common';
@@ -29,7 +27,7 @@ type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintena
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private projectService = inject(ProjectService);
   private dataService = inject(DataService);
   private authService = inject(AuthService);
 
@@ -74,7 +72,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   loadProjects(): void {
-    this.apiService.getProjects().subscribe({
+    this.projectService.getProjects().subscribe({
       next: (projects) => {
         this.projects.set(projects);
       },
@@ -83,9 +81,6 @@ export class ProjectsComponent implements OnInit {
       }
     });
   }
-
-
-
   /**
    * Updates the active filter and triggers the computed signal to update the list.
    * @param category The category to filter by (strictly typed).
@@ -107,7 +102,7 @@ export class ProjectsComponent implements OnInit {
       formData.append('category', form.value.category);
       formData.append('file', files[0]);
 
-      this.apiService.addProject(formData).subscribe({
+      this.projectService.addProject(formData).subscribe({
         next: (project) => {
           this.projects.update(projects => [...projects, project]);
           this.toggleAddProjectForm(); // Hide form after submission
@@ -131,7 +126,7 @@ export class ProjectsComponent implements OnInit {
   onUpdateProject(): void {
     const projectToUpdate = this.editProject();
     if (projectToUpdate && projectToUpdate.id) {
-      this.apiService.updateProject(projectToUpdate.id, projectToUpdate).subscribe({
+      this.projectService.updateProject(projectToUpdate.id, projectToUpdate).subscribe({
         next: (updatedProject) => {
           this.projects.update(projects =>
             projects.map(p => (p.id === updatedProject.id ? updatedProject : p))
@@ -147,7 +142,7 @@ export class ProjectsComponent implements OnInit {
 
   onDeleteProject(projectId: number): void {
     if (confirm('Are you sure you want to delete this project?')) {
-      this.apiService.deleteProject(projectId).subscribe({
+      this.projectService.deleteProject(projectId).subscribe({
         next: () => {
           this.projects.update(projects => projects.filter(p => p.id !== projectId));
         },

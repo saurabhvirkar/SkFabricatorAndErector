@@ -25,12 +25,10 @@ export interface Project {
 
 export interface Service {
   id: number;
-  title: string;
-  description: string;
+  name: string;
+  summary: string;
   icon: string;
   imageUrl: string;
-  name?: string;
-  summary?: string;
 }
 
 export interface ClientDetails {

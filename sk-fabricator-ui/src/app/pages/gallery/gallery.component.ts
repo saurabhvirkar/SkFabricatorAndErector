@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ApiService } from '../../api.service';
 import { AuthService } from '../../auth.service';
 import { GalleryImage } from '../../_models/data.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { GalleryService } from '../../_services/gallery.service';
 
 /**
  * Define the strict union type for image categories.
@@ -24,7 +24,7 @@ type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenanc
   imports: [CommonModule, FormsModule],
 })
 export class GalleryComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private galleryService = inject(GalleryService);
   private authService = inject(AuthService);
 
   // Static Data & Setup
@@ -59,7 +59,7 @@ export class GalleryComponent implements OnInit {
   }
 
   loadImages(): void {
-    this.apiService.getImages(this.activeFilter()).subscribe({
+    this.galleryService.getImages(this.activeFilter()).subscribe({
       next: (images) => {
         this.images.set(images);
       },
@@ -92,7 +92,7 @@ export class GalleryComponent implements OnInit {
     formData.append('category', this.selectedCategoryForUpload()!);
     formData.append('isAboutSlider', this.isAboutSliderChecked().toString());
 
-    this.apiService.uploadImage(formData, this.selectedCategoryForUpload()!, this.isAboutSliderChecked()).subscribe({
+    this.galleryService.uploadImage(formData, this.selectedCategoryForUpload()!, this.isAboutSliderChecked()).subscribe({
       next: () => {
         alert('Image uploaded successfully!');
         this.selectedFile = null;
@@ -113,7 +113,7 @@ export class GalleryComponent implements OnInit {
 
   onDeletePhoto(id: number): void {
     if (confirm('Are you sure you want to delete this image?')) {
-      this.apiService.deleteImage(id).subscribe({
+      this.galleryService.deleteImage(id).subscribe({
         next: () => {
           alert('Image deleted successfully!');
           this.loadImages(); // Reload images to update the list

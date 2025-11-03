@@ -1,10 +1,9 @@
 import { Component, computed, signal, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { Observable, of, delay } from 'rxjs';
 import { Inquiry } from '../../_models/inquiry.model';
-import { ApiService } from '../../api.service';
+import { InquiryService } from '../../_services/inquiry.service';
 
 @Component({
   selector: 'app-inquiry-details',
@@ -15,13 +14,13 @@ import { ApiService } from '../../api.service';
   styleUrls: ['./inquiry-details.component.scss']
 })
 export class InquiryDetailsComponent implements OnInit {
-  private apiService = inject(ApiService);
-  inquiries$: Observable<Inquiry[]> = this.apiService.getInquiries();
+  private inquiryService = inject(InquiryService);
+  inquiries$: Observable<Inquiry[]> = this.inquiryService.getInquiries();
   // Track if the data is currently being fetched
   isFetching = signal(true);
 
   // Observable pipe to fetch and sort data, then mark fetching as complete
-  private inquiriesObservable: Observable<Inquiry[]> = this.apiService.getInquiries().pipe(
+  private inquiriesObservable: Observable<Inquiry[]> = this.inquiryService.getInquiries().pipe(
     map((inquiries: Inquiry[]) => {
       // Sort by submittedAt (newest first)
       return inquiries.sort((a, b) => new Date(b.submittedAt ?? 0).getTime() - new Date(a.submittedAt ?? 0).getTime());
@@ -124,7 +123,7 @@ export class InquiryDetailsComponent implements OnInit {
     if (id === undefined) return;
 
     if (confirm('Are you sure you want to delete this inquiry? This action cannot be undone.')) {
-      this.apiService.deleteInquiry(id).subscribe({
+      this.inquiryService.deleteInquiry(id).subscribe({
         next: () => {
           // On success, remove the inquiry from the main signal to update the UI
           this.totalInquiries.update(currentInquiries => 

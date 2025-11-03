@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../_services/data.service';
-import { ApiService } from '../api.service';
 import { Photo } from '../_models/photo.model';
+import { GalleryService } from '../_services/gallery.service';
 
 @Component({
   selector: 'app-accolades',
@@ -13,12 +13,12 @@ import { Photo } from '../_models/photo.model';
 })
 export class AccoladesComponent implements OnInit {
   private dataService = inject(DataService);
-  private apiService = inject(ApiService);
+  private galleryService = inject(GalleryService);
   accolades = this.dataService.getAccolades();
   aboutSliderImages: Photo[] = [];
 
   ngOnInit(): void {
-    this.apiService.getPhotos().subscribe({
+    this.galleryService.getPhotos().subscribe({
       next: (images) => {
         this.aboutSliderImages = images.filter(image => image.isAboutSlider);
       },

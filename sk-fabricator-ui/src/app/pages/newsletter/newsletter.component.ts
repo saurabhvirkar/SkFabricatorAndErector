@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../api.service';
+import { NewsletterService } from '../../_services/newsletter.service';
 
 @Component({
   selector: 'app-newsletter',
@@ -12,7 +12,7 @@ import { ApiService } from '../../api.service';
 })
 export class NewsletterComponent {
   private fb = inject(FormBuilder);
-  private apiService = inject(ApiService);
+  private newsletterService = inject(NewsletterService);
 
   newsletterForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -32,7 +32,7 @@ export class NewsletterComponent {
     this.submissionStatus.set('loading');
     this.responseMessage.set('');
 
-    this.apiService.subscribeNewsletter(this.newsletterForm.value.email!).subscribe(
+    this.newsletterService.subscribeNewsletter(this.newsletterForm.value.email!).subscribe(
       res => {
         this.responseMessage.set(res.message);
         this.submissionStatus.set(res.success ? 'success' : 'error');

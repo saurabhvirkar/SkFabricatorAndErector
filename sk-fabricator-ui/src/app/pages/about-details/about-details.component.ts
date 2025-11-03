@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ApiService } from '../../api.service';
 import { Photo } from '../../_models/photo.model'; // Use Photo model for about slider images
+import { GalleryService } from '../../_services/gallery.service';
 
 @Component({
   selector: 'app-about-details',
@@ -12,7 +12,7 @@ import { Photo } from '../../_models/photo.model'; // Use Photo model for about 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutDetailsComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private galleryService = inject(GalleryService);
   private platformId = inject(PLATFORM_ID);
 
   sectionImages = signal<Photo[]>([]); // Use Photo model
@@ -24,7 +24,7 @@ export class AboutDetailsComponent implements OnInit {
   }
 
   loadAboutSliderImages(): void {
-    this.apiService.getPhotos().subscribe({
+    this.galleryService.getPhotos().subscribe({
       next: (images) => {
         this.sectionImages.set(images.filter(image => image.isAboutSlider));
         if (this.sectionImages().length > 1) {
