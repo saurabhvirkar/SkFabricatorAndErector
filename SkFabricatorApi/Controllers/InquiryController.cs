@@ -6,7 +6,7 @@ using SkFabricatorApi.Services;
 namespace SkFabricatorApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/inquiry")]
 public class InquiryController : ControllerBase
 {
     private readonly IInquiryService _inquiryService;

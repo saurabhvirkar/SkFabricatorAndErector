@@ -8,7 +8,7 @@ using SkFabricatorApi.Models.DTOs;
 namespace SkFabricatorApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/team")]
 public class TeamController : ControllerBase
 {
     private readonly ITeamRepository _teamRepository;

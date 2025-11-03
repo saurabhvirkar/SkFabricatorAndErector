@@ -8,7 +8,7 @@ using SkFabricatorApi.Models.DTOs;
 namespace SkFabricatorApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/services")]
 public class ServicesController : ControllerBase
 {
     private readonly IServiceRepository _serviceRepository;

@@ -6,7 +6,7 @@ using SkFabricatorApi.Repositories;
 namespace SkFabricatorApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/newsletter")]
 public class NewsletterController : ControllerBase
 {
     private readonly INewsletterRepository _newsletterRepository;

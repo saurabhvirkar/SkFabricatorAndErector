@@ -7,7 +7,7 @@ using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/section-image")]
     [ApiController]
     public class SectionImageController : ControllerBase
     {

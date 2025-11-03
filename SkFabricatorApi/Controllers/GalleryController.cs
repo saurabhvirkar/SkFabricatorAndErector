@@ -6,7 +6,7 @@ using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/gallery")]
     [ApiController]
     [AllowAnonymous]
     public class GalleryController : ControllerBase
