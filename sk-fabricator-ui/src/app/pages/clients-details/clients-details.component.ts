@@ -1,6 +1,5 @@
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
-import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
 import { ClientDetails } from '../../_models/data.model';
 import { AuthService } from '../../auth.service';
@@ -51,20 +50,23 @@ export class ClientsDetailsComponent implements OnInit {
 
   toggleAddClientForm(): void {
     this.showAddClientForm.update(value => !value);
+    if (!this.showAddClientForm()) {
+      this.newClient = { id: 0, name: '', imageUrl: '', clientUrl: '' }; // Reset form
+    }
   }
 
   onAddClient(form: any, files: FileList | null): void {
     if (form.valid && files && files.length > 0) {
       const formData = new FormData();
-      formData.append('name', form.value.name);
-      formData.append('clientUrl', form.value.clientUrl);
+      formData.append('name', this.newClient.name);
+      formData.append('clientUrl', this.newClient.clientUrl || '');
       formData.append('file', files[0]);
 
       this.apiService.addClient(formData).subscribe({
         next: (client) => {
           this.clients.update(clients => [...clients, client]);
           this.toggleAddClientForm();
-          form.reset();
+          form.resetForm(); // Reset the form after successful submission
         },
         error: (err) => {
           console.error('Failed to add client', err);
@@ -84,7 +86,11 @@ export class ClientsDetailsComponent implements OnInit {
   onUpdateClient(): void {
     const clientToUpdate = this.editClient();
     if (clientToUpdate && clientToUpdate.id) {
-      this.apiService.updateClient(clientToUpdate.id, clientToUpdate).subscribe({
+      // Create a DTO for updating, excluding the image file for now
+      const updateDto = { ...clientToUpdate };
+      // If image update is separate, handle it in onImageUpload
+
+      this.apiService.updateClient(clientToUpdate.id, updateDto).subscribe({
         next: (updatedClient) => {
           this.clients.update(clients =>
             clients.map(c => (c.id === updatedClient.id ? updatedClient : c))

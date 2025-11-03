@@ -23,7 +23,7 @@ namespace SkFabricatorApi.Services
             {
                 throw new System.Exception("File is required.");
             }
-            var photo = await _photoService.AddPhotoAsync(request.File, "Clients");
+            var photo = await _photoService.AddPhotoAsync(request.File, "Clients", false);
             var imageUrl = photo.Url;
 
             var client = new ClientDetails
@@ -44,7 +44,7 @@ namespace SkFabricatorApi.Services
                 throw new System.Exception("Client not found");
             }
 
-            var photo = await _photoService.AddPhotoAsync(file, "Clients");
+            var photo = await _photoService.AddPhotoAsync(file, "Clients", false);
             var imageUrl = photo.Url;
             client.ImageUrl = imageUrl;
 

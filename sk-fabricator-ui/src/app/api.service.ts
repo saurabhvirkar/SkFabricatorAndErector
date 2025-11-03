@@ -12,6 +12,7 @@ import { ClientDetails } from './_models/data.model';
 import { GalleryImage } from './_models/data.model';
 import { SectionImage } from './_models/section-image.model';
 import { HomeSlider } from './_models/home-slider.model';
+import { Photo } from './_models/photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -183,12 +184,18 @@ export class ApiService {
   }
 
   getImages(filter: string): Observable<GalleryImage[]> {
-    return this.http.get<GalleryImage[]>(`${this.baseUrl}/gallery?category=${filter}`)
+    let url = `${this.baseUrl}/gallery`;
+    if (filter !== 'All') {
+      url += `?category=${filter}`;
+    }
+    return this.http.get<GalleryImage[]>(url)
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  uploadImage(formData: FormData, category: string): Observable<GalleryImage> {
-    return this.http.post<GalleryImage>(`${this.baseUrl}/gallery/upload?category=${category}`, formData, { headers: this.getHeaders() })
+  uploadImage(formData: FormData, category: string, isAboutSlider: boolean): Observable<GalleryImage> {
+    formData.append('category', category);
+    formData.append('isAboutSlider', isAboutSlider.toString());
+    return this.http.post<GalleryImage>(`${this.baseUrl}/gallery/add-photo`, formData, { headers: this.getHeaders() })
       .pipe(catchError(err => this.handleError(err)));
   }
 

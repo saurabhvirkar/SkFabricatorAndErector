@@ -10,5 +10,6 @@ namespace SkFabricatorApi.Models.DTOs
 
         [Required]
         public required string Category { get; set; }
+        public bool IsAboutSlider { get; set; }
     }
 }

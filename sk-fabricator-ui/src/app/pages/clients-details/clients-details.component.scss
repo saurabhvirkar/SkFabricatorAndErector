@@ -1,57 +1,57 @@
-.clients-container {
-  padding: 2rem;
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.clientDetails-page {
+  /* Add any specific styles for the overall page if needed */
 }
 
 .clients-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust as needed */
   gap: 1.5rem;
 }
 
 .client-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  text-align: center;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .client-image {
-    width: 100%;
-    height: 150px;
-    object-fit: contain;
-    padding: 1rem;
-  }
-
-  .client-name {
-    padding: 1rem;
-    font-weight: bold;
-  }
-
-  .admin-actions {
-    padding: 0.5rem;
-    display: flex;
-    justify-content: space-around;
-  }
+  position: relative;
+  /* Add card specific styles */
 }
 
-.add-client-form, .edit-form {
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
+.admin-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
 }

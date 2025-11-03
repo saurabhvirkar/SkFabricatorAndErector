@@ -4,6 +4,7 @@ import { ApiService } from '../../api.service';
 import { AuthService } from '../../auth.service';
 import { GalleryImage } from '../../_models/data.model';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 /**
  * Define the strict union type for image categories.
@@ -20,6 +21,7 @@ type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenanc
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, FormsModule],
 })
 export class GalleryComponent implements OnInit {
   private apiService = inject(ApiService);
@@ -35,6 +37,7 @@ export class GalleryComponent implements OnInit {
   images = signal<GalleryImage[]>([]);
   selectedFile: File | null = null;
   selectedCategoryForUpload = signal<ImageCategory | null>(null);
+  isAboutSliderChecked = signal(false);
 
   // State
   activeFilter = signal<ImageCategory>('All'); 
@@ -86,12 +89,15 @@ export class GalleryComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('category', this.selectedCategoryForUpload()!);
+    formData.append('isAboutSlider', this.isAboutSliderChecked().toString());
 
-    this.apiService.uploadImage(formData, this.selectedCategoryForUpload()!).subscribe({
+    this.apiService.uploadImage(formData, this.selectedCategoryForUpload()!, this.isAboutSliderChecked()).subscribe({
       next: () => {
         alert('Image uploaded successfully!');
         this.selectedFile = null;
         this.selectedCategoryForUpload.set(null);
+        this.isAboutSliderChecked.set(false);
         this.loadImages(); // Reload images to show the new one
         
         // Reset the file input element

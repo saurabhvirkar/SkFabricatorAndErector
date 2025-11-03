@@ -23,6 +23,10 @@
               }
             </select>
           </div>
+          <div class="mb-4 flex items-center">
+            <input type="checkbox" id="isAboutSlider" [(ngModel)]="isAboutSliderChecked" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            <label for="isAboutSlider" class="ml-2 block text-sm text-gray-900">Is About Slider</label>
+          </div>
           <input type="file" (change)="onFileSelected($event)" class="block w-full text-sm text-gray-500
             file:mr-4 file:py-2 file:px-4
             file:rounded-full file:border-0

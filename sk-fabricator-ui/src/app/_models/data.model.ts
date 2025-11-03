@@ -62,4 +62,5 @@ export interface GalleryImage {
   isMain: boolean;
   publicId: string;
   category: ImageCategory;
+  isAboutSlider: boolean;
 }

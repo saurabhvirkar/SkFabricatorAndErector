@@ -1,119 +1,47 @@
-import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy, OnDestroy, OnInit, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { DataService } from '../../_services/data.service';
 import { ApiService } from '../../api.service';
-import { SectionImage } from '../../_models/section-image.model';
-import { FormsModule } from '@angular/forms';
-
-import { AuthService } from '../../auth.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Photo } from '../../_models/photo.model'; // Use Photo model for about slider images
 
 @Component({
   selector: 'app-about-details',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './about-details.component.html',
   styleUrls: ['./about-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AboutDetailsComponent implements OnInit, OnDestroy {
-  private dataService = inject(DataService);
+export class AboutDetailsComponent implements OnInit {
   private apiService = inject(ApiService);
-  private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
 
-  isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
-  currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
-
-  isAdminOrManager = computed(() => {
-    const role = this.currentUserRole();
-    return role === 'Admin' || role === 'Manager';
-  });
-  
-  sectionImages = signal<SectionImage[]>([]);
-  currentSlideIndex: number = 0;
-  private intervalId: any;
+  sectionImages = signal<Photo[]>([]); // Use Photo model
+  currentSlideIndex = 0;
+  intervalId: any;
 
   ngOnInit(): void {
-    this.loadSliderImages();
+    this.loadAboutSliderImages();
   }
 
-  loadSliderImages(): void {
-    this.apiService.getSectionImagesBySectionName('AboutDetailsComponent').subscribe({
-      next: (images: SectionImage[]) => {
-        this.sectionImages.set(images);
-        if (isPlatformBrowser(this.platformId) && images.length > 0) {
-          this.startAutoSlide();
+  loadAboutSliderImages(): void {
+    this.apiService.getPhotos().subscribe({
+      next: (images) => {
+        this.sectionImages.set(images.filter(image => image.isAboutSlider));
+        if (this.sectionImages().length > 1) {
+          this.startSlider();
         }
       },
-      error: (err: any) => {
-        console.error('Failed to load slider images for AboutDetailsComponent', err);
+      error: (err) => {
+        console.error('Failed to load about slider images', err);
       }
     });
   }
 
-  /*
-  onAddImage(files: FileList | null): void {
-    if (files && files.length > 0) {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('sectionName', 'AboutDetailsComponent');
-
-      this.apiService.uploadSectionImage(formData, 'AboutDetailsComponent').subscribe({
-        next: (image: SectionImage) => {
-          this.sectionImages.update(images => [...images, image]);
-        },
-        error: (err: any) => {
-          console.error('Failed to add image', err);
-        }
-      });
-    }
-  }
-  */
-
-  onDeleteImage(id: number): void {
-    if (confirm('Are you sure you want to delete this image?')) {
-      this.apiService.deleteSectionImage(id).subscribe({
-        next: () => {
-          this.sectionImages.update(images => images.filter(s => s.id !== id));
-        },
-        error: (err) => {
-          console.error('Failed to delete image', err);
-        }
-      });
-    }
-  }
-
-  changeSlide(step: number): void {
-    const totalSlides = this.sectionImages().length;
-    if (totalSlides === 0) return;
-    this.currentSlideIndex = (this.currentSlideIndex + step + totalSlides) % totalSlides;
-    this.resetAutoSlide();
-  }
-
-  goToSlide(index: number): void {
-    const totalSlides = this.sectionImages().length;
-    if (totalSlides === 0) return;
-    this.currentSlideIndex = index;
-    this.resetAutoSlide();
-  }
-
-  startAutoSlide(): void {
-    if (isPlatformBrowser(this.platformId) && this.sectionImages().length > 0) {
-      if (this.intervalId) {
-        clearInterval(this.intervalId);
-      }
-      this.intervalId = setInterval(() => {
-        this.currentSlideIndex = (this.currentSlideIndex + 1) % this.sectionImages().length;
-      }, 3000);
-    }
-  }
-
-  resetAutoSlide(): void {
+  startSlider(): void {
     if (isPlatformBrowser(this.platformId)) {
-      clearInterval(this.intervalId);
-      this.startAutoSlide();
+      this.intervalId = setInterval(() => {
+        this.nextSlide();
+      }, 5000); // Change image every 5 seconds
     }
   }
 
@@ -121,5 +49,27 @@ export class AboutDetailsComponent implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  }
+
+  nextSlide(): void {
+    const totalSlides = this.sectionImages().length;
+    if (totalSlides === 0) return;
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % totalSlides;
+  }
+
+  prevSlide(): void {
+    const totalSlides = this.sectionImages().length;
+    if (totalSlides === 0) return;
+    this.currentSlideIndex = (this.currentSlideIndex - 1 + totalSlides) % totalSlides;
+  }
+
+  changeSlide(direction: number): void {
+    const totalSlides = this.sectionImages().length;
+    if (totalSlides === 0) return;
+    this.currentSlideIndex = (this.currentSlideIndex + direction + totalSlides) % totalSlides;
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
   }
 }

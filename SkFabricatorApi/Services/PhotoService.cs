@@ -25,7 +25,7 @@ namespace SkFabricatorApi.Services
             _photoRepository = photoRepository;
         }
 
-        public async Task<Photo> AddPhotoAsync(IFormFile file, string category)
+        public async Task<Photo> AddPhotoAsync(IFormFile file, string category, bool isAboutSlider)
         {
             var uploadResult = new ImageUploadResult();
 
@@ -48,7 +48,8 @@ namespace SkFabricatorApi.Services
             {
                 Url = uploadResult.SecureUrl.AbsoluteUri,
                 PublicId = uploadResult.PublicId,
-                Category = category
+                Category = category,
+                IsAboutSlider = isAboutSlider
             };
 
             return await _photoRepository.AddPhotoAsync(photo);

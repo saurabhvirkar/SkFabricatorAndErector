@@ -11,8 +11,8 @@ using SkFabricatorApi.Data;
 namespace SkFabricatorApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251101152322_AddProjectCategoryAndServiceIcon3")]
-    partial class AddProjectCategoryAndServiceIcon3
+    [Migration("20251103062315_MakeHomeSliderImageAndPublicIdNullable3344")]
+    partial class MakeHomeSliderImageAndPublicIdNullable3344
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,9 @@ namespace SkFabricatorApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ClientUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -238,6 +241,31 @@ namespace SkFabricatorApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClientDetails");
+                });
+
+            modelBuilder.Entity("SkFabricatorApi.Models.HomeSlider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeSliders");
                 });
 
             modelBuilder.Entity("SkFabricatorApi.Models.Inquiry", b =>
@@ -313,6 +341,9 @@ namespace SkFabricatorApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsAboutSlider")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsMain")
                         .HasColumnType("INTEGER");
 
@@ -340,6 +371,9 @@ namespace SkFabricatorApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -417,6 +451,9 @@ namespace SkFabricatorApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Role")

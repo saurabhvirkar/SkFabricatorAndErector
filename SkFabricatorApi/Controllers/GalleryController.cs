@@ -34,7 +34,7 @@ namespace SkFabricatorApi.Controllers
 
             try
             {
-                var photo = await _photoService.AddPhotoAsync(request.File, request.Category);
+                var photo = await _photoService.AddPhotoAsync(request.File, request.Category, request.IsAboutSlider);
                 return Ok(photo);
             }
             catch (System.Exception ex)

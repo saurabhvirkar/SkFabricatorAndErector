@@ -1,15 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using SkFabricatorApi.Services;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using SkFabricatorApi.Models;
 
 namespace SkFabricatorApi.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class AboutController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAboutContent()
+        private readonly IPhotoService _photoService;
+
+        public AboutController(IPhotoService photoService)
         {
-            return Ok("Welcome to the About Page API!");
+            _photoService = photoService;
         }
+
     }
 }
