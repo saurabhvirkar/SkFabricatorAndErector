@@ -1,6 +1,6 @@
 namespace SkFabricatorApi.Models.DTOs;
 
-public class AddServiceRequestDto
+public class AddOurServiceRequestDto
 {
     public string Name { get; set; } = null!;
     public string Summary { get; set; } = null!;

@@ -66,8 +66,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInquiryService, InquiryService>();
         services.AddScoped<IProjectRepository, ProjectRepository>(); // Already present, but good to confirm
         services.AddScoped<IProjectService, ProjectService>();
-        services.AddScoped<IServiceRepository, ServiceRepository>(); // Already present, but good to confirm
-        services.AddScoped<IServiceService, ServiceService>();
+        services.AddScoped<IOurServiceRepository, OurServiceRepository>(); // Already present, but good to confirm
+        services.AddScoped<IOurServiceService, OurServiceService>();
         services.AddScoped<INewsletterRepository, NewsletterRepository>(); // Already present, but good to confirm
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IPhotoService, PhotoService>();

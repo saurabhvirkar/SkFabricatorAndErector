@@ -10,7 +10,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Inquiry> Inquiries { get; set; }
     public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<Service> Services { get; set; }
+    public DbSet<OurService> OurServices { get; set; }
     public DbSet<Photo> Photos { get; set; }
     public DbSet<SectionImage> SectionImages { get; set; }
     public DbSet<TeamMember> TeamMembers { get; set; }

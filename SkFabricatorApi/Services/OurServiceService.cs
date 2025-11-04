@@ -7,12 +7,12 @@ using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Services;
 
-public class ServiceService : IServiceService
+public class OurServiceService : IOurServiceService
 {
     private readonly Cloudinary _cloudinary;
-    private readonly IServiceRepository _serviceRepository;
+    private readonly IOurServiceRepository _ourServiceRepository;
 
-    public ServiceService(IOptions<CloudinarySettings> config, IServiceRepository serviceRepository)
+    public OurServiceService(IOptions<CloudinarySettings> config, IOurServiceRepository ourServiceRepository)
     {
         var acc = new Account(
             config.Value.CloudName,
@@ -20,13 +20,13 @@ public class ServiceService : IServiceService
             config.Value.ApiSecret
         );
         _cloudinary = new Cloudinary(acc);
-        _serviceRepository = serviceRepository;
+        _ourServiceRepository = ourServiceRepository;
     }
 
-    public async Task<Service> AddServiceImageAsync(int serviceId, IFormFile file)
+    public async Task<OurService> AddServiceImageAsync(int serviceId, IFormFile file)
     {
-        var service = await _serviceRepository.GetByIdAsync(serviceId);
-        if (service == null)
+        var ourService = await _ourServiceRepository.GetByIdAsync(serviceId);
+        if (ourService == null)
         {
             throw new System.Exception("Service not found");
         }
@@ -48,12 +48,12 @@ public class ServiceService : IServiceService
             throw new System.Exception(uploadResult.Error.Message);
         }
 
-        service.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        ourService.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
-        return await _serviceRepository.UpdateAsync(service);
+        return await _ourServiceRepository.UpdateAsync(ourService);
     }
 
-    public async Task<Service> AddServiceAsync(AddServiceRequestDto request)
+    public async Task<OurService> AddServiceAsync(AddOurServiceRequestDto request)
     {
         var uploadResult = new ImageUploadResult();
 
@@ -72,7 +72,7 @@ public class ServiceService : IServiceService
             throw new System.Exception(uploadResult.Error.Message);
         }
 
-        var service = new Service
+        var service = new OurService
         {
             Name = request.Name,
             Summary = request.Summary,
@@ -80,21 +80,21 @@ public class ServiceService : IServiceService
             ImageUrl = uploadResult.SecureUrl.AbsoluteUri
         };
 
-        return await _serviceRepository.AddAsync(service);
+        return await _ourServiceRepository.AddAsync(service);
     }
 
-    public async Task<Service> UpdateServiceAsync(int serviceId, Service service)
+    public async Task<OurService> UpdateServiceAsync(int serviceId, OurService service)
     {
         if (serviceId != service.Id)
         {
             throw new System.Exception("Service ID mismatch");
         }
 
-        return await _serviceRepository.UpdateAsync(service);
+        return await _ourServiceRepository.UpdateAsync(service);
     }
 
     public async Task DeleteServiceAsync(int serviceId)
     {
-        await _serviceRepository.DeleteAsync(serviceId);
+        await _ourServiceRepository.DeleteAsync(serviceId);
     }
 }

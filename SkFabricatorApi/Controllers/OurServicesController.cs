@@ -9,22 +9,22 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/services")]
-public class ServicesController : ControllerBase
+public class OurServicesController : ControllerBase
 {
-    private readonly IServiceRepository _serviceRepository;
-    private readonly IServiceService _serviceService;
+    private readonly IOurServiceRepository _ourServiceRepository;
+    private readonly IOurServiceService _ourServiceService;
 
-    public ServicesController(IServiceRepository serviceRepository, IServiceService serviceService)
+    public OurServicesController(IOurServiceRepository ourServiceRepository, IOurServiceService ourServiceService)
     {
-        _serviceRepository = serviceRepository;
-        _serviceService = serviceService;
+        _ourServiceRepository = ourServiceRepository;
+        _ourServiceService = ourServiceService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var services = await _serviceRepository.GetAllAsync();
-        return Ok(services);
+        var ourServices = await _ourServiceRepository.GetAllAsync();
+        return Ok(ourServices);
     }
 
     [HttpGet("{id}", Name = "GetServiceById")]
@@ -32,21 +32,21 @@ public class ServicesController : ControllerBase
     {
         // This assumes your repository can fetch by ID.
         // We will need to add GetByIdAsync to IServiceRepository and ServiceRepository.
-        var service = await _serviceRepository.GetByIdAsync(id);
-        if (service == null)
+        var ourService = await _ourServiceRepository.GetByIdAsync(id);
+        if (ourService == null)
         {
             return NotFound();
         }
-        return Ok(service);
+        return Ok(ourService);
     }
 
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Add([FromForm] AddServiceRequestDto request)
+    public async Task<IActionResult> Add([FromForm] AddOurServiceRequestDto request)
     {
         try
         {
-            var newService = await _serviceService.AddServiceAsync(request);
+            var newService = await _ourServiceService.AddServiceAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = newService.Id }, newService);
         }
         catch (System.Exception ex)
@@ -57,14 +57,14 @@ public class ServicesController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Update(int id, [FromBody] Service service)
+    public async Task<IActionResult> Update(int id, [FromBody] OurService ourService)
     {
-        if (id != service.Id)
+        if (id != ourService.Id)
         {
             return BadRequest();
         }
 
-        await _serviceRepository.UpdateAsync(service);
+        await _ourServiceRepository.UpdateAsync(ourService);
 
         return NoContent();
     }
@@ -73,24 +73,24 @@ public class ServicesController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Delete(int id)
     {
-        var service = await _serviceRepository.GetByIdAsync(id);
-        if (service == null)
+        var ourService = await _ourServiceRepository.GetByIdAsync(id);
+        if (ourService == null)
         {
             return NotFound();
         }
 
-        await _serviceRepository.DeleteAsync(id);
+        await _ourServiceRepository.DeleteAsync(id);
 
         return NoContent();
     }
 
     [HttpPost("add-image")]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> AddServiceImage([FromForm] AddServiceImageRequestDto request)
+    public async Task<IActionResult> AddServiceImage([FromForm] AddOurServiceImageRequestDto request)
     {
         try
         {
-            var service = await _serviceService.AddServiceImageAsync(request.ServiceId, request.File);
+            var service = await _ourServiceService.AddServiceImageAsync(request.ServiceId, request.File);
             return Ok(service);
         }
         catch (System.Exception ex)

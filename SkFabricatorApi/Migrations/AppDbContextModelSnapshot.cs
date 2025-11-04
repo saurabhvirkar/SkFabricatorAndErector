@@ -328,6 +328,30 @@ namespace SkFabricatorApi.Migrations
                     b.ToTable("NewsletterSubscriptions");
                 });
 
+            modelBuilder.Entity("SkFabricatorApi.Models.OurService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OurServices");
+                });
+
             modelBuilder.Entity("SkFabricatorApi.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -401,30 +425,6 @@ namespace SkFabricatorApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SectionImages");
-                });
-
-            modelBuilder.Entity("SkFabricatorApi.Models.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Icon")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Summary")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("SkFabricatorApi.Models.TeamMember", b =>

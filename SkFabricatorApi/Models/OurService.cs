@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkFabricatorApi.Models;
 
-public class Service
+public class OurService
 {
     public int Id { get; set; }
     [Required]

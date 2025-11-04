@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkFabricatorApi.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeHomeSliderImageAndPublicIdNullable3344 : Migration
+    public partial class MakeHomeSliderImageAndPublicIdNullable33444 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -119,6 +119,22 @@ namespace SkFabricatorApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OurServices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Summary = table.Column<string>(type: "TEXT", nullable: true),
+                    Icon = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OurServices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
                 {
@@ -165,22 +181,6 @@ namespace SkFabricatorApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SectionImages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Services",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Summary = table.Column<string>(type: "TEXT", nullable: true),
-                    Icon = table.Column<string>(type: "TEXT", nullable: true),
-                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Services", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -377,6 +377,9 @@ namespace SkFabricatorApi.Migrations
                 name: "NewsletterSubscriptions");
 
             migrationBuilder.DropTable(
+                name: "OurServices");
+
+            migrationBuilder.DropTable(
                 name: "Photos");
 
             migrationBuilder.DropTable(
@@ -384,9 +387,6 @@ namespace SkFabricatorApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "SectionImages");
-
-            migrationBuilder.DropTable(
-                name: "Services");
 
             migrationBuilder.DropTable(
                 name: "TeamMembers");
