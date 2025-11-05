@@ -5,7 +5,7 @@
     @for (slide of backgroundSlides(); track slide.id; let i = $index) {
       <div 
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-        [style.background-image]="'url(' + slide.imageUrl + ')'"
+        [style.background-image]="slide.imageUrl ? 'url(' + slide.imageUrl + ')' : 'none'"
         [class.opacity-100]="currentSlideIndex === i"
         [class.opacity-0]="currentSlideIndex !== i"
         role="img"
@@ -65,7 +65,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @for (slide of backgroundSlides(); track slide.id) {
               <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col">
-                <img [src]="slide.imageUrl" [alt]="slide.title" class="w-full h-40 object-cover rounded-md mb-4">
+                <img [src]="slide.imageUrl || 'https://via.placeholder.com/150'" [alt]="slide.title" class="w-full h-40 object-cover rounded-md mb-4">
                 <form #updateForm="ngForm" (ngSubmit)="onUpdateHomeSlider(slide.id, updateForm.value.title, updateForm.value.description)">
                   <div class="mb-3">
                     <label [for]="'title-' + slide.id" class="block text-sm font-medium text-gray-700">Title</label>

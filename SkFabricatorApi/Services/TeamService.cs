@@ -27,12 +27,7 @@ public class TeamService : ITeamService
 
     public async Task<TeamMember> AddTeamMemberImageAsync(int teamMemberId, IFormFile file)
     {
-        var teamMember = await _teamRepository.GetByIdAsync(teamMemberId);
-        if (teamMember == null)
-        {
-            throw new System.Exception("Team member not found");
-        }
-
+        var teamMember = await _teamRepository.GetByIdAsync(teamMemberId) ?? throw new System.Exception("Team member not found");
         var uploadResult = new ImageUploadResult();
 
         if (file.Length > 0)
@@ -52,7 +47,8 @@ public class TeamService : ITeamService
 
         teamMember.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
-        return await _teamRepository.UpdateAsync(teamMember);
+        await _teamRepository.UpdateAsync(teamMember);
+        return teamMember;
     }
 
     public async Task<TeamMember> AddTeamMemberAsync(AddTeamMemberRequestDto request)
@@ -87,7 +83,8 @@ public class TeamService : ITeamService
 
         try
         {
-            return await _teamRepository.AddAsync(teamMember);
+            await _teamRepository.AddAsync(teamMember);
+            return teamMember;
         }
         catch (System.Exception ex)
         {
@@ -115,7 +112,8 @@ public class TeamService : ITeamService
             }
         }
 
-        return await _teamRepository.DeleteAsync(id);
+        await _teamRepository.DeleteAsync(teamMember);
+        return true;
     }
 
     public async Task<TeamMember?> UpdateTeamMemberAsync(int id, UpdateTeamMemberRequestDto request)
@@ -132,6 +130,7 @@ public class TeamService : ITeamService
         teamMember.LinkedInUrl = request.LinkedInUrl;
         teamMember.Details = request.Details;
 
-        return await _teamRepository.UpdateAsync(teamMember);
+        await _teamRepository.UpdateAsync(teamMember);
+        return teamMember;
     }
 }

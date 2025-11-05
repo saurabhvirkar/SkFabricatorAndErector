@@ -49,12 +49,13 @@ public class SectionImageService : ISectionImageService
             SectionName = sectionName
         };
 
-        return await _sectionImageRepository.AddSectionImageAsync(sectionImage);
+        await _sectionImageRepository.AddAsync(sectionImage);
+        return sectionImage;
     }
 
     public async Task<bool> DeleteSectionImageAsync(int id)
     {
-        var sectionImage = await _sectionImageRepository.GetSectionImageByIdAsync(id);
+        var sectionImage = await _sectionImageRepository.GetByIdAsync(id);
 
         if (sectionImage == null)
         {
@@ -72,16 +73,17 @@ public class SectionImageService : ISectionImageService
             }
         }
 
-        return await _sectionImageRepository.DeleteSectionImageAsync(id);
+        await _sectionImageRepository.DeleteAsync(sectionImage);
+        return true;
     }
 
     public async Task<IEnumerable<SectionImage>> GetSectionImagesBySectionNameAsync(string sectionName)
     {
-        return await _sectionImageRepository.GetSectionImagesBySectionNameAsync(sectionName);
+        return await _sectionImageRepository.FindAsync(s => s.SectionName == sectionName);
     }
 
     public async Task<IEnumerable<SectionImage>> GetAllSectionImagesAsync()
     {
-        return await _sectionImageRepository.GetAllSectionImagesAsync();
+        return await _sectionImageRepository.GetAllAsync();
     }
 }

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
 using SkFabricatorApi.Services;
 using SkFabricatorApi.Models.DTOs;
@@ -9,18 +8,10 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/team")]
-public class TeamController : ControllerBase
+public class TeamController(ITeamRepository teamRepository, ITeamService teamService) : ControllerBase
 {
-    private readonly ITeamRepository _teamRepository;
-    private readonly ITeamService _teamService;
-    private readonly ILogger<TeamController> _logger;
-
-    public TeamController(ITeamRepository teamRepository, ITeamService teamService, ILogger<TeamController> logger)
-    {
-        _teamRepository = teamRepository;
-        _teamService = teamService;
-        _logger = logger;
-    }
+    private readonly ITeamRepository _teamRepository = teamRepository;
+    private readonly ITeamService _teamService = teamService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -44,31 +35,16 @@ public class TeamController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Add([FromForm] AddTeamMemberRequestDto request)
     {
-        try
-        {
-            var newTeamMember = await _teamService.AddTeamMemberAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = newTeamMember.Id }, newTeamMember);
-        }
-        catch (System.Exception ex)
-        {
-            _logger.LogError(ex, "Error adding team member");
-            return BadRequest(ex.Message);
-        }
+        var newTeamMember = await _teamService.AddTeamMemberAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = newTeamMember.Id }, newTeamMember);
     }
 
     [HttpPost("add-image")]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> AddTeamMemberImage([FromForm] AddTeamMemberImageRequestDto request)
     {
-        try
-        {
-            var teamMember = await _teamService.AddTeamMemberImageAsync(request.TeamMemberId, request.File);
-            return Ok(teamMember);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var teamMember = await _teamService.AddTeamMemberImageAsync(request.TeamMemberId, request.File);
+        return Ok(teamMember);
     }
 
     [HttpDelete("{id}")]
@@ -87,19 +63,11 @@ public class TeamController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateTeamMemberRequestDto request)
     {
-        try
+        var updatedTeamMember = await _teamService.UpdateTeamMemberAsync(id, request);
+        if (updatedTeamMember == null)
         {
-            var updatedTeamMember = await _teamService.UpdateTeamMemberAsync(id, request);
-            if (updatedTeamMember == null)
-            {
-                return NotFound();
-            }
-            return Ok(updatedTeamMember);
+            return NotFound();
         }
-        catch (System.Exception ex)
-        {
-            _logger.LogError(ex, "Error updating team member");
-            return BadRequest(ex.Message);
-        }
+        return Ok(updatedTeamMember);
     }
 }

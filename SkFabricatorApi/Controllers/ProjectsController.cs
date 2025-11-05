@@ -9,16 +9,10 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/projects")]
-public class ProjectsController : ControllerBase
+public class ProjectsController(IProjectRepository projectRepository, IProjectService projectService) : ControllerBase
 {
-    private readonly IProjectRepository _projectRepository;
-    private readonly IProjectService _projectService;
-
-    public ProjectsController(IProjectRepository projectRepository, IProjectService projectService)
-    {
-        _projectRepository = projectRepository;
-        _projectService = projectService;
-    }
+    private readonly IProjectRepository _projectRepository = projectRepository;
+    private readonly IProjectService _projectService = projectService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -44,30 +38,16 @@ public class ProjectsController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Add([FromForm] AddProjectRequestDto request)
     {
-        try
-        {
-            var newProject = await _projectService.AddProjectAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = newProject.Id }, newProject);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var newProject = await _projectService.AddProjectAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = newProject.Id }, newProject);
     }
 
     [HttpPost("add-image")]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> AddProjectImage([FromForm] AddProjectImageRequestDto request)
     {
-        try
-        {
-            var project = await _projectService.AddProjectImageAsync(request.ProjectId, request.File);
-            return Ok(project);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var project = await _projectService.AddProjectImageAsync(request.ProjectId, request.File);
+        return Ok(project);
     }
 
     [HttpDelete("{id}")]
@@ -91,15 +71,8 @@ public class ProjectsController : ControllerBase
             return BadRequest();
         }
 
-        try
-        {
-            var updatedProject = await _projectService.UpdateProjectAsync(project);
-            return Ok(updatedProject);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var updatedProject = await _projectService.UpdateProjectAsync(project);
+        return Ok(updatedProject);
     }
 }
 

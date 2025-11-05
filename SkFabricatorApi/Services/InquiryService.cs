@@ -5,34 +5,27 @@ using SkFabricatorApi.Repositories;
 
 namespace SkFabricatorApi.Services;
 
-public class InquiryService : IInquiryService
+public class InquiryService(IInquiryRepository inquiryRepository, IConfiguration config, ILogger<InquiryService> logger) : IInquiryService
 {
-    private readonly IInquiryRepository _inquiryRepository;
-    private readonly IConfiguration _config;
-    private readonly ILogger<InquiryService> _logger;
-
-    public InquiryService(IInquiryRepository inquiryRepository, IConfiguration config, ILogger<InquiryService> logger)
-    {
-        _inquiryRepository = inquiryRepository;
-        _config = config;
-        _logger = logger;
-    }
+    private readonly IInquiryRepository _inquiryRepository = inquiryRepository;
+    private readonly IConfiguration _config = config;
+    private readonly ILogger<InquiryService> _logger = logger;
 
     public async Task<Inquiry> CreateInquiryAsync(Inquiry inquiry)
     {
-        var newInquiry = await _inquiryRepository.AddAsync(inquiry);
+        await _inquiryRepository.AddAsync(inquiry);
 
         // Try to send the email, but don't let it block the user response.
         // If it fails, log the error for administrative review.
         try
         {
-            await SendEmailAsync(newInquiry);
+            await SendEmailAsync(inquiry);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send inquiry notification email for inquiry ID {InquiryId}.", newInquiry.Id);
+            _logger.LogError(ex, "Failed to send inquiry notification email for inquiry ID {InquiryId}.", inquiry.Id);
         }
-        return newInquiry;
+        return inquiry;
     }
 
     public async Task<IEnumerable<Inquiry>> GetAllInquiriesAsync()

@@ -27,11 +27,7 @@ public class HomeSliderService : IHomeSliderService
 
     public async Task<HomeSlider> AddHomeSliderImageAsync(int homeSliderId, IFormFile file)
     {
-        var homeSlider = await _homeSliderRepository.GetByIdAsync(homeSliderId);
-        if (homeSlider == null)
-        {
-            throw new System.Exception("Home slider item not found");
-        }
+        var homeSlider = await _homeSliderRepository.GetByIdAsync(homeSliderId) ?? throw new System.Exception("Home slider item not found");
 
         var uploadResult = new ImageUploadResult();
 
@@ -51,9 +47,8 @@ public class HomeSliderService : IHomeSliderService
         }
 
         homeSlider.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
-        homeSlider.PublicId = uploadResult.PublicId;
-
-        return await _homeSliderRepository.UpdateAsync(homeSlider);
+        await _homeSliderRepository.UpdateAsync(homeSlider);
+        return homeSlider;
     }
 
     public async Task<HomeSlider> AddHomeSliderAsync(AddHomeSliderRequestDto request)
@@ -66,7 +61,8 @@ public class HomeSliderService : IHomeSliderService
 
         try
         {
-            return await _homeSliderRepository.AddAsync(homeSlider);
+            await _homeSliderRepository.AddAsync(homeSlider);
+            return homeSlider;
         }
         catch (System.Exception ex)
         {
@@ -94,7 +90,8 @@ public class HomeSliderService : IHomeSliderService
             }
         }
 
-        return await _homeSliderRepository.DeleteAsync(id);
+        await _homeSliderRepository.DeleteAsync(homeSlider);
+        return true;
     }
 
     public async Task<HomeSlider?> UpdateHomeSliderAsync(int id, AddHomeSliderRequestDto request)
@@ -108,6 +105,7 @@ public class HomeSliderService : IHomeSliderService
         homeSlider.Title = request.Title;
         homeSlider.Description = request.Description;
 
-        return await _homeSliderRepository.UpdateAsync(homeSlider);
+        await _homeSliderRepository.UpdateAsync(homeSlider);
+        return homeSlider;
     }
 }

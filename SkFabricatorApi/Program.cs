@@ -14,7 +14,11 @@ builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration
 builder.Services.AddApplicationServices();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 // Add framework services
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<SkFabricatorApi.Filters.ValidationFilter>();
+    options.Filters.Add<SkFabricatorApi.Filters.ApiExceptionFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddCorsPolicy();
@@ -31,6 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<SkFabricatorApi.Middleware.ErrorHandlingMiddleware>();
 app.UseCorsPolicy();
 app.UseAuthentication();
 app.UseAuthorization();

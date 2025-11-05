@@ -11,8 +11,8 @@ using SkFabricatorApi.Data;
 namespace SkFabricatorApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251104070906_MakeHomeSliderImageAndPublicIdNullable33444")]
-    partial class MakeHomeSliderImageAndPublicIdNullable33444
+    [Migration("20251105073545_MakeHomeSliderImageAndPublicIdNullable3344444")]
+    partial class MakeHomeSliderImageAndPublicIdNullable3344444
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

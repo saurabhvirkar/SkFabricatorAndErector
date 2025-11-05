@@ -4,16 +4,10 @@ using SkFabricatorApi.Models.DTOs;
 
 namespace SkFabricatorApi.Services;
 
-public class ClientService : IClientService
+public class ClientService(IClientDetailsRepository clientRepository, IPhotoService photoService) : IClientService
 {
-    private readonly IClientDetailsRepository _clientRepository;
-    private readonly IPhotoService _photoService;
-
-    public ClientService(IClientDetailsRepository clientRepository, IPhotoService photoService)
-    {
-        _clientRepository = clientRepository;
-        _photoService = photoService;
-    }
+    private readonly IClientDetailsRepository _clientRepository = clientRepository;
+    private readonly IPhotoService _photoService = photoService;
 
     public async Task<ClientDetails> AddClientAsync(AddClientRequestDto request)
     {
@@ -31,21 +25,16 @@ public class ClientService : IClientService
             ImageUrl = imageUrl
         };
 
-        return await _clientRepository.AddAsync(client);
+        await _clientRepository.AddAsync(client);
+        return client;
     }
 
     public async Task<ClientDetails> AddClientImageAsync(int clientId, IFormFile file)
     {
-        var client = await _clientRepository.GetByIdAsync(clientId);
-        if (client == null)
-        {
-            throw new System.Exception("Client not found");
-        }
+        var client = await _clientRepository.GetByIdAsync(clientId) ?? throw new System.Exception("Client not found");
 
         var photo = await _photoService.AddPhotoAsync(file, "Clients", false);
         var imageUrl = photo.Url;
-        client.ImageUrl = imageUrl;
-
         await _clientRepository.UpdateAsync(client);
         return client;
     }
@@ -58,7 +47,8 @@ public class ClientService : IClientService
             return false;
         }
 
-        return await _clientRepository.DeleteAsync(id);
+        await _clientRepository.DeleteAsync(client);
+        return true;
     }
 
     public async Task<ClientDetails?> UpdateClientAsync(int id, UpdateClientRequestDto request)
@@ -71,7 +61,6 @@ public class ClientService : IClientService
 
         client.Name = request.Name;
         client.ClientUrl = request.ClientUrl;
-
         await _clientRepository.UpdateAsync(client);
         return client;
     }

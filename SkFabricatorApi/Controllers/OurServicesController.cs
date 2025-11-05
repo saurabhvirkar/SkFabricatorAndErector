@@ -9,16 +9,10 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/services")]
-public class OurServicesController : ControllerBase
+public class OurServicesController(IOurServiceRepository ourServiceRepository, IOurServiceService ourServiceService) : ControllerBase
 {
-    private readonly IOurServiceRepository _ourServiceRepository;
-    private readonly IOurServiceService _ourServiceService;
-
-    public OurServicesController(IOurServiceRepository ourServiceRepository, IOurServiceService ourServiceService)
-    {
-        _ourServiceRepository = ourServiceRepository;
-        _ourServiceService = ourServiceService;
-    }
+    private readonly IOurServiceRepository _ourServiceRepository = ourServiceRepository;
+    private readonly IOurServiceService _ourServiceService = ourServiceService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -44,15 +38,8 @@ public class OurServicesController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Add([FromForm] AddOurServiceRequestDto request)
     {
-        try
-        {
-            var newService = await _ourServiceService.AddServiceAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = newService.Id }, newService);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var newService = await _ourServiceService.AddServiceAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = newService.Id }, newService);
     }
 
     [HttpPut("{id}")]
@@ -79,7 +66,7 @@ public class OurServicesController : ControllerBase
             return NotFound();
         }
 
-        await _ourServiceRepository.DeleteAsync(id);
+        await _ourServiceRepository.DeleteAsync(ourService);
 
         return NoContent();
     }
@@ -88,14 +75,7 @@ public class OurServicesController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> AddServiceImage([FromForm] AddOurServiceImageRequestDto request)
     {
-        try
-        {
-            var service = await _ourServiceService.AddServiceImageAsync(request.ServiceId, request.File);
-            return Ok(service);
-        }
-        catch (System.Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var service = await _ourServiceService.AddServiceImageAsync(request.ServiceId, request.File);
+        return Ok(service);
     }
 }

@@ -49,12 +49,13 @@ public class PhotoService : IPhotoService
             IsAboutSlider = isAboutSlider
         };
 
-        return await _photoRepository.AddPhotoAsync(photo);
+        await _photoRepository.AddAsync(photo);
+        return photo;
     }
 
     public async Task<bool> DeletePhotoAsync(int photoId)
     {
-        var photo = await _photoRepository.GetPhotoByIdAsync(photoId);
+        var photo = await _photoRepository.GetByIdAsync(photoId);
 
         if (photo == null)
         {
@@ -72,11 +73,16 @@ public class PhotoService : IPhotoService
             }
         }
 
-        return await _photoRepository.DeletePhotoAsync(photoId);
+        await _photoRepository.DeleteAsync(photo);
+        return true;
     }
 
     public async Task<IEnumerable<Photo>> GetPhotosAsync(string? category = null)
     {
-        return await _photoRepository.GetPhotosAsync(category);
+        if (string.IsNullOrEmpty(category))
+        {
+            return await _photoRepository.GetAllAsync();
+        }
+        return await _photoRepository.FindAsync(p => p.Category == category);
     }
 }

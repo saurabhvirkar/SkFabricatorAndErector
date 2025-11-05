@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkFabricatorApi.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeHomeSliderImageAndPublicIdNullable33444 : Migration
+    public partial class MakeHomeSliderImageAndPublicIdNullable3344444 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

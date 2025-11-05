@@ -25,12 +25,7 @@ public class ProjectService : IProjectService
 
     public async Task<Project> AddProjectImageAsync(int projectId, IFormFile file)
     {
-        var project = await _projectRepository.GetByIdAsync(projectId);
-        if (project == null)
-        {
-            throw new System.Exception("Project not found");
-        }
-
+        var project = await _projectRepository.GetByIdAsync(projectId) ?? throw new System.Exception("Project not found");
         var uploadResult = new ImageUploadResult();
 
         if (file.Length > 0)
@@ -50,7 +45,8 @@ public class ProjectService : IProjectService
 
         project.Image = uploadResult.SecureUrl.AbsoluteUri;
 
-        return await _projectRepository.UpdateAsync(project);
+        await _projectRepository.UpdateAsync(project);
+        return project;
     }
 
     public async Task<Project> AddProjectAsync(AddProjectRequestDto request)
@@ -81,7 +77,8 @@ public class ProjectService : IProjectService
             PublicId = uploadResult.PublicId
         };
 
-        return await _projectRepository.AddAsync(project);
+        await _projectRepository.AddAsync(project);
+        return project;
     }
 
     public async Task<bool> DeleteProjectAsync(int id)
@@ -103,11 +100,13 @@ public class ProjectService : IProjectService
             }
         }
 
-        return await _projectRepository.DeleteAsync(id);
+        await _projectRepository.DeleteAsync(project);
+        return true;
     }
 
     public async Task<Project> UpdateProjectAsync(Project project)
     {
-        return await _projectRepository.UpdateAsync(project);
+        await _projectRepository.UpdateAsync(project);
+        return project;
     }
 }

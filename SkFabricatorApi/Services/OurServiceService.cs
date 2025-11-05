@@ -25,11 +25,7 @@ public class OurServiceService : IOurServiceService
 
     public async Task<OurService> AddServiceImageAsync(int serviceId, IFormFile file)
     {
-        var ourService = await _ourServiceRepository.GetByIdAsync(serviceId);
-        if (ourService == null)
-        {
-            throw new System.Exception("Service not found");
-        }
+        var ourService = await _ourServiceRepository.GetByIdAsync(serviceId) ?? throw new System.Exception("Service not found");
 
         var uploadResult = new ImageUploadResult();
 
@@ -50,7 +46,8 @@ public class OurServiceService : IOurServiceService
 
         ourService.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
-        return await _ourServiceRepository.UpdateAsync(ourService);
+        await _ourServiceRepository.UpdateAsync(ourService);
+        return ourService;
     }
 
     public async Task<OurService> AddServiceAsync(AddOurServiceRequestDto request)
@@ -80,7 +77,8 @@ public class OurServiceService : IOurServiceService
             ImageUrl = uploadResult.SecureUrl.AbsoluteUri
         };
 
-        return await _ourServiceRepository.AddAsync(service);
+        await _ourServiceRepository.AddAsync(service);
+        return service;
     }
 
     public async Task<OurService> UpdateServiceAsync(int serviceId, OurService service)
@@ -90,11 +88,16 @@ public class OurServiceService : IOurServiceService
             throw new System.Exception("Service ID mismatch");
         }
 
-        return await _ourServiceRepository.UpdateAsync(service);
+        await _ourServiceRepository.UpdateAsync(service);
+        return service;
     }
 
     public async Task DeleteServiceAsync(int serviceId)
     {
-        await _ourServiceRepository.DeleteAsync(serviceId);
+        var service = await _ourServiceRepository.GetByIdAsync(serviceId);
+        if (service != null)
+        {
+            await _ourServiceRepository.DeleteAsync(service);
+        }
     }
 }

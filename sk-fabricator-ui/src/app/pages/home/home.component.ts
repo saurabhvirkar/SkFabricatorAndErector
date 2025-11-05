@@ -91,24 +91,29 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.homeSliderService.addHomeSlider({ title, description }).pipe(
-      switchMap((newSlider: HomeSlider) => {
+    this.homeSliderService.addHomeSlider({ title, description }).subscribe({
+      next: (newSlider: HomeSlider) => {
+        this.backgroundSlides.update(sliders => [...sliders, newSlider]);
+        // If this is the first slide, update hero text
+        if (this.backgroundSlides().length === 1) {
+          this.heroTitle.set(newSlider.title);
+          this.heroDescription.set(newSlider.description);
+        }
+
         if (file && file.length > 0) {
           const formData = new FormData();
           formData.append('file', file[0]);
           formData.append('homeSliderId', newSlider.id.toString());
-          return this.homeSliderService.addHomeSliderImage(formData);
-        } else {
-          return of(newSlider);
-        }
-      })
-    ).subscribe({
-      next: (sliderWithImage: HomeSlider) => {
-        this.backgroundSlides.update(sliders => [...sliders, sliderWithImage]);
-        // If this is the first slide, update hero text
-        if (this.backgroundSlides().length === 1) {
-          this.heroTitle.set(sliderWithImage.title);
-          this.heroDescription.set(sliderWithImage.description);
+          this.homeSliderService.addHomeSliderImage(formData).subscribe({
+            next: (sliderWithImage: HomeSlider) => {
+              this.backgroundSlides.update(sliders =>
+                sliders.map(s => (s.id === newSlider.id ? sliderWithImage : s))
+              );
+            },
+            error: (err: any) => {
+              console.error('Failed to add home slider image', err);
+            }
+          });
         }
       },
       error: (err: any) => {

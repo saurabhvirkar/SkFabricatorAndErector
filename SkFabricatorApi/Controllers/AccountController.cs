@@ -11,16 +11,10 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class AccountController(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions) : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly JwtSettings _jwtSettings;
-
-    public AccountController(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions)
-    {
-        _userManager = userManager;
-        _jwtSettings = jwtOptions.Value;
-    }
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)

@@ -7,35 +7,17 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/inquiry")]
-public class InquiryController : ControllerBase
+public class InquiryController(IInquiryService inquiryService) : ControllerBase
 {
-    private readonly IInquiryService _inquiryService;
-
-    public InquiryController(IInquiryService inquiryService)
-    {
-        _inquiryService = inquiryService;
-    }
+    private readonly IInquiryService _inquiryService = inquiryService;
 
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> SubmitInquiryAsync([FromBody] Inquiry inquiry)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
-            var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
-            return CreatedAtRoute("GetInquiryByIdAsync", new { id = createdInquiry.Id }, createdInquiry);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "An internal error occurred while processing your request.");
-        }
+        var createdInquiry = await _inquiryService.CreateInquiryAsync(inquiry);
+        return CreatedAtRoute("GetInquiryByIdAsync", new { id = createdInquiry.Id }, createdInquiry);
     }
-
 
     [HttpGet]
     [Authorize(Roles = "Admin,Manager")]

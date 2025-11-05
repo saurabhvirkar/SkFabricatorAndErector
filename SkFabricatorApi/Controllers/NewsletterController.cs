@@ -7,24 +7,18 @@ namespace SkFabricatorApi.Controllers;
 
 [ApiController]
 [Route("api/newsletter")]
-public class NewsletterController : ControllerBase
+public class NewsletterController(INewsletterRepository newsletterRepository) : ControllerBase
 {
-    private readonly INewsletterRepository _newsletterRepository;
-    public NewsletterController(INewsletterRepository newsletterRepository)
-    {
-        _newsletterRepository = newsletterRepository;
-    }
+    private readonly INewsletterRepository _newsletterRepository = newsletterRepository;
 
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Subscribe([FromBody] NewsletterSubscription sub)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        var newSub = await _newsletterRepository.AddAsync(sub);
-        return CreatedAtAction("GetNewsletterSubscriptionById", new { id = newSub.Id }, newSub);
+        await _newsletterRepository.AddAsync(sub);
+        await _newsletterRepository.SaveChangesAsync();
+        return CreatedAtAction("GetNewsletterSubscriptionById", new { id = sub.Id }, sub);
     }
-
     [HttpGet]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetAll()

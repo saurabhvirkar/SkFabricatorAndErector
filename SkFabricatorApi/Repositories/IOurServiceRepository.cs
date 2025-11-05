@@ -2,11 +2,6 @@ using SkFabricatorApi.Models;
 
 namespace SkFabricatorApi.Repositories;
 
-public interface IOurServiceRepository
+public interface IOurServiceRepository : IGenericRepository<OurService>
 {
-    Task<IEnumerable<OurService>> GetAllAsync();
-    Task<OurService> AddAsync(OurService service);
-    Task<OurService> UpdateAsync(OurService service);
-    Task DeleteAsync(int id);
-    Task<OurService?> GetByIdAsync(int id);
 }
