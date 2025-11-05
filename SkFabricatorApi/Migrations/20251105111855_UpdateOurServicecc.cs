@@ -5,24 +5,18 @@
 namespace SkFabricatorApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateOurServiceModel : Migration
+    public partial class UpdateOurServicecc : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Icon",
-                table: "OurServices",
-                newName: "Description");
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Description",
-                table: "OurServices",
-                newName: "Icon");
+
         }
     }
 }

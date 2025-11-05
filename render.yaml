@@ -8,7 +8,7 @@ services:
       - 10000
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        value: Data Source=/data/SkFabricator.db
+        value: Host=dpg-d45iievdiees7389up0g-a.singapore-postgres.render.com;Port=5432;Database=skfabricatordb;Username=skfabricatordb_user;Password=iWQWI4mq2VqeXEsu2kLz4RG6PHEzjjpL
       - key: Jwt__Issuer
         value: http://skfabricatorapi:10000
       - key: Jwt__Audience
@@ -16,27 +16,14 @@ services:
       - key: Jwt__Key
         generateValue: true
       - key: CloudinarySettings__CloudName
-        sync: false
       - key: CloudinarySettings__ApiKey
-        sync: false
       - key: CloudinarySettings__ApiSecret
-        sync: false
       - key: Email__From
-        sync: false
       - key: Email__To
-        sync: false
       - key: Email__SmtpServer
-        sync: false
       - key: Email__SmtpPort
-        sync: false
       - key: Email__Username
-        sync: false
       - key: Email__Password
-        sync: false
-    disks:
-      - name: skfabricator-data
-        path: /data
-
   - type: web
     name: skfabricatorui
     env: docker
