@@ -1,5 +1,6 @@
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
+using Microsoft.AspNetCore.HttpOverrides; // Added for ForwardedHeaders
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerDocumentation();
 }
 
+// Configure Forwarded Headers for proxy support (Render)
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 app.UseHttpsRedirection();
 app.UseMiddleware<SkFabricatorApi.Middleware.ErrorHandlingMiddleware>();
 app.UseCorsPolicy();
@@ -41,4 +48,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+// Configure Kestrel to listen on the PORT environment variable provided by Render
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://0.0.0.0:{port}");
