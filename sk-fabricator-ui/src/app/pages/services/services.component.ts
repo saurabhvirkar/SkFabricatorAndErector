@@ -36,7 +36,7 @@ export class ServicesComponent implements OnInit {
   showAddServiceForm = signal<boolean>(false); // New signal for form visibility
   editingService = signal<Service | null>(null);
 
-  newService: Service = { id: 0, name: '', summary: '', icon: '', imageUrl: '' };
+  newService: Service = { id: 0, name: '', summary: '', description: '', imageUrl: '' };
 
   ngOnInit(): void {
     this.loadServices();
@@ -66,7 +66,7 @@ export class ServicesComponent implements OnInit {
       const formData = new FormData();
       formData.append('Name', form.value.name);
       formData.append('Summary', form.value.summary);
-      formData.append('Icon', form.value.icon);
+      formData.append('Description', form.value.description);
       formData.append('File', files[0]);
 
       this.serviceService.addService(formData).subscribe({
@@ -88,7 +88,7 @@ export class ServicesComponent implements OnInit {
         id: service.id,
         name: form.value.name,
         summary: form.value.summary,
-        icon: form.value.icon,
+        description: form.value.description,
         imageUrl: service.imageUrl // Keep the existing image URL
       };
       this.serviceService.updateService(service.id, updatedServiceData).subscribe({

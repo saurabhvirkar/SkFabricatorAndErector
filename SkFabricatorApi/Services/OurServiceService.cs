@@ -54,7 +54,7 @@ public class OurServiceService : IOurServiceService
     {
         var uploadResult = new ImageUploadResult();
 
-        if (request.File.Length > 0)
+        if (request.File != null && request.File.Length > 0)
         {
             using var stream = request.File.OpenReadStream();
             var uploadParams = new ImageUploadParams
@@ -73,7 +73,7 @@ public class OurServiceService : IOurServiceService
         {
             Name = request.Name,
             Summary = request.Summary,
-            Icon = request.Icon,
+            Description = request.Description,
             ImageUrl = uploadResult.SecureUrl.AbsoluteUri
         };
 

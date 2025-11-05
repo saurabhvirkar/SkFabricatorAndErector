@@ -18,16 +18,9 @@
             <!-- Overlay for text readability -->
             <div class="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-70 transition-all duration-300"></div>
             <div class="relative z-10 text-white">
-              <div class="text-6xl text-blue-300 mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-black bg-opacity-20">
-                {{ service.icon }}
-              </div>
               <h2 class="text-2xl font-bold mb-3">{{ service.name }}</h2>
               <p class="text-gray-200 mb-4">{{ service.summary }}</p>
-              <ul class="text-sm text-gray-300 space-y-2 border-l-2 border-blue-500 pl-4">
-                <li>Specialized welding techniques.</li>
-                <li>Advanced project management.</li>
-                <li>Commitment to safety and quality.</li>
-              </ul>
+              <p class="text-sm text-gray-300">{{ service.description }}</p>
             </div>
           </div>
         }
@@ -69,9 +62,9 @@
                         rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
             <div class="mb-4">
-              <label for="icon" class="block text-sm font-medium text-gray-700">Icon (Emoji or URL)</label>
-              <input type="text" id="icon" name="icon" ngModel required
-                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+              <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+              <textarea id="description" name="description" ngModel required
+                        rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
             <div class="mb-4">
               <label for="file" class="block text-sm font-medium text-gray-700">Image</label>
@@ -97,9 +90,7 @@
       <!-- Overlay for text readability -->
       <div class="absolute inset-0 bg-black bg-opacity-60 group-hover:bg-opacity-70 transition-all duration-300"></div>
       <div class="relative z-10 text-white">
-        <div class="text-6xl text-blue-300 mb-4 w-16 h-16 flex items-center justify-center rounded-full bg-black bg-opacity-20">
-          {{ service.icon }}
-        </div>
+
         <h2 class="text-2xl font-bold mb-3">{{ service.name }}</h2>
         <p class="text-gray-200 mb-4">{{ service.summary }}</p>
         <ul class="text-sm text-gray-300 space-y-2 border-l-2 border-blue-500 pl-4">
@@ -146,9 +137,9 @@
                     rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
         </div>
         <div class="mb-4">
-          <label for="edit-icon" class="block text-sm font-medium text-gray-700">Icon (Emoji or URL)</label>
-          <input type="text" id="edit-icon" name="icon" [(ngModel)]="editingService()!.icon" required
-                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          <label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea id="edit-description" name="description" [(ngModel)]="editingService()!.description" required
+                    rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
         </div>
         <div class="flex justify-end space-x-4">
           <button type="button" (click)="toggleEditServiceForm(null)"

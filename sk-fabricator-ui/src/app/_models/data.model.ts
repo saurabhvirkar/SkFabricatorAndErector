@@ -27,7 +27,7 @@ export interface Service {
   id: number;
   name: string;
   summary: string;
-  icon: string;
+  description: string;
   imageUrl: string;
 }
 
