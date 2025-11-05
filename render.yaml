@@ -4,7 +4,8 @@ services:
     env: docker
     dockerfilePath: SkFabricatorApi/Dockerfile
     healthCheckPath: /health
-    ports: 10000
+    ports:
+      - 10000
     envVars:
       - key: ConnectionStrings__DefaultConnection
         value: Data Source=/data/SkFabricator.db
@@ -41,7 +42,8 @@ services:
     env: docker
     dockerfilePath: sk-fabricator-ui/Dockerfile
     healthCheckPath: /
-    ports: 80
+    ports:
+      - 80
     envVars:
       - key: API_URL
         value: http://skfabricatorapi:10000
