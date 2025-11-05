@@ -8,7 +8,8 @@ public static class CorsExtensions
         {
             options.AddDefaultPolicy(policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("http://localhost:4200", 
+                           "https://sk-fabricator-ui.onrender.com")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();

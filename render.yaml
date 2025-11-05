@@ -2,7 +2,7 @@ services:
   - type: web
     name: skfabricatorapi
     env: docker
-    dockerfilePath: SkFabricatorApi/Dockerfile
+    dockerfilePath: Dockerfile.api
     healthCheckPath: /health
     ports:
       - 10000
@@ -10,9 +10,9 @@ services:
       - key: ConnectionStrings__DefaultConnection
         value: Host=dpg-d45iievdiees7389up0g-a.singapore-postgres.render.com;Port=5432;Database=skfabricatordb;Username=skfabricatordb_user;Password=iWQWI4mq2VqeXEsu2kLz4RG6PHEzjjpL
       - key: Jwt__Issuer
-        value: http://skfabricatorapi:10000
+        value: https://skfabricatorapi.onrender.com # Will be updated by Render after deployment
       - key: Jwt__Audience
-        value: http://skfabricatorui:80
+        value: https://skfabricatorui.onrender.com # Will be updated by Render after deployment
       - key: Jwt__Key
         generateValue: true
       - key: CloudinarySettings__CloudName
@@ -24,13 +24,15 @@ services:
       - key: Email__SmtpPort
       - key: Email__Username
       - key: Email__Password
-  - type: web
+  - type: static_site
     name: skfabricatorui
-    env: docker
-    dockerfilePath: sk-fabricator-ui/Dockerfile
-    healthCheckPath: /
-    ports:
-      - 80
+    env: static
+    buildCommand: npm install && npm run build
+    publishPath: dist/sk-fabricator-ui/browser
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://skfabricatorapi.onrender.com/api/* # This will be updated by Render after deployment
     envVars:
       - key: API_URL
-        value: http://skfabricatorapi:10000
+        value: https://skfabricatorapi.onrender.com # This will be updated by Render after deployment
