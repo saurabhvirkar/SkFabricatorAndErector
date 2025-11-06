@@ -2,7 +2,7 @@ import { mergeApplicationConfig, ApplicationConfig, ENVIRONMENT_INITIALIZER } fr
 import { provideServerRendering } from '@angular/platform-server';
 import { appConfig } from './app.config';
 import { APP_BASE_HREF } from '@angular/common';
-import { environment } from '../environments/environment';
+import { environment } from './environments/environment';
 
 const serverConfig: ApplicationConfig = {
   providers: [
