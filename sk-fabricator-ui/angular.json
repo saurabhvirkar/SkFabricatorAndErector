@@ -87,8 +87,7 @@
             },
             "docker-build": {
               "prerender": false,
-              "ssr": false,
-              "outputMode": "browser"
+              "server": false
             }
           },
           "defaultConfiguration": "production"
