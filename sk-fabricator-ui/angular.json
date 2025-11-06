@@ -84,11 +84,6 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            },
-            "docker-build": {
-              "outputMode": "static",
-              "prerender": false,
-              "ssr": false
             }
           },
           "defaultConfiguration": "production"
