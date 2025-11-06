@@ -101,4 +101,8 @@ export class AuthService {
       }
     }
   }
+
+  isAdmin(): boolean {
+    return this.currentUserRoleSubject.value === 'Admin';
+  }
 }
