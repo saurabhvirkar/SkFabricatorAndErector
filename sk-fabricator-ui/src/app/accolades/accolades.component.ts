@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../_services/data.service';
-import { Photo } from '../_models/photo.model';
+import { Photo } from '../_models';
 import { GalleryService } from '../_services/gallery.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
-import { Project } from '../../_models/data.model';
+import { Project } from '../../_models';
 import { ProjectService } from '../../_services/project.service';
 import { DataService } from '../../_services/data.service';
 import { AuthService } from '../../auth.service';

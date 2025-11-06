@@ -4,7 +4,7 @@ import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { DataService } from '../../_services/data.service';
 import { ServiceService } from '../../_services/service.service';
 import { SectionImage } from '../../_models/section-image.model';
-import { Service } from '../../_models/data.model'; // Import the correct Service interface
+import { Service } from '../../_models'; // Import the correct Service interface
 
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';

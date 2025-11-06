@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../auth.service';
-import { GalleryImage } from '../../_models/data.model';
+import { GalleryImage } from '../../_models';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GalleryService } from '../../_services/gallery.service';

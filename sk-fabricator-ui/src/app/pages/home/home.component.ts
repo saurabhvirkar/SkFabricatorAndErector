@@ -5,7 +5,7 @@ import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 import { RouterLink } from '@angular/router';
 import { AboutDetailsComponent } from '../about-details/about-details.component';
 import { ServiceService } from '../../_services/service.service';
-import { Service } from '../../_models/data.model';
+import { Service } from '../../_models';
 import { HomeSlider } from '../../_models/home-slider.model';
 import { FormsModule } from '@angular/forms';
 import { switchMap, of } from 'rxjs';

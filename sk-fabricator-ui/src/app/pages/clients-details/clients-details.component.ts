@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
-import { ClientDetails } from '../../_models/data.model';
+import { ClientDetails } from '../../_models';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';

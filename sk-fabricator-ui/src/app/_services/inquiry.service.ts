@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { Inquiry } from '../_models/inquiry.model';
+import { Inquiry } from '../_models';
 
 @Injectable({
   providedIn: 'root'

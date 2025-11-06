@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { GalleryImage } from '../_models/data.model';
+import { GalleryImage } from '../_models';
 
 @Injectable({
   providedIn: 'root'

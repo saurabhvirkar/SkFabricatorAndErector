@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Accolade, Project,  TeamMember } from '../_models/data.model';
+import { Accolade, Project,  TeamMember } from '../_models';
 
 @Injectable({
   providedIn: 'root'

@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { HomeSlider } from '../_models/home-slider.model';
+import { HomeSlider } from '../_models';
 
 @Injectable({
   providedIn: 'root'
