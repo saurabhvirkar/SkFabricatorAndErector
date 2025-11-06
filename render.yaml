@@ -1,5 +1,5 @@
 # Filename: render.yaml
-# This file defines all your services for Render.
+# This file defines all your services for Render's FREE tier.
 
 services:
   # -----------------
@@ -8,18 +8,22 @@ services:
   - type: web
     name: skfabricatorapi
     env: docker
-    dockerfilePath: ./Dockerfile.api
-    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile.api  # Uses the Dockerfile in your root
+    healthCheckPath: /health         # The endpoint we added in Step 3
     # 'disks:' section removed for free tier
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__DefaultConnection
         value: Host=dpg-d45iievdiees7389up0g-a.singapore-postgres.render.com;Port=5432;Database=skfabricatordb;Username=skfabricatordb_user;Password=iWQWI4mq2VqeXEsu2kLz4RG6PHEzjjpL
+      
+      # --- IMPORTANT: Set URLs to your live Render services ---
       - key: Jwt__Issuer
-        value: https://skfabricatorapi.onrender.com
+        value: https://skfabricatorapi.onrender.com # This service's URL
       - key: Jwt__Audience
-        value: https://skfabricatorui.onrender.com
+        value: https://skfabricatorui.onrender.com  # Your UI's future URL
+      
+      # --- All your secrets from appsettings.Development.json ---
       - key: Jwt__Key
         value: C#mS&z!B%E*H-MbQeThWmZq4t7w9z&F)J@NcRfUjXn2r5u8x/A?D*G-KaPdS
       - key: Jwt__ExpireDays
@@ -52,9 +56,9 @@ services:
   # -----------------
   # Service 2: The Angular SSR App (Free Plan)
   # -----------------
-  - type: web
+  - type: web             # <-- CRITICAL FIX: This MUST be 'web', not 'static_site'
     name: skfabricatorui
     env: docker
-    dockerfilePath: ./sk-fabricator-ui/Dockerfile.ui
-    # 'http:' section removed for free tier.
-    # Render will set the $PORT env var, which server.ts will use.
+    dockerfilePath: ./sk-fabricator-ui/Dockerfile.ui # Uses the Dockerfile in your UI folder
+    # 'http:' section removed. Render's free tier automatically assigns a $PORT
+    # and your server.ts file already listens for it.
