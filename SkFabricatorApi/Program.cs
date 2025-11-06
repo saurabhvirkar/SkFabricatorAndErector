@@ -1,6 +1,7 @@
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
 using Microsoft.AspNetCore.HttpOverrides; // Added for ForwardedHeaders
+using Microsoft.AspNetCore.DataProtection; // Added for DirectoryInfo
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration
 // Add custom application services (Repositories, etc.)
 builder.Services.AddApplicationServices();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+// Configure Data Protection to store keys in a specific directory
+builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"));
 // Add framework services
 builder.Services.AddControllers(options =>
 {
@@ -50,4 +53,11 @@ app.MapControllers();
 
 // Configure Kestrel to listen on the PORT environment variable provided by Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://0.0.0.0:{port}");
+if (app.Environment.IsDevelopment())
+{
+    app.Run($"http://localhost:{port}");
+}
+else
+{
+    app.Run($"http://0.0.0.0:{port}");
+}
