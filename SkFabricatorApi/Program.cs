@@ -31,6 +31,21 @@ await app.UseDatabaseInitialization(app.Services, builder.Configuration);
 
 // --- Middleware Pipeline Configuration ---
 
+// Explicitly handle OPTIONS requests for CORS preflight
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "https://skfabricatorui.onrender.com" });
+        context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Origin, X-Requested-With, Content-Type, Accept, Authorization" });
+        context.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "GET, POST, PUT, DELETE, OPTIONS" });
+        context.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
+        context.Response.StatusCode = 200;
+        return;
+    }
+    await next();
+});
+
 // FIX 1: Trust the Render proxy (must be high in the pipeline)
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {

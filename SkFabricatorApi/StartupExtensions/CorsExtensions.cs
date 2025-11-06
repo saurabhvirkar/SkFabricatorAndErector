@@ -10,7 +10,7 @@ public static class CorsExtensions
             {
                 // This is the corrected code
                 policy.WithOrigins("http://localhost:4200",
-                           "https://skfabricatorui.onrender.com") // <-- Corrected URL
+           "https://skfabricatorui.onrender.com") // <-- THIS IS CORRECT
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
