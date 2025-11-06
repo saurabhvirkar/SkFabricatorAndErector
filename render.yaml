@@ -7,6 +7,7 @@ services:
   # -----------------
   - type: web
     name: skfabricatorapi
+    plan: free
     env: docker
     dockerfilePath: ./Dockerfile.api
     healthCheckPath: /health         # We will add this in Step 3
@@ -55,7 +56,8 @@ services:
   # -----------------
   # Service 2: The Angular SSR App (Free Plan)
   # -----------------
-  - type: web             # <-- CRITICAL FIX: This MUST be 'web', not 'static_site'
+  - type: web
     name: skfabricatorui
+    plan: free
     env: docker
     dockerfilePath: ./sk-fabricator-ui/Dockerfile.ui # Path to your UI's Dockerfile
