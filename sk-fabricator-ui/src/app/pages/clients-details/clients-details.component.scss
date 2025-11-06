@@ -32,26 +32,47 @@
   animation-delay: 0.3s;
 }
 
-.clientDetails-page {
-  /* Add any specific styles for the overall page if needed */
+.animation-delay-500 {
+  animation-delay: 0.5s;
 }
 
-.clients-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust as needed */
-  gap: 1.5rem;
+@keyframes bg-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.client-card {
-  position: relative;
-  /* Add card specific styles */
+.animate-bg-pan {
+  animation: bg-pan 15s ease-in-out infinite;
 }
 
-.admin-actions {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-  z-index: 10;
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
+
+.animate-client-logo {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Form Styles */
+input[type="text"],
+input[type="url"],
+input[type="file"] {
+  @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500;
+}
+
+button[type="submit"] {
+  @apply px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition duration-300 disabled:opacity-50;
+}
+

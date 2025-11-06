@@ -1,6 +1,6 @@
 <div class="projects-page min-w-full pt-16">
   <!-- Page Header -->
-  <header class="relative bg-gray-900 text-white pt-20 pb-20 bg-cover bg-center">
+  <header class="relative bg-gray-900 text-white pt-20 pb-20 bg-cover bg-center animate-bg-pan">
     <div class="absolute inset-0 bg-indigo-900 opacity-80"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <h1 class="text-5xl font-extrabold mb-4 animate-fade-in-down">Our Completed Projects</h1>
@@ -14,7 +14,7 @@
   <main class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Filter Buttons -->
-      <div class="flex justify-center flex-wrap gap-4 mb-12">
+      <div class="flex justify-center flex-wrap gap-4 mb-12 animate-fade-in-up animation-delay-500">
       @for (category of categories; track category) {
         <button (click)="setFilter(category)"
                 [class]="'px-6 py-2 rounded-full font-semibold text-sm transition-all duration-200 border-2 ' + (activeFilter() === category ? 'bg-blue-600 text-white border-blue-600 shadow-lg' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 hover:border-gray-300')">
@@ -26,7 +26,7 @@
       <!-- Projects Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @for (project of filteredProjects(); track project.id) {
-          <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2 border-b-4 border-blue-600">
+          <div class="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2 border-b-4 border-blue-600 animate-project-card">
             <div class="h-56 overflow-hidden">
               <img [src]="project.image" [alt]="project.title"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
@@ -58,7 +58,7 @@
       </div>
 
       @if (isEditing()) {
-        <div class="mt-8 p-6 bg-white rounded-xl shadow-lg">
+        <div class="mt-8 p-6 bg-white rounded-xl shadow-lg animate-fade-in-up">
           <h3 class="text-2xl font-bold text-gray-900 mb-6">Edit Project</h3>
           <form (ngSubmit)="onUpdateProject()" #editForm="ngForm">
             <div class="mb-4">
@@ -105,7 +105,7 @@
         </div>
 
         @if (showAddProjectForm()) {
-          <div class="mt-8 p-6 bg-white rounded-xl shadow-lg">
+          <div class="mt-8 p-6 bg-white rounded-xl shadow-lg animate-fade-in-up">
             <h3 class="text-2xl font-bold text-gray-900 mb-6">Add New Project</h3>
             <form (ngSubmit)="onAddProject(projectForm, fileInput.files)" #projectForm="ngForm">
             <div class="mb-4">

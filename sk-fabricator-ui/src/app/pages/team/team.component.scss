@@ -31,3 +31,47 @@
 .animation-delay-300 {
   animation-delay: 0.3s;
 }
+
+@keyframes bg-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-bg-pan {
+  animation: bg-pan 15s ease-in-out infinite;
+}
+
+@keyframes slide-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-team-card {
+  animation: slide-in-up 0.5s ease-out forwards;
+}
+
+/* Form Styles */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+textarea {
+  @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500;
+}
+
+button[type="submit"] {
+  @apply px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+

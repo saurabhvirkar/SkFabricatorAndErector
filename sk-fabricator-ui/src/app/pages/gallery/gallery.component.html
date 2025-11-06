@@ -1,5 +1,5 @@
 <div class="gallery-page min-w-full pt-16">
-  <header class="bg-gray-900 text-white pt-8 pb-12">
+  <header class="bg-gray-900 text-white pt-8 pb-12 animate-bg-pan">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 class="text-4xl font-extrabold mb-3 animate-fade-in-down">Our Work Gallery</h1>
       <p class="text-lg text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
@@ -12,7 +12,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
       @if (isLoggedIn() && isAdminOrManager()) {
-        <div class="upload-section bg-white p-6 rounded-lg shadow-md mb-10">
+        <div class="upload-section bg-white p-6 rounded-lg shadow-md mb-10 animate-fade-in-up">
           <h2 class="text-2xl font-bold text-gray-800 mb-4">Upload New Image</h2>
           <div class="mb-4">
             <label for="imageCategory" class="block text-sm font-medium text-gray-700">Category</label>
@@ -40,7 +40,7 @@
         </div>
       }
       
-      <div class="flex justify-center flex-wrap gap-3 mb-10">
+      <div class="flex justify-center flex-wrap gap-3 mb-10 animate-fade-in-up animation-delay-500">
         @for (category of categories; track category) {
           <button (click)="setFilter(category)"
                   [class]="[
@@ -56,7 +56,7 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (image of images(); track image.id) {
-          <div class="rounded-xl shadow-lg overflow-hidden relative group cursor-pointer hover:shadow-2xl transition duration-300" 
+          <div class="rounded-xl shadow-lg overflow-hidden relative group cursor-pointer hover:shadow-2xl transition duration-300 animate-gallery-item"
                (click)="openLightbox(image)">
             <img [src]="image.url" alt="Gallery Image"
                  class="w-full h-64 object-cover transition duration-500 group-hover:scale-105">
@@ -85,12 +85,12 @@
   </main>
 
   @if (selectedImage()) {
-    <div class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4" (click)="closeLightbox()">
+    <div class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4 animate-fade-in" (click)="closeLightbox()">
       <div class="max-w-4xl max-h-full overflow-hidden relative">
         <button (click)="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl font-bold z-50 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-80 transition duration-300" aria-label="Close Lightbox">
           &times;
         </button>
-        <img [src]="selectedImage()?.url" alt="Lightbox Image" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" (click)="$event.stopPropagation()">
+        <img [src]="selectedImage()?.url" alt="Lightbox Image" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-zoom-in" (click)="$event.stopPropagation()">
         <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4 text-center rounded-b-lg">
           <p class="text-xl font-semibold">Image</p>
         </div>

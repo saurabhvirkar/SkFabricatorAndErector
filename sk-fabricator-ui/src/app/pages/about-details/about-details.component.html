@@ -2,19 +2,19 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <!-- Left Column: Text Content -->
-      <div class="p-6 rounded-xl shadow-lg bg-white">
-        <h2 class="text-md font-bold uppercase text-blue-600 tracking-wider mb-3 animate-fade-in-down animation-delay-100">About Us</h2>
-        <h3 class="text-5xl font-extrabold text-gray-900 mb-6 leading-tight animate-fade-in-down animation-delay-200">15+ Years of Engineering Excellence</h3>
-        <p class="text-lg text-gray-700 mb-6 leading-relaxed animate-fade-in-up animation-delay-300">
+      <div class="p-6 rounded-xl shadow-lg bg-white animate-fade-in-left">
+        <h2 class="text-md font-bold uppercase text-blue-600 tracking-wider mb-3">About Us</h2>
+        <h3 class="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">15+ Years of Engineering Excellence</h3>
+        <p class="text-lg text-gray-700 mb-6 leading-relaxed">
           Since our inception, SK Fabricator and Erector has been a trusted partner in the industrial sector, delivering unparalleled expertise in mechanical piping, structural fabrication, and on-site erection.
         </p>
-        <p class="text-gray-700 leading-relaxed animate-fade-in-up animation-delay-400">
+        <p class="text-gray-700 leading-relaxed">
           Our foundation is built on a commitment to quality, safety, and timely project delivery. We leverage state-of-the-art equipment and a highly skilled team to meet and exceed client expectations on every project, no matter the scale or complexity.
         </p>
       </div>
 
       <!-- Right Column: Image Slider -->
-      <div class="relative h-96 w-full overflow-hidden rounded-lg shadow-2xl">
+      <div class="relative h-96 w-full overflow-hidden rounded-lg shadow-2xl animate-fade-in-right">
         @for (slide of sectionImages(); track slide.id; let i = $index) {
           <div 
             class="absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out"
@@ -39,53 +39,15 @@
       </div>
     </div>
 
-
-
-    <!--
-    @if (isLoggedIn() && isAdminOrManager()) {
-      <section class="bg-gray-100 py-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 class="text-2xl font-bold text-gray-900 mb-6">Manage Slider Images</h3>
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h4 class="text-xl font-semibold text-gray-800 mb-4">Upload New Image</h4>
-            <form (ngSubmit)="onAddImage(fileInput.files)" #imageForm="ngForm">
-              <div class="flex items-center">
-                <input type="file" #fileInput accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
-                <button type="submit" [disabled]="!fileInput.files || fileInput.files.length === 0" class="ml-4 px-6 py-2 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                  Upload
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div class="mt-8">
-            <h4 class="text-xl font-semibold text-gray-800 mb-4">Current Images</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              @for (slide of sectionImages(); track slide.id) {
-                <div class="relative group">
-                  <img [src]="slide.url" [alt]="'Slider image ' + slide.id" class="w-full h-40 object-cover rounded-lg shadow-md">
-                  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button (click)="onDeleteImage(slide.id)" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full hover:bg-red-700 transition-all duration-200">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-      </section>
-    }-->
-
     <!-- Our Commitment Section -->
     <section class="mt-24 py-16 bg-gray-100 rounded-xl shadow-inner">
       <div class="text-center mb-16">
-        <h2 class="text-5xl font-extrabold text-gray-900 mb-4 animate-fade-in-down animation-delay-500">Our Commitment & Guaranteed Excellence</h2>
-        <p class="text-xl text-gray-600 mt-2 animate-fade-in-up animation-delay-600">Four pillars that define our promise to every client.</p>
+        <h2 class="text-5xl font-extrabold text-gray-900 mb-4 animate-fade-in-down">Our Commitment & Guaranteed Excellence</h2>
+        <p class="text-xl text-gray-600 mt-2 animate-fade-in-up">Four pillars that define our promise to every client.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Safety First -->
-        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
+        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl animate-service-card">
           <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/3184454/pexels-photo-3184454.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1')"></div>
           <div class="p-6 flex-grow flex flex-col justify-center">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Safety First</h3>
@@ -93,7 +55,7 @@
           </div>
         </div>
         <!-- Guaranteed Quality -->
-        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
+        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl animate-service-card animation-delay-200">
           <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1')"></div>
           <div class="p-6 flex-grow flex flex-col justify-center">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Guaranteed Quality</h3>
@@ -101,7 +63,7 @@
           </div>
         </div>
         <!-- Guaranteed Delivery -->
-        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
+        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl animate-service-card animation-delay-400">
           <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1')"></div>
           <div class="p-6 flex-grow flex flex-col justify-center">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Guaranteed Delivery</h3>
@@ -109,7 +71,7 @@
           </div>
         </div>
         <!-- Professional Service -->
-        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
+        <div class="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col text-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl animate-service-card animation-delay-600">
           <div class="h-40 bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/8346833/pexels-photo-8346833.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1')"></div>
           <div class="p-6 flex-grow flex flex-col justify-center">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Professional Service</h3>

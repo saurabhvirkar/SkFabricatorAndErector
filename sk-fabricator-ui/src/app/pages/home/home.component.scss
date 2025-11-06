@@ -41,3 +41,48 @@
 .animation-delay-600 {
   animation-delay: 0.6s;
 }
+
+/* Add a subtle zoom-in effect to the hero image */
+.hero-image-animation {
+  animation: zoom-in 20s ease-out infinite;
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Add a slide-in animation for the service cards */
+.service-card-animation {
+  animation: slide-in-up 0.5s ease-out forwards;
+}
+
+@keyframes slide-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Refine form styles */
+input[type="text"],
+input[type="file"],
+textarea {
+  @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-3;
+}
+
+button[type="submit"] {
+  @apply px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+

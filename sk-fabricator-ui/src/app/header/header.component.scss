@@ -13,3 +13,10 @@
 .mobile-menu.open {
   max-height: 500px; /* Adjust as needed */
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .logo-text {
+    display: none;
+  }
+}

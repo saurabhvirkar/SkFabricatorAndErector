@@ -1,1 +1,17 @@
 /* Add any component-specific styles here */
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+h3 {
+  @apply text-lg font-bold text-white mb-4;
+}
+
+ul li a {
+  @apply text-gray-400 hover:text-white transition-colors duration-300;
+}
+

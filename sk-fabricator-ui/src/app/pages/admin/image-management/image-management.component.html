@@ -1,8 +1,8 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold mb-6">Admin Image Management</h1>
+<div class="container mx-auto p-6 animate-fade-in">
+  <h1 class="text-3xl font-bold mb-6 animate-fade-in-down">Admin Image Management</h1>
 
   @if (isLoggedIn() && isAdmin()) {
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8 animate-fade-in-up animation-delay-100">
       <h2 class="text-2xl font-semibold mb-4">Upload Images for Section</h2>
 
       <div class="mb-4">
@@ -31,13 +31,13 @@
       </button>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 animate-fade-in-up animation-delay-200">
       <h2 class="text-2xl font-semibold mb-4">Images for {{ selectedSection() || 'Selected Section' }}</h2>
 
       @if (sectionImages().length > 0) {
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           @for (image of sectionImages(); track image.id) {
-            <div class="relative group rounded-lg overflow-hidden shadow-lg">
+            <div class="relative group rounded-lg overflow-hidden shadow-lg animate-gallery-item">
               <img [src]="image.url" alt="Section Image" class="w-full h-48 object-cover">
               <button (click)="onDeleteImage(image.id)" class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition duration-300" aria-label="Delete Image">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
