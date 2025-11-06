@@ -86,6 +86,7 @@
               "sourceMap": true
             },
             "docker-build": {
+              "outputMode": "static",
               "prerender": false,
               "ssr": false
             }
