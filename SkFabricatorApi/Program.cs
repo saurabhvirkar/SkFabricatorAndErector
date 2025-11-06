@@ -64,8 +64,7 @@
 
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
-using Microsoft.AspNetCore.HttpOverrides; // Added for ForwardedHeaders
-using Microsoft.AspNetCore.DataProtection; // Added for DirectoryInfo
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,10 +75,7 @@ builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration
 builder.Services.AddApplicationServices();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
-// FIX 1: Persist Data Protection keys to a mounted disk
-// We will create this disk in our render.yaml file
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/var/data/DataProtection-Keys"));
+// (We remove the AddDataProtection line here)
 
 builder.Services.AddControllers(options =>
 {
@@ -97,7 +93,7 @@ await app.UseDatabaseInitialization(app.Services, builder.Configuration);
 
 // --- Middleware Pipeline Configuration ---
 
-// FIX 2: Trust the Render proxy (must be high in the pipeline)
+// Trust the Render proxy
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -108,8 +104,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerDocumentation();
 }
 
-// FIX 3: REMOVE app.UseHttpsRedirection();
-// app.UseHttpsRedirection(); // <-- This line MUST be removed or commented out.
+// REMOVED: app.UseHttpsRedirection();
 
 app.UseMiddleware<SkFabricatorApi.Middleware.ErrorHandlingMiddleware>();
 app.UseCorsPolicy();
@@ -117,5 +112,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// FIX 4: Simplify app.Run(). .NET 8 handles this automatically.
 app.Run();
