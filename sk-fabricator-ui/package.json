@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration docker && docker build -f sk-fabricator-ui/Dockerfile.ui . --no-cache",
+    "build": "ng build --configuration docker-build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:sk-fabricator-ui": "node dist/sk-fabricator-ui/server/server.mjs"
