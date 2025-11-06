@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { GalleryImage } from '../_models/data.model';
@@ -49,11 +49,19 @@ export class GalleryService {
 
   // Gallery
   getPhotos(): Observable<GalleryImage[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      // During prerendering, return an empty observable to prevent API calls
+      return of([]);
+    }
     return this.http.get<GalleryImage[]>(`${this.baseUrl}/gallery`)
       .pipe(catchError(err => this.handleError(err)));
   }
 
   getImages(filter: string): Observable<GalleryImage[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      // During prerendering, return an empty observable to prevent API calls
+      return of([]);
+    }
     let url = `${this.baseUrl}/gallery`;
     if (filter !== 'All') {
       url += `?category=${filter}`;

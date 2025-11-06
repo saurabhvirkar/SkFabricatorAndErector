@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Service } from '../_models/data.model';
@@ -49,6 +49,10 @@ export class ServiceService {
 
   // Services
   getServices(): Observable<Service[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      // During prerendering, return an empty observable to prevent API calls
+      return of([]);
+    }
     return this.http.get<Service[]>(`${this.baseUrl}/services`)
       .pipe(catchError(err => this.handleError(err)));
   }

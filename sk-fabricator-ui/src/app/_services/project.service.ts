@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Project } from '../_models/data.model';
@@ -49,6 +49,10 @@ export class ProjectService {
 
   // Projects
   getProjects(): Observable<Project[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      // During prerendering, return an empty observable to prevent API calls
+      return of([]);
+    }
     return this.http.get<Project[]>(`${this.baseUrl}/projects`)
       .pipe(catchError(err => this.handleError(err)));
   }

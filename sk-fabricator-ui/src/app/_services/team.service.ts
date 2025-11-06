@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { TeamMember } from '../_models/data.model';

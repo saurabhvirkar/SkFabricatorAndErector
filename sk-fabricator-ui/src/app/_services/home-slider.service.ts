@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { HomeSlider } from '../_models/home-slider.model';
@@ -49,6 +49,10 @@ export class HomeSliderService {
 
   // Home Slider
   getHomeSliders(): Observable<HomeSlider[]> {
+    if (!isPlatformBrowser(this.platformId)) {
+      // During prerendering, return an empty observable to prevent API calls
+      return of([]);
+    }
     return this.http.get<HomeSlider[]>(`${this.baseUrl}/home-slider`)
       .pipe(catchError(err => this.handleError(err)));
   }
