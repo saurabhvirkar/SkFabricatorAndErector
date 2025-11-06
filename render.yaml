@@ -1,38 +1,67 @@
+# Filename: render.yaml
+# This file defines all your services for Render.
+
 services:
+  # -----------------
+  # Service 1: The .NET 8 API
+  # -----------------
   - type: web
     name: skfabricatorapi
     env: docker
-    dockerfilePath: Dockerfile.api
-    healthCheckPath: /health
-    ports:
-      - 10000
+    dockerfilePath: ./Dockerfile.api  # Uses the Dockerfile in your root
+    healthCheckPath: /health         # The endpoint we added in Step 3
+    disks:
+      - name: data-protection
+        mountPath: /var/data       # Matches the path in Program.cs
+        sizeGB: 1
     envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
       - key: ConnectionStrings__DefaultConnection
         value: Host=dpg-d45iievdiees7389up0g-a.singapore-postgres.render.com;Port=5432;Database=skfabricatordb;Username=skfabricatordb_user;Password=iWQWI4mq2VqeXEsu2kLz4RG6PHEzjjpL
+      
+      # --- IMPORTANT: Set URLs to your live Render services ---
       - key: Jwt__Issuer
-        value: https://skfabricatorapi.onrender.com # Will be updated by Render after deployment
+        value: https://skfabricatorapi.onrender.com # This service's URL
       - key: Jwt__Audience
-        value: https://skfabricatorui.onrender.com # Will be updated by Render after deployment
+        value: https://skfabricatorui.onrender.com  # Your UI's future URL
+      
+      # --- All your secrets from appsettings.Development.json ---
       - key: Jwt__Key
-        generateValue: true
+        value: C#mS&z!B%E*H-MbQeThWmZq4t7w9z&F)J@NcRfUjXn2r5u8x/A?D*G-KaPdS
+      - key: Jwt__ExpireDays
+        value: 1
+      - key: Jwt__RefreshTokenExpireDays
+        value: 7
       - key: CloudinarySettings__CloudName
+        value: dniawq4zi
       - key: CloudinarySettings__ApiKey
+        value: 319362234799618
       - key: CloudinarySettings__ApiSecret
+        value: PNHVpskpmPf9z6zp8KwQQSRmXGg
       - key: Email__From
+        value: ssvirkar04@gmail.com
       - key: Email__To
+        value: ssvirkar04@gmail.com
       - key: Email__SmtpServer
+        value: smtp.gmail.com
       - key: Email__SmtpPort
+        value: 587
       - key: Email__Username
+        value: ssvirkar04@gmail.com
       - key: Email__Password
-  - type: static_site
+        value: vgog keuz eaiv ggag
+      - key: SeedUserPasswords__Admin
+        value: Admin@123
+      - key: SeedUserPasswords__Manager
+        value: Manager@123
+
+  # -----------------
+  # Service 2: The Angular SSR App
+  # -----------------
+  - type: web             # <-- CRITICAL FIX: This MUST be 'web', not 'static_site'
     name: skfabricatorui
-    env: static
-    buildCommand: npm install && npm run build
-    publishPath: dist/sk-fabricator-ui/browser
-    routes:
-      - type: rewrite
-        source: /api/*
-        destination: https://skfabricatorapi.onrender.com/api/* # This will be updated by Render after deployment
-    envVars:
-      - key: API_URL
-        value: https://skfabricatorapi.onrender.com # This will be updated by Render after deployment
+    env: docker
+    dockerfilePath: ./sk-fabricator-ui/Dockerfile.ui # Uses the Dockerfile in your UI folder
+    http:
+      port: 4000 # The port your server.ts listens on

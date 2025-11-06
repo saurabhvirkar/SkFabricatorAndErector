@@ -70,4 +70,12 @@ public class HomeController(IHomeSliderRepository homeSliderRepository, IHomeSli
         }
         return Ok(updatedHomeSlider);
     }
+
+    [HttpGet("/health")]
+    [AllowAnonymous]
+    public IActionResult HealthCheck()
+    {
+        // This simple endpoint tells Render the API is running.
+        return Ok("Healthy");
+    }
 }
