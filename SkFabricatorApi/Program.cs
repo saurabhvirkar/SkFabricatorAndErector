@@ -37,18 +37,24 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-app.UseSwaggerDocumentation();
-
-if (app.Environment.IsDevelopment())
+// Explicitly handle OPTIONS requests for CORS preflight
+app.Use(async (context, next) =>
 {
-    // app.UseSwaggerDocumentation(); // Moved outside
-}
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "https://skfabricatorui.onrender.com" });
+        context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Origin, X-Requested-With, Content-Type, Accept, Authorization" });
+        context.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "GET, POST, PUT, DELETE, OPTIONS" });
+        context.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
+        context.Response.StatusCode = 200;
+        return;
+    }
+    await next();
+});
 
-// FIX 2: REMOVE app.UseHttpsRedirection(); It is not needed on Render.
-// app.UseHttpsRedirection(); 
-
-app.UseMiddleware<SkFabricatorApi.Middleware.ErrorHandlingMiddleware>();
 app.UseCorsPolicy();
+
+app.UseSwaggerDocumentation();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
