@@ -87,7 +87,7 @@
             },
             "docker-build": {
               "prerender": false,
-              "server": false
+              "outputMode": "static"
             }
           },
           "defaultConfiguration": "production"

@@ -37,9 +37,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
+app.UseSwaggerDocumentation();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerDocumentation();
+    // app.UseSwaggerDocumentation(); // Moved outside
 }
 
 // FIX 2: REMOVE app.UseHttpsRedirection(); It is not needed on Render.
