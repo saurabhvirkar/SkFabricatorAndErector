@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.HttpOverrides; // Added for ForwardedHeaders
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Service Registration ---
-builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddPersistenceServices(builder.Configuration, builder.Environment);
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddAuthenticationAndAuthorizationServices(builder.Configuration);
 builder.Services.AddApplicationServices();

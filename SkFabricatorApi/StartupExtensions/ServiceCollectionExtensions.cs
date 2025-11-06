@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +9,26 @@ using SkFabricatorApi.Repositories;
 using SkFabricatorApi.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace SkFabricatorApi.StartupExtensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        {
+            if (environment.IsDevelopment())
+            {
+                options.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+            }
+            else
+            {
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            }
+        });
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -24,6 +36,7 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
 
     public static IServiceCollection AddAuthenticationAndAuthorizationServices(this IServiceCollection services, IConfiguration configuration)
     {

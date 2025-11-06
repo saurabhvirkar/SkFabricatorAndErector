@@ -14,8 +14,16 @@ public static class DatabaseExtensions
             try
             {
                 var context = serviceProvider.GetRequiredService<AppDbContext>();
-                await context.Database.MigrateAsync();
-                logger.LogInformation("Database migrations applied successfully.");
+                if (context.Database.IsNpgsql())
+                {
+                    await context.Database.MigrateAsync();
+                    logger.LogInformation("Database migrations applied successfully for PostgreSQL.");
+                }
+                else
+                {
+                    await context.Database.EnsureCreatedAsync();
+                    logger.LogInformation("Database created successfully for SQLite.");
+                }
 
                 await SeedData.InitializeAsync(serviceProvider, configuration);
                 logger.LogInformation("Database seeded successfully.");
