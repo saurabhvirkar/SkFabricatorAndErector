@@ -86,7 +86,8 @@
               "sourceMap": true
             },
             "docker-build": {
-              "outputMode": "browser"
+              "prerender": false,
+              "ssr": false
             }
           },
           "defaultConfiguration": "production"
