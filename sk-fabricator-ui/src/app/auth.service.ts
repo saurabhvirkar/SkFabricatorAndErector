@@ -2,18 +2,16 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { environment } from './environments/environment';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  private apiService = inject(ApiService);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
-  private baseUrl = environment.apiUrl;
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -55,7 +53,7 @@ export class AuthService {
     if (!accessToken || !refreshToken) {
       return throwError(() => new Error('Missing tokens for refresh'));
     }
-    return this.http.post<any>(`${this.baseUrl}/account/refresh`, {
+    return this.apiService.post<any>('account/refresh', {
       accessToken: accessToken,
       refreshToken: refreshToken
     }).pipe(
@@ -64,13 +62,13 @@ export class AuthService {
       }),
       catchError(error => {
         this.logout(); // If refresh fails, log the user out
-        return throwError(() => this.handleError(error));
+        return throwError(() => error);
       })
     );
   }
 
   login(credentials: any): Observable<{ token: string, refreshToken: string, email: string, role: string }> {
-    return this.http.post<{ token: string, refreshToken: string, email: string, role: string }>(`${this.baseUrl}/account/login`, credentials).pipe(
+    return this.apiService.post<{ token: string, refreshToken: string, email: string, role: string }>('account/login', credentials).pipe(
       tap(response => {
         if (response && response.token && response.role) {
           if (isPlatformBrowser(this.platformId)) {
@@ -79,8 +77,7 @@ export class AuthService {
           this.isLoggedInSubject.next(true);
           this.currentUserRoleSubject.next(response.role);
         }
-      }),
-      catchError(err => this.handleError(err))
+      })
     );
   }
 
@@ -103,23 +100,5 @@ export class AuthService {
         localStorage.setItem('user_role', role);
       }
     }
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    console.error('API Error:', error);
-    let errorMessage = 'Something went wrong; please try again later.';
-    if (isPlatformBrowser(this.platformId) && error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else if (error.error && typeof error.error === 'string') {
-      // Backend returned an error message as a string
-      errorMessage = error.error;
-    } else if (error.error && error.error.message) {
-      // Backend returned an error object with a message property
-      errorMessage = error.error.message;
-    } else if (error.statusText) {
-      errorMessage = error.statusText;
-    }
-    return throwError(() => new Error(errorMessage));
   }
 }

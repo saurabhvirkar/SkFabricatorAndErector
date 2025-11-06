@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, inject } from '@angular/core';
 import { Project } from '../../_models';
 import { ProjectService } from '../../_services/project.service';
-import { DataService } from '../../_services/data.service';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, NgClass } from '@angular/common';
@@ -28,7 +27,6 @@ type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintena
 })
 export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectService);
-  private dataService = inject(DataService);
   private authService = inject(AuthService);
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });

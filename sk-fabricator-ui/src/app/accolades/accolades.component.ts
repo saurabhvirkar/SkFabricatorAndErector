@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../_services/data.service';
-import { Photo } from '../_models';
+import { Accolade, Photo } from '../_models';
 import { GalleryService } from '../_services/gallery.service';
 
 @Component({
@@ -12,9 +11,12 @@ import { GalleryService } from '../_services/gallery.service';
   styleUrls: ['./accolades.component.scss'],
 })
 export class AccoladesComponent implements OnInit {
-  private dataService = inject(DataService);
   private galleryService = inject(GalleryService);
-  accolades = this.dataService.getAccolades();
+  accolades: Accolade[] = [
+    { id: 1, icon: '🏆', title: 'Years of Service', count: 15, suffix: '+' },
+    { id: 2, icon: '🧱', title: 'Projects Completed', count: 500, suffix: '+' },
+    { id: 3, icon: '⭐', title: 'Client Satisfaction', count: 98, suffix: '%' }
+  ];
   aboutSliderImages: Photo[] = [];
 
   ngOnInit(): void {

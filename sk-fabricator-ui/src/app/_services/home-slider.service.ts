@@ -1,85 +1,31 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { environment } from '../environments/environment';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HomeSlider } from '../_models';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeSliderService {
-  private http = inject(HttpClient);
-  private platformId = inject(PLATFORM_ID);
-  private baseUrl = environment.apiUrl;
+  private apiService = inject(ApiService);
 
-  constructor() { }
-
-  // Helper to get headers
-  private getHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('jwt_token');
-      if (token) {
-        headers = headers.set('Authorization', 'Bearer ' + token);
-      }
-    }
-    return headers;
-  }
-
-  // Error handling helper
-  private handleError(error: HttpErrorResponse) {
-    console.error('API Error:', error);
-    let errorMessage = 'Something went wrong; please try again later.';
-    if (isPlatformBrowser(this.platformId) && error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else if (error.error && typeof error.error === 'string') {
-      // Backend returned an error message as a string
-      errorMessage = error.error;
-    } else if (error.error && error.error.message) {
-      // Backend returned an error object with a message property
-      errorMessage = error.error.message;
-    } else if (error.statusText) {
-      errorMessage = error.statusText;
-    }
-    return throwError(() => new Error(errorMessage));
-  }
-
-  // Home Slider
   getHomeSliders(): Observable<HomeSlider[]> {
-    if (!isPlatformBrowser(this.platformId)) {
-      // During prerendering, return an empty observable to prevent API calls
-      return of([]);
-    }
-    return this.http.get<HomeSlider[]>(`${this.baseUrl}/home-slider`)
-      .pipe(catchError(err => this.handleError(err)));
+    return this.apiService.get<HomeSlider[]>('home-slider');
   }
 
   addHomeSlider(homeSliderData: { title: string, description: string }): Observable<HomeSlider> {
-    return this.http.post(`${this.baseUrl}/home-slider`, homeSliderData, { headers: this.getHeaders(), responseType: 'text' })
-      .pipe(
-        map(response => JSON.parse(response) as HomeSlider),
-        catchError(err => this.handleError(err))
-      );
+    return this.apiService.post<HomeSlider>('home-slider', homeSliderData);
   }
 
   addHomeSliderImage(imageData: FormData): Observable<HomeSlider> {
-    return this.http.post(`${this.baseUrl}/home-slider/add-image`, imageData, { headers: this.getHeaders(), responseType: 'text' })
-      .pipe(
-        map(response => JSON.parse(response) as HomeSlider),
-        catchError(err => this.handleError(err))
-      );
+    return this.apiService.post<HomeSlider>('home-slider/add-image', imageData, true);
   }
 
   updateHomeSlider(id: number, homeSliderData: { title: string, description: string }): Observable<HomeSlider> {
-    return this.http.put<HomeSlider>(`${this.baseUrl}/home-slider/${id}`, homeSliderData, { headers: this.getHeaders() })
-      .pipe(catchError(err => this.handleError(err)));
+    return this.apiService.put<HomeSlider>(`home-slider/${id}`, homeSliderData);
   }
 
   deleteHomeSlider(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/home-slider/${id}`, { headers: this.getHeaders() })
-      .pipe(catchError(err => this.handleError(err)));
+    return this.apiService.delete<any>(`home-slider/${id}`);
   }
 }

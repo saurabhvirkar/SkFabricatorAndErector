@@ -1,7 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
-import { DataService } from '../../_services/data.service';
 import { ServiceService } from '../../_services/service.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models'; // Import the correct Service interface
@@ -20,7 +19,6 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush, 
 })
 export class ServicesComponent implements OnInit {
-  private dataService = inject(DataService);
   private serviceService = inject(ServiceService);
   private authService = inject(AuthService);
 
