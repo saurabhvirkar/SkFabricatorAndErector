@@ -14,6 +14,8 @@ const serverConfig: ApplicationConfig = {
         return () => {
           if (isPlatformBrowser(platformId)) {
             environment.apiUrl = 'https://skfabricatorapi.onrender.com'; // Use your production API URL
+          } else {
+            environment.apiUrl = ''; // Prevent API calls during prerendering
           }
         };
       },
