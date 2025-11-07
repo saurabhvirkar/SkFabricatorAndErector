@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { switchMap, of } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ContactMapComponent } from '../map/map.component';
+import { MapComponent } from '../map/map.component';
 import { HomeSliderService } from '../../_services/home-slider.service';
 
 @Component({

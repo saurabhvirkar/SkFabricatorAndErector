@@ -4,6 +4,7 @@ import { ContactUsComponent } from '../contact-us/contact-us.component';
 import { ServiceService } from '../../_services/service.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models'; // Import the correct Service interface
+import { Router } from '@angular/router'; // Import Router
 
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -12,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, ContactUsComponent, FormsModule, NgClass],
+  imports: [CommonModule, FormsModule, NgClass],
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
   // Added ChangeDetectionStrategy.OnPush
@@ -21,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 export class ServicesComponent implements OnInit {
   private serviceService = inject(ServiceService);
   private authService = inject(AuthService);
+  private router = inject(Router); // Inject Router
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
   currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
@@ -142,5 +144,9 @@ export class ServicesComponent implements OnInit {
         }
       });
     }
+  }
+
+  navigateToContactUs(): void {
+    this.router.navigate(['/contact-us']);
   }
 }

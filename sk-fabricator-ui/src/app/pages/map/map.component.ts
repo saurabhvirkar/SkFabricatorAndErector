@@ -10,7 +10,7 @@ import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class ContactMapComponent implements OnInit {
+export class MapComponent implements OnInit {
 
   private sanitizer = inject(DomSanitizer);
   // ✅ Correct Google Maps Embed URL

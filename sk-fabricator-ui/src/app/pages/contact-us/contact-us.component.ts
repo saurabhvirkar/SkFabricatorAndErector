@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InquiryService } from '../../_services/inquiry.service';
 import { Inquiry } from '../../_models/inquiry.model';
-import { ContactMapComponent } from '../map/map.component';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-contact-us',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ContactMapComponent],
+  imports: [CommonModule, ReactiveFormsModule, MapComponent],
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
 })
