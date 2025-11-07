@@ -7,6 +7,7 @@ import { GalleryComponent } from './pages/gallery/gallery.component';
 import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
 import { InquiryDetailsComponent } from './pages/inquiry-details/inquiry-details.component';
 import { ServicesComponent } from './pages/services/services.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { authGuard } from './auth.guard';
 import { ClientsDetailsComponent } from './pages/clients-details/clients-details.component';
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'team', component: TeamComponent },
   { path: 'gallery', component: GalleryComponent },
   { path: 'services', component: ServicesComponent },
+  { path: 'contact-us', component: ContactUsComponent },
   { path: 'clients', component: ClientsDetailsComponent },
 
   {

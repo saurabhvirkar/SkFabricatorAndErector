@@ -6,17 +6,23 @@ import { Inquiry } from '../../_models/inquiry.model';
 import { ContactMapComponent } from '../map/map.component';
 
 @Component({
-  selector: 'app-inquiry-form',
+  selector: 'app-contact-us',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './inquiry-form.component.html',
-  styleUrls: ['./inquiry-form.component.scss'],
+  imports: [CommonModule, ReactiveFormsModule, ContactMapComponent],
+  templateUrl: './contact-us.component.html',
+  styleUrls: ['./contact-us.component.scss'],
 })
-export class InquiryFormComponent {
+export class ContactUsComponent {
   private fb = inject(FormBuilder);
   // Integration Point: Injects the service responsible for API communication
   private inquiryService = inject(InquiryService); 
 
+   // Contact details
+    phoneNumber1 = '+91 9130 01 2070';
+    phoneNumber2 = '+91 9552 03 4884';
+    phoneNumber3 = '+91 8483 80 6320';
+    email = 'skfabricator2070@gmail.com';
+    address = '17/3/1 Shiv Colony, Wakad Rd, Ganesh Nagar, Thergaon, Pune, Maharashtra 411033';
   // Signals for managing submission state and response message
   submissionStatus = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
   responseMessage = signal('');
@@ -62,7 +68,7 @@ export class InquiryFormComponent {
 
     // 2. API Service Integration
     this.inquiryService.submitInquiry(inquiryData).subscribe({
-      next: (res) => {
+      next: (res: Inquiry) => {
         this.submissionStatus.set('success');
         this.responseMessage.set('Your inquiry has been sent successfully! We will get back to you shortly.'); // The backend now returns the created object. We can use it if needed.
         // Reset the form to its initial state, preserving defaults
@@ -71,7 +77,7 @@ export class InquiryFormComponent {
           preferredContact: 'Email'
         });
       },
-      error: (err) => {
+      error: (err: any) => {
         // 3. Error Handling for network/server issues
         this.submissionStatus.set('error');
         // Use the error message from the API if available, otherwise show a generic one.

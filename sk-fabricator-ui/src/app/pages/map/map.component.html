@@ -1,0 +1,23 @@
+<div class="contact-page min-w-full">
+  <main class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Google Map Section -->
+        <div
+          class="rounded-xl overflow-hidden shadow-xl border border-gray-200 animate-fade-in-up animation-delay-200"
+        >
+          <h3 class="sr-only">Our Location Map</h3>
+          <iframe
+            [src]="safeMapUrl"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="w-full h-[300px]"
+            frameborder="0"
+          >
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

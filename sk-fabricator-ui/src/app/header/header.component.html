@@ -1,35 +1,35 @@
-<header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+<header class="bg-white shadow-lg fixed top-0 left-0 right-0 z-50 transition-all duration-300">
   <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       <!-- Logo -->
       <a routerLink="/" class="flex items-center gap-x-3" aria-label="SK Fabricator & Erector Home">
-        <div class="bg-sk-primary text-black font-black text-2xl w-12 h-12 flex items-center justify-center rounded-lg shadow-sm">
+        <div class="bg-blue-600 text-white font-black text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-md transition-all duration-300 hover:bg-blue-700">
           SK
         </div>
         <div class="hidden sm:flex flex-col leading-tight">
           <span class="text-xl font-bold text-gray-800">
             Fabricator & Erector
           </span>
-          <span class="text-xs text-gray-500 font-medium">
+          <span class="text-xs text-blue-600 font-medium tracking-wide">
             Perfection Through Precision
           </span>
         </div>
       </a>
 
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+      <div class="hidden md:flex items-center space-x-1 lg:space-x-4">
         @if (navItems$ | async; as navItems) {
           @for (item of navItems; track item.link) {
-            <a [routerLink]="item.link" routerLinkActive="text-sk-primary border-b-2 border-sk-primary"
+            <a [routerLink]="item.link" routerLinkActive="text-blue-600 border-b-2 border-blue-600 font-semibold"
               [routerLinkActiveOptions]="{exact: item.link === '/'}"
-              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-sk-primary transition-colors duration-200">
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
               {{ item.label }}
             </a>
           }
           <!-- Conditional Inquiries Link -->
           @if (isLoggedIn$ | async) {
-            <a routerLink="/inquiries" routerLinkActive="text-sk-primary border-b-2 border-sk-primary"
-              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-sk-primary transition-colors duration-200">
+            <a routerLink="/inquiries" routerLinkActive="text-blue-600 border-b-2 border-blue-600 font-semibold"
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
               Inquiries
             </a>
           }
@@ -46,12 +46,12 @@
                 <span class="ml-2 text-sm font-medium text-gray-700 capitalize">{{ role }}</span>
               </div>
             }
-            <button (click)="logout()" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors">
+            <button (click)="logout()" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors duration-300 shadow-md">
               Logout
             </button>
           </div>
         } @else {
-          <a routerLink="/login" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+          <a routerLink="/login" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md">
             Admin Login
           </a>
         }
@@ -60,7 +60,7 @@
       <!-- Mobile Menu Button -->
       <div class="md:hidden flex items-center">
         <button (click)="toggleMenu()" type="button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-sk-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sk-primary"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600"
           aria-controls="mobile-menu" [attr.aria-expanded]="isMenuOpen">
           <span class="sr-only">Open main menu</span>
           <!-- Icon for menu (hamburger) -->
@@ -81,15 +81,15 @@
     @if (navItems$ | async; as navItems) {
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         @for (item of navItems; track item.link) {
-          <a [routerLink]="item.link" routerLinkActive="bg-blue-50 text-sk-primary" (click)="toggleMenu()"
-            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+          <a [routerLink]="item.link" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" (click)="toggleMenu()"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">
             {{ item.label }}
           </a>
         }
         <!-- Conditional Inquiries Link for Mobile -->
         @if (isLoggedIn$ | async) {
-          <a routerLink="/inquiries" routerLinkActive="bg-blue-50 text-sk-primary" (click)="toggleMenu()"
-            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+          <a routerLink="/inquiries" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" (click)="toggleMenu()"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">
             Inquiries
           </a>
         }
@@ -111,7 +111,7 @@
               </button>
             </div>
           } @else {
-            <a routerLink="/login" (click)="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-sk-primary">
+            <a routerLink="/login" (click)="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">
               Admin Login
             </a>
           }

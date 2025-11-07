@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { ContactUsComponent } from '../contact-us/contact-us.component';
 import { ServiceService } from '../../_services/service.service';
 import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models'; // Import the correct Service interface
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, InquiryFormComponent, FormsModule, NgClass],
+  imports: [CommonModule, ContactUsComponent, FormsModule, NgClass],
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
   // Added ChangeDetectionStrategy.OnPush

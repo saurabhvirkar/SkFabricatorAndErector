@@ -1,7 +1,5 @@
 <div class="home-page min-w-full pt-16">
-  <!-- Hero Section -->
   <section class="relative text-white overflow-hidden">
-    <!-- Background Image Slider -->
     @for (slide of backgroundSlides(); track slide.id; let i = $index) {
       <div 
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
@@ -13,22 +11,67 @@
       ></div>
     }
 
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center py-32 md:py-48">
-      <div class="max-w-3xl text-center mx-auto">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 animate-fade-in-up">
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center items-center text-center py-32 md:py-48">
+      <div class="max-w-4xl">
+        <p class="text-xl md:text-2xl text-blue-300 font-semibold mb-4 animate-fade-in-up animation-delay-100">
+          Innovate. Fabricate. Elevate.
+        </p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-up animation-delay-200">
           {{ heroTitle() }}
         </h1>
-        <p class="text-lg md:text-xl text-gray-100 mb-8 animate-fade-in-up animation-delay-300">
+        <p class="text-lg md:text-xl text-gray-200 mb-10 animate-fade-in-up animation-delay-400">
           {{ heroDescription() }}
         </p>
         <a routerLink="/projects"
-          class="inline-block px-8 py-4 text-lg font-semibold bg-blue-600 rounded-lg hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105 shadow-lg animate-fade-in-up animation-delay-600">
-          View Our Work
+          class="inline-block px-10 py-4 text-xl font-bold bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-xl animate-fade-in-up animation-delay-600">
+          Explore Our Projects
         </a>
       </div>
     </div>
   </section>
+
+    <section class="py-20 bg-gray-50 counter-section">
+
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+
+          <div class="p-8 counter-item">
+
+            <div class="text-blue-600 text-5xl mb-3"><i class="fas fa-trophy"></i></div>
+
+            <h3 class="text-4xl font-bold text-blue-600">15</h3>
+
+            <p class="text-gray-600">Years of Service</p>
+
+          </div>
+
+          <div class="p-8 counter-item">
+
+            <div class="text-blue-600 text-5xl mb-3"><i class="fas fa-hard-hat"></i></div>
+
+            <h3 class="text-4xl font-bold text-blue-600">500</h3>
+
+            <p class="text-gray-600">Projects Completed</p>
+
+          </div>
+
+          <div class="p-8 counter-item">
+
+            <div class="text-blue-600 text-5xl mb-3"><i class="fas fa-star"></i></div>
+
+            <h3 class="text-4xl font-bold text-blue-600">98</h3>
+
+            <p class="text-gray-600">Client Satisfaction</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
 
   @if (isLoggedIn() && isAdminOrManager()) {
     <section class="bg-gray-100 py-12">
@@ -41,7 +84,7 @@
               <div>
                 <label for="newTitle" class="block text-sm font-medium text-gray-700">Title</label>
                 <input type="text" id="newTitle" name="title" ngModel required
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
               </div>
               <div>
                 <label for="newDescription" class="block text-sm font-medium text-gray-700">Description</label>
@@ -68,7 +111,7 @@
                   <div class="mb-3">
                     <label [for]="'title-' + slide.id" class="block text-sm font-medium text-gray-700">Title</label>
                     <input [id]="'title-' + slide.id" type="text" name="title" [(ngModel)]="slide.title" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
                   </div>
                   <div class="mb-3">
                     <label [for]="'description-' + slide.id" class="block text-sm font-medium text-gray-700">Description</label>
@@ -101,10 +144,8 @@
     </section>
   }
 
-  <!-- Accolades Section -->
-  <app-accolades class="bg-gray-100"></app-accolades>
 
-  <!-- Core Services Section -->
+
   <section class="py-20 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
@@ -113,7 +154,7 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         @for (service of featuredServices(); track service.id) {
-        <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-blue-600 overflow-hidden flex flex-col">
+        <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-blue-600 hover:bg-blue-50 overflow-hidden flex flex-col">
           <div class="h-56 overflow-hidden">
             <img 
               [src]="service.imageUrl" 
@@ -133,9 +174,7 @@
     </div>
   </section>
 
-  <!-- About Us Section -->
   <app-about-details class="bg-gray-50"></app-about-details>
 
-  <!-- Inquiry Form Section -->
-  <app-inquiry-form></app-inquiry-form>
+  <app-contact-us></app-contact-us>
 </div>

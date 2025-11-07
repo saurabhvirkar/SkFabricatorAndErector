@@ -1,7 +1,6 @@
-import { Component, inject, OnDestroy, PLATFORM_ID, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnDestroy, PLATFORM_ID, OnInit, signal, computed, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AccoladesComponent } from '../../accolades/accolades.component';
-import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { ContactUsComponent } from '../contact-us/contact-us.component';
 import { RouterLink } from '@angular/router';
 import { AboutDetailsComponent } from '../about-details/about-details.component';
 import { ServiceService } from '../../_services/service.service';
@@ -11,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { switchMap, of } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ContactMapComponent } from '../map/map.component';
 import { HomeSliderService } from '../../_services/home-slider.service';
 
 @Component({
@@ -18,8 +18,7 @@ import { HomeSliderService } from '../../_services/home-slider.service';
   standalone: true,
   imports: [
     CommonModule,
-    AccoladesComponent,
-    InquiryFormComponent,
+    ContactUsComponent,
     RouterLink,
     AboutDetailsComponent,
     FormsModule,
@@ -27,11 +26,12 @@ import { HomeSliderService } from '../../_services/home-slider.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private serviceService = inject(ServiceService);
   private homeSliderService = inject(HomeSliderService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+  private elementRef = inject(ElementRef);
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
   currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
@@ -54,6 +54,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadBackgroundSlides();
     this.loadFeaturedServices();
+  }
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.animateCounters();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, options);
+
+      const counterSection = this.elementRef.nativeElement.querySelector('.counter-section');
+      if (counterSection) {
+        observer.observe(counterSection);
+      }
+    }
   }
 
   loadFeaturedServices(): void {
@@ -212,5 +236,27 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  }
+
+  animateCounters(): void {
+    const counters = this.elementRef.nativeElement.querySelectorAll('.counter-item h3');
+    counters.forEach((counter: HTMLElement) => {
+      const target = +counter.innerText;
+      counter.innerText = '0';
+      const increment = target / 200;
+
+      const updateCounter = () => {
+        const c = +counter.innerText;
+        if (c < target) {
+          counter.innerText = `${Math.ceil(c + increment)}`;
+          requestAnimationFrame(updateCounter);
+        }
+        else {
+          counter.innerText = target.toString();
+        }
+      };
+
+      updateCounter();
+    });
   }
 }

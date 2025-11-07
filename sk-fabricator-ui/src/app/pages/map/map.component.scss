@@ -36,37 +36,6 @@ $accent-color: #38bdf8; // sky-400
   animation-delay: 0.3s;
 }
 
-.animation-delay-600 {
-  animation-delay: 0.6s;
-}
-
-@keyframes bg-pan {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-bg-pan {
-  animation: bg-pan 15s ease-in-out infinite;
-}
-
-@keyframes slide-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-service-card {
-  animation: slide-in-up 0.5s ease-out forwards;
+.animation-delay-200 {
+  animation-delay: 0.2s;
 }

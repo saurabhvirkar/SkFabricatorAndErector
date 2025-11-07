@@ -38,6 +38,7 @@ export class HeaderComponent {
     { label: 'Clients', link: '/clients' },
     { label: 'Team', link: '/team' },
     { label: 'Gallery', link: '/gallery' },
+    { label: 'Contact Us', link: '/contact-us' },
   ];
 
   // Admin-only navigation item
