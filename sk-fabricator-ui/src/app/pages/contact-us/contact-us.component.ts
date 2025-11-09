@@ -5,6 +5,7 @@ import { InquiryService } from '../../_services/inquiry.service';
 import { Inquiry } from '../../_models/inquiry.model';
 import { MapComponent } from '../map/map.component';
 import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
+import { CONTACT_DETAILS } from '../../_constants/contact.constants';
 
 @Component({
   selector: 'app-contact-us',
@@ -18,12 +19,7 @@ export class ContactUsComponent {
   // Integration Point: Injects the service responsible for API communication
   private inquiryService = inject(InquiryService); 
 
-   // Contact details
-    phoneNumber1 = '+91 9130 01 2070';
-    phoneNumber2 = '+91 9552 03 4884';
-    phoneNumber3 = '+91 8483 80 6320';
-    email = 'skfabricator2070@gmail.com';
-    address = '17/3/1 Shiv Colony, Wakad Rd, Ganesh Nagar, Thergaon, Pune, Maharashtra 411033';
+  contact = CONTACT_DETAILS;
   // Signals for managing submission state and response message
   submissionStatus = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
   responseMessage = signal('');

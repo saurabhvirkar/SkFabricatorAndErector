@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InquiryService } from '../../_services/inquiry.service';
 import { Inquiry } from '../../_models/inquiry.model';
-import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-inquiry-form',
