@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
 using SkFabricatorApi.Models.DTOs;
+using SixLabors.ImageSharp;
 
 namespace SkFabricatorApi.Services;
 
@@ -30,10 +31,17 @@ public class HomeSliderService : IHomeSliderService
         var homeSlider = await _homeSliderRepository.GetByIdAsync(homeSliderId) ?? throw new System.Exception("Home slider item not found");
 
         var uploadResult = new ImageUploadResult();
+        int width = 0;
+        int height = 0;
 
         if (file.Length > 0)
         {
             using var stream = file.OpenReadStream();
+            var imageInfo = await Image.IdentifyAsync(stream);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
+            stream.Position = 0; // Reset stream position
+
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream)
@@ -47,6 +55,10 @@ public class HomeSliderService : IHomeSliderService
         }
 
         homeSlider.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        homeSlider.PublicId = uploadResult.PublicId;
+        homeSlider.Width = width;
+        homeSlider.Height = height;
+
         await _homeSliderRepository.UpdateAsync(homeSlider);
         return homeSlider;
     }

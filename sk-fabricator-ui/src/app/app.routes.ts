@@ -6,13 +6,13 @@ import { TeamComponent } from './pages/team/team.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
 import { InquiryDetailsComponent } from './pages/inquiry-details/inquiry-details.component';
-import { ServicesComponent } from './pages/services/services.component';
+import { OurServicesComponent } from './pages/our-services/our-services.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { authGuard } from './auth.guard';
 import { ClientsDetailsComponent } from './pages/clients-details/clients-details.component';
 
 
-import { ImageManagementComponent } from './pages/admin/image-management/image-management.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,15 +27,8 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'team', component: TeamComponent },
   { path: 'gallery', component: GalleryComponent },
-  { path: 'services', component: ServicesComponent },
+  { path: 'services', component: OurServicesComponent },
   { path: 'contact-us', component: ContactUsComponent },
   { path: 'clients', component: ClientsDetailsComponent },
-
-  {
-    path: 'admin/image-management',
-    component: ImageManagementComponent,
-    canActivate: [authGuard],
-    data: { roles: ['admin', 'manager'] }
-  },
 
 ];

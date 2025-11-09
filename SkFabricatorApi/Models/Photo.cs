@@ -12,4 +12,6 @@ public class Photo
 
     [Required]
     public string? Category { get; set; }
+    public int? Width { get; set; }
+    public int? Height { get; set; }
 }

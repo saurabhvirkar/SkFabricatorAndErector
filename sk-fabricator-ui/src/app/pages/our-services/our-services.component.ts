@@ -1,11 +1,8 @@
 import { Component, inject, ChangeDetectionStrategy, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { ContactUsComponent } from '../contact-us/contact-us.component';
 import { ServiceService } from '../../_services/service.service';
-import { SectionImage } from '../../_models/section-image.model';
 import { Service } from '../../_models'; // Import the correct Service interface
 import { Router } from '@angular/router'; // Import Router
-
 import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -14,12 +11,11 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-services',
   standalone: true,
   imports: [CommonModule, FormsModule, NgClass],
-  templateUrl: './services.component.html',
-  styleUrls: ['./services.component.scss'],
-  // Added ChangeDetectionStrategy.OnPush
+  templateUrl: './our-services.component.html',
+  styleUrls: ['./our-services.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush, 
 })
-export class ServicesComponent implements OnInit {
+export class OurServicesComponent implements OnInit {
   private serviceService = inject(ServiceService);
   private authService = inject(AuthService);
   private router = inject(Router); // Inject Router

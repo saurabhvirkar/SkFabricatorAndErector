@@ -5,6 +5,5 @@ export * from './home-slider.model';
 export * from './inquiry.model';
 export * from './photo.model';
 export * from './project.model';
-export * from './section-image.model';
 export * from './service.model';
 export * from './team-member.model';

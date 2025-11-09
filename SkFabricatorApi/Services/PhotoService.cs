@@ -3,6 +3,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
+using SixLabors.ImageSharp;
 
 namespace SkFabricatorApi.Services;
 
@@ -25,10 +26,17 @@ public class PhotoService : IPhotoService
     public async Task<Photo> AddPhotoAsync(IFormFile file, string category, bool isAboutSlider)
     {
         var uploadResult = new ImageUploadResult();
+        int width = 0;
+        int height = 0;
 
         if (file.Length > 0)
         {
             using var stream = file.OpenReadStream();
+            var imageInfo = await Image.IdentifyAsync(stream);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
+            stream.Position = 0; // Reset stream position
+
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream)
@@ -46,7 +54,9 @@ public class PhotoService : IPhotoService
             Url = uploadResult.SecureUrl.AbsoluteUri,
             PublicId = uploadResult.PublicId,
             Category = category,
-            IsAboutSlider = isAboutSlider
+            IsAboutSlider = isAboutSlider,
+            Width = width,
+            Height = height
         };
 
         await _photoRepository.AddAsync(photo);
@@ -56,6 +66,7 @@ public class PhotoService : IPhotoService
     public async Task<bool> DeletePhotoAsync(int photoId)
     {
         var photo = await _photoRepository.GetByIdAsync(photoId);
+
 
         if (photo == null)
         {

@@ -81,11 +81,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IOurServiceRepository, OurServiceRepository>(); // Already present, but good to confirm
         services.AddScoped<IOurServiceService, OurServiceService>();
-        services.AddScoped<INewsletterRepository, NewsletterRepository>(); // Already present, but good to confirm
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IPhotoService, PhotoService>();
-        services.AddScoped<ISectionImageRepository, SectionImageRepository>();
-        services.AddScoped<ISectionImageService, SectionImageService>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<ITeamService, TeamService>();
         services.AddScoped<IClientDetailsRepository, ClientDetailsRepository>();

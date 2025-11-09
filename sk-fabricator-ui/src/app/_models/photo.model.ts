@@ -5,4 +5,6 @@ export interface Photo {
     publicId: string;
     category: string;
     isAboutSlider: boolean;
+    width?: number;
+    height?: number;
 }

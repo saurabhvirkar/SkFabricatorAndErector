@@ -4,4 +4,6 @@ export interface HomeSlider {
     description: string;
     imageUrl?: string;
     publicId?: string;
+    width?: number;
+    height?: number;
 }

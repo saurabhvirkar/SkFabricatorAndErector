@@ -1,14 +1,13 @@
 <div class="home-page min-w-full pt-16">
   <section class="relative text-white overflow-hidden">
     @for (slide of backgroundSlides(); track slide.id; let i = $index) {
-      <div 
-        class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-        [style.background-image]="slide.imageUrl ? 'url(' + slide.imageUrl + ')' : 'none'"
+      <img
+        [src]="slide.imageUrl"
+        [alt]="'Hero background image ' + (i + 1)"
+        class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
         [class.opacity-100]="currentSlideIndex === i"
         [class.opacity-0]="currentSlideIndex !== i"
-        role="img"
-        [attr.aria-label]="'Hero background image ' + (i + 1)"
-      ></div>
+      />
     }
 
     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
