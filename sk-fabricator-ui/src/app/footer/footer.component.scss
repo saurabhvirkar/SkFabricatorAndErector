@@ -4,6 +4,15 @@ $accent-color: #38bdf8; // sky-400
 
 /* Add any component-specific styles here */
 
+@media (max-width: 1023px) {
+  .flex-wrap {
+    flex-direction: column;
+  }
+  .w-full.lg\:w-3\/5, .w-full.lg\:w-2\/5 {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .footer-container {
     padding-left: 1rem;
