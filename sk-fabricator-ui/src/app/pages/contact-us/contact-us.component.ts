@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InquiryService } from '../../_services/inquiry.service';
 import { Inquiry } from '../../_models/inquiry.model';
 import { MapComponent } from '../map/map.component';
+import { InquiryFormComponent } from '../inquiry-form/inquiry-form.component';
 
 @Component({
   selector: 'app-contact-us',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MapComponent],
+  imports: [CommonModule, ReactiveFormsModule, MapComponent ,InquiryFormComponent],
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
 })

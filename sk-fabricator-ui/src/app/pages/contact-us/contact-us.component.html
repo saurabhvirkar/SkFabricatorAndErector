@@ -1,142 +1,110 @@
 <section class="py-8 bg-gray-50 min-h-screen pt-20">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-8">
-            <!-- Reach Out to Us Section -->
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border-t-8 border-sk-primary">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Reach Out to Us</h2>
-                <div class="space-y-6 text-gray-700">
-                    <div class="flex items-start">
-                        <svg class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <div>
-                            <h3 class="font-semibold text-lg">Our Main Office</h3>
-                            <p>17/3/1 Shiv Colony, Wakad Rd, Ganesh Nagar, Thergaon, Pune, Maharashtra 411033</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <svg class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                        <div>
-                            <h3 class="font-semibold text-lg">Phone Support</h3>
-                            <p>+91 9130 01 2070</p>
-                            <p>+91 9552 03 4884</p>
-                            <p>+91 8483 80 6320</p>
-                            <p>Mon-Sat, 9 AM - 7 PM</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <svg class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <div>
-                            <h3 class="font-semibold text-lg">Email Us</h3>
-                            <p>skfabricator2070&#64;gmail.com</p>
-                            <p>We respond within 24 hours</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Get a Free Consultation Form -->
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border-t-8 border-sk-primary lg:px-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Get a Free Consultation</h2>
-                <p class="text-center text-gray-500 mb-8">
-                    Tell us about your project. Our experts will get back to you within 24 hours.
-                </p>
-
-                <form [formGroup]="inquiryForm" (ngSubmit)="onSubmit()" class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                        <input id="name" type="text" formControlName="name" placeholder="John Doe"
-                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150"
-                            [ngClass]="{'border-red-500': inquiryForm.get('name')?.invalid && inquiryForm.get('name')?.touched}">
-                        <p *ngIf="inquiryForm.get('name')?.invalid && inquiryForm.get('name')?.touched"
-                            class="mt-2 text-sm text-red-600">Name is required.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input id="email" type="email" formControlName="email" placeholder="you@company.com"
-                                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150"
-                                [ngClass]="{'border-red-500': inquiryForm.get('email')?.invalid && inquiryForm.get('email')?.touched}">
-                            <p *ngIf="inquiryForm.get('email')?.hasError('required') && inquiryForm.get('email')?.touched"
-                                class="mt-2 text-sm text-red-600">Email is required.</p>
-                            <p *ngIf="inquiryForm.get('email')?.hasError('email') && inquiryForm.get('email')?.touched"
-                                class="mt-2 text-sm text-red-600">Must be a valid email format.</p>
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
-                            <input id="phone" type="tel" formControlName="phone" placeholder="+91 98765 43210"
-                                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150"
-                                [ngClass]="{'border-red-500': inquiryForm.get('phone')?.invalid && inquiryForm.get('phone')?.touched}">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="subject" class="block text-sm font-medium text-gray-700">Subject (Optional)</label>
-                            <input id="subject" type="text" formControlName="subject" placeholder="Project Title or Topic"
-                                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150">
-                        </div>
-                        <div>
-                            <label for="category" class="block text-sm font-medium text-gray-700">Service Category (Optional)</label>
-                            <select id="category" formControlName="category"
-                                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150">
-                                <option value="">Select a Category</option>
-                                <option value="Industrial Piping">Industrial Piping</option>
-                                <option value="Structure Fabrication">Structure Fabrication</option>
-                                <option value="Equipment Erection">Equipment Erection</option>
-                                <option value="General Inquiry">General Inquiry</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="preferredContact" class="block text-sm font-medium text-gray-700">Preferred Contact Method (Optional)</label>
-                        <div class="mt-2 flex space-x-6">
-                            <label class="inline-flex items-center">
-                                <input type="radio" formControlName="preferredContact" value="Email" class="form-radio text-sk-primary">
-                                <span class="ml-2 text-gray-700">Email</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" formControlName="preferredContact" value="Phone" class="form-radio text-sk-primary">
-                                <span class="ml-2 text-gray-700">Phone</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="message" class="block text-sm font-medium text-gray-700">Project Details / Message</label>
-                        <textarea id="message" formControlName="message" rows="4"
-                            placeholder="Describe your project, required services, and timeline."
-                            class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-sk-primary focus:border-sk-primary transition duration-150"
-                            [ngClass]="{'border-red-500': inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched}"></textarea>
-                        <p *ngIf="inquiryForm.get('message')?.invalid && inquiryForm.get('message')?.touched"
-                            class="mt-2 text-sm text-red-600">Message is required.</p>
-                    </div>
-
-                    <button type="submit" [disabled]="inquiryForm.invalid || submissionStatus() === 'loading'"
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-medium text-black bg-sk-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sk-primary transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
-                        @if (submissionStatus() === 'loading') {
-                        <span>Submitting...</span>
-                        } @else {
-                        <span>Submit Inquiry</span>
-                        }
-                    </button>
-
-                    @if (responseMessage()) {
-                    <div [ngClass]="{
-                        'bg-green-100 border-green-400 text-green-700': submissionStatus() === 'success',
-                        'bg-red-100 border-red-400 text-red-700': submissionStatus() === 'error'
-                        }" class="p-4 border-l-4 rounded-lg mt-4" role="alert">
-                        <p class="font-bold">{{ submissionStatus() | titlecase }}</p>
-                        <p>{{ responseMessage() }}</p>
-                    </div>
-                    }
-                </form>
-            </div>
-        </div>
-
-        <!-- Map Section -->
-        <div class="mt-8">
-            <app-map class="block w-full h-[70vh]"></app-map>
-        </div>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h1
+        class="text-4xl font-extrabold text-gray-900 mb-4 animate-fade-in-down"
+      >
+        Contact Us
+      </h1>
+      <p
+        class="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in-up animation-delay-300"
+      >
+        We'd love to hear from you! Reach out to us for inquiries, project
+        discussions, or any questions you might have.
+      </p>
     </div>
+    <div class="contact-grid items-start mb-8">
+      <!-- Reach Out to Us Section -->
+      <div
+        class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border-t-8 border-sk-primary animate-fade-in-left"
+      >
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Reach Out to Us
+        </h2>
+        <div class="space-y-6 text-gray-700">
+          <div class="flex items-start">
+            <svg
+              class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Our Main Office</h3>
+              <p>
+                17/3/1 Shiv Colony, Wakad Rd, Ganesh Nagar, Thergaon, Pune,
+                Maharashtra 411033
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <svg
+              class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              ></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Phone Support</h3>
+              <p>+91 9130 01 2070</p>
+              <p>+91 9552 03 4884</p>
+              <p>+91 8483 80 6320</p>
+              <p>Mon-Sat, 9 AM - 7 PM</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <svg
+              class="flex-shrink-0 h-6 w-6 text-sk-primary mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-lg">Email Us</h3>
+              <p>skfabricator2070&#64;gmail.com</p>
+              <p>We respond within 24 hours</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="animate-fade-in-up animation-delay-500">
+        <app-inquiry-form></app-inquiry-form>
+      </div>
+    </div>
+  </div>
+  <!-- Map Section -->
+  <div class="map-section animate-fade-in-up animation-delay-500">
+    <app-map class="block w-full h-[45vh] rounded-2xl shadow-xl"></app-map>
+  </div>
 </section>
