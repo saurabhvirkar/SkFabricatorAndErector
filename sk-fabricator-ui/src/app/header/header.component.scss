@@ -33,3 +33,135 @@ $accent-color: #38bdf8; // sky-400
 .text-sk-primary {
   color: $primary-color;
 }
+
+/* Top Bar Styles */
+.top-bar {
+  height: 40px; // Fixed height for the top bar
+  overflow: hidden;
+  transition: all 0.3s ease-in-out; // Smooth transition for hiding/showing
+
+  &.hidden {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+}
+
+/* Header Styles */
+header {
+  // Ensure the header itself transitions smoothly for height changes
+  transition: all 0.3s ease-in-out;
+
+  // Target the inner div that has the 'h-20' class
+  // This ensures its height animates smoothly
+  .container > .flex {
+    transition: height 0.3s ease-in-out;
+  }
+
+  // Target the logo elements to make them transition smoothly
+  .logo-icon, .logo-text-main, .logo-text-sub {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  // Define the .scrolled state
+  &.scrolled {
+    // This adds a modern, glassy blur effect to the background
+    background-color: rgba(255, 255, 255, 0.9);
+    @supports (backdrop-filter: blur(8px)) {
+      backdrop-filter: blur(8px);
+    }
+    // You can use a slightly different shadow if you like
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    // --- Apply the "shrunk" styles ---
+
+    // 1. Shrink the header height
+    .container > .flex {
+      // from h-20 (5rem) to h-16 (4rem)
+      height: 4rem; 
+    }
+
+    // 2. Shrink the logo icon
+    .logo-icon {
+      // from w-12 h-12 (3rem) to w-10 h-10 (2.5rem)
+      width: 2.5rem;
+      height: 2.5rem;
+      // from text-2xl (1.5rem) to text-xl (1.25rem)
+      font-size: 1.25rem;
+    }
+
+    // 3. Adjust logo text
+    .logo-text-group {
+      .logo-text-main {
+        // from text-xl (1.25rem) to text-lg (1.125rem)
+        font-size: 1.125rem;
+      }
+      .logo-text-sub {
+        // Hide the tagline to save space
+        opacity: 0;
+        transform: translateY(-4px); // Optional: add a slight move-up effect
+        font-size: 0;
+      }
+    }
+  }
+}
+
+// ===============================================
+// === 👇 ADD ALL THE NEW STYLES BELOW THIS LINE ===
+// ===============================================
+
+header {
+  // Target the inner div that has the 'h-20' class
+  // This ensures its height animates smoothly
+  .container > .flex {
+    transition: height 0.3s ease-in-out;
+  }
+
+  // Target the logo elements to make them transition smoothly
+  .logo-icon, .logo-text-main, .logo-text-sub {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  // Define the .scrolled state
+  &.scrolled {
+    // This adds a modern, glassy blur effect to the background
+    background-color: rgba(255, 255, 255, 0.9);
+    @supports (backdrop-filter: blur(8px)) {
+      backdrop-filter: blur(8px);
+    }
+    // You can use a slightly different shadow if you like
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    // --- Apply the "shrunk" styles ---
+
+    // 1. Shrink the header height
+    .container > .flex {
+      // from h-20 (5rem) to h-16 (4rem)
+      height: 4rem; 
+    }
+
+    // 2. Shrink the logo icon
+    .logo-icon {
+      // from w-12 h-12 (3rem) to w-10 h-10 (2.5rem)
+      width: 2.5rem;
+      height: 2.5rem;
+      // from text-2xl (1.5rem) to text-xl (1.25rem)
+      font-size: 1.25rem;
+    }
+
+    // 3. Adjust logo text
+    .logo-text-group {
+      .logo-text-main {
+        // from text-xl (1.25rem) to text-lg (1.125rem)
+        font-size: 1.125rem;
+      }
+      .logo-text-sub {
+        // Hide the tagline to save space
+        opacity: 0;
+        transform: translateY(-4px); // Optional: add a slight move-up effect
+        font-size: 0;
+      }
+    }
+  }
+}
