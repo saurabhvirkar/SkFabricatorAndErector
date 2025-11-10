@@ -10,22 +10,22 @@ export class ServiceService {
   private apiService = inject(ApiService);
 
   getServices(): Observable<Service[]> {
-    return this.apiService.get<Service[]>('services');
+    return this.apiService.get<Service[]>('our-services');
   }
 
   addService(serviceData: FormData): Observable<Service> {
-    return this.apiService.post<Service>('services', serviceData, true);
+    return this.apiService.post<Service>('our-services', serviceData, true);
   }
 
   updateService(serviceId: number, serviceData: any): Observable<Service> {
-    return this.apiService.put<Service>(`services/${serviceId}`, serviceData);
+    return this.apiService.put<Service>(`our-services/${serviceId}`, serviceData);
   }
 
   deleteService(serviceId: number): Observable<any> {
-    return this.apiService.delete<any>(`services/${serviceId}`);
+    return this.apiService.delete<any>(`our-services/${serviceId}`);
   }
 
   addServiceImage(imageData: FormData): Observable<Service> {
-    return this.apiService.post<Service>('services/image', imageData, true);
+    return this.apiService.post<Service>('our-services/add-image', imageData, true);
   }
 }

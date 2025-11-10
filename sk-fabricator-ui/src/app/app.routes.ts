@@ -27,7 +27,7 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'team', component: TeamComponent },
   { path: 'gallery', component: GalleryComponent },
-  { path: 'services', component: OurServicesComponent },
+  { path: 'our-services', component: OurServicesComponent },
   { path: 'contact-us', component: ContactUsComponent },
   { path: 'clients', component: ClientsDetailsComponent },
 
