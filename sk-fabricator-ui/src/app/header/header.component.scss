@@ -24,6 +24,14 @@ $accent-color: #38bdf8; // sky-400
   .logo-text {
     display: none;
   }
+
+  .main-nav { /* Assuming this is your main navigation container */
+    display: none;
+  }
+
+  .mobile-menu-toggle { /* Assuming this is your hamburger icon/mobile menu button */
+    display: block; /* Show the toggle button on mobile */
+  }
 }
 
 .bg-sk-primary {

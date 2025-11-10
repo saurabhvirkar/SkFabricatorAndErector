@@ -1,9 +1,23 @@
 /* You can add your global styles to this file, and also import other style files */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: 'Inter', sans-serif;
+  font-size: 16px; /* Base font size for larger screens */
+}
+
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px; /* Smaller base font size for mobile */
+  }
 }
 
 body {
   background-color: #f8f8f8;
+  margin: 0; /* Remove default body margin */
 }
