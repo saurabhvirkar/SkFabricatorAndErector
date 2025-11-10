@@ -74,18 +74,7 @@
   animation-delay: 0.9s;
 }
 
-/* Custom styles for better alignment and responsiveness */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr; /* Stack on small screens */
-  gap: 2rem; /* Spacing between items */
-}
 
-@media (min-width: 1024px) { /* Equivalent to lg breakpoint in Tailwind */
-  .contact-grid {
-    grid-template-columns: repeat(2, 1fr); /* Two columns on large screens */
-  }
-}
 
 .map-section {
   margin-top: 2rem; /* Add some space above the map */
