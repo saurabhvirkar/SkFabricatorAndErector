@@ -5,3 +5,6 @@ node_modules/
 .angular/
 
 .fake
+skfabricator.db
+skfabricator.db-shm
+skfabricator.db-wal
