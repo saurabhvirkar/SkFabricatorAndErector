@@ -71,8 +71,7 @@ header {
     @supports (backdrop-filter: blur(8px)) {
       backdrop-filter: blur(8px);
     }
-    // You can use a slightly different shadow if you like
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    & { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 
     // --- Apply the "shrunk" styles ---
 
@@ -98,10 +97,7 @@ header {
         font-size: 1.125rem;
       }
       .logo-text-sub {
-        // Hide the tagline to save space
-        opacity: 0;
-        transform: translateY(-4px); // Optional: add a slight move-up effect
-        font-size: 0;
+        // Keep the tagline visible and at its original size
       }
     }
   }
@@ -130,8 +126,7 @@ header {
     @supports (backdrop-filter: blur(8px)) {
       backdrop-filter: blur(8px);
     }
-    // You can use a slightly different shadow if you like
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    & { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 
     // --- Apply the "shrunk" styles ---
 
@@ -157,10 +152,7 @@ header {
         font-size: 1.125rem;
       }
       .logo-text-sub {
-        // Hide the tagline to save space
-        opacity: 0;
-        transform: translateY(-4px); // Optional: add a slight move-up effect
-        font-size: 0;
+        // Keep the tagline visible and at its original size
       }
     }
   }
