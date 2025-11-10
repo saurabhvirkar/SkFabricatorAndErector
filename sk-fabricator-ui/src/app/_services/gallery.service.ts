@@ -28,6 +28,6 @@ export class GalleryService {
   }
 
   deleteImage(id: number): Observable<any> {
-    return this.apiService.delete<any>(`gallery/${id}`);
+    return this.apiService.delete<any>(`gallery/delete-photo/${id}`);
   }
 }
