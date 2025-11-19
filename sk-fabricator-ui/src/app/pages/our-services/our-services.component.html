@@ -11,7 +11,7 @@
   
   <main class="py-8 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
+      <div class="text-center mb-10">
         <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Our Expertise, Your Success</h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
           At SK Fabricator & Erector, we combine cutting-edge technology with seasoned expertise to deliver unparalleled results across various industrial sectors. Explore our core services designed to meet your most demanding project requirements.
@@ -20,7 +20,7 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         @for (service of services(); track service.id) {
-          <div class="relative bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 overflow-hidden group bg-cover bg-center animate-service-card border-b-4 border-blue-600"
+          <div class="relative bg-white p-20 rounded-xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 overflow-hidden group bg-cover bg-center animate-service-card border-b-4 border-blue-600"
                [style.backgroundImage]="'url(' + service.imageUrl + ')'">
             <!-- Overlay for text readability -->
             <div class="absolute inset-0 bg-black bg-opacity-70 group-hover:bg-opacity-80 transition-all duration-300"></div>

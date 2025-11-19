@@ -1,78 +1,79 @@
-@keyframes fade-in-down {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
+:host {
+  display: block;
+}
+
+.header-bg {
+  background: linear-gradient(45deg, #1a237e, #283593, #3949ab);
+}
+
+.client-card {
+  position: relative;
+  border-bottom: 4px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.client-card:hover {
+  border-color: #3949ab;
+}
+
+.edit-btn, .delete-btn {
+  @apply bg-white bg-opacity-80 backdrop-blur-sm text-gray-700 p-2 rounded-full shadow-md transition-all duration-200 hover:bg-opacity-100 hover:scale-110;
+}
+
+.edit-btn:hover {
+  @apply text-blue-600;
+}
+
+.delete-btn:hover {
+  @apply text-red-600;
+}
+
+.toggle-form-btn {
+  @apply px-8 py-3 bg-blue-600 text-white font-bold rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105;
+}
+
+.form-container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-field {
+  @apply flex flex-col;
+  label {
+    @apply mb-1 text-sm font-semibold text-gray-600;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+  input[type="text"],
+  input[type="url"] {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow;
   }
 }
 
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.file-input {
+  @apply text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors;
 }
 
-.animate-fade-in-down {
-  animation: fade-in-down 0.5s ease-out forwards;
+.submit-btn, .cancel-btn {
+  @apply px-6 py-2 font-semibold rounded-full shadow-md transition-all duration-300 transform hover:scale-105;
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
+.submit-btn {
+  @apply bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
-.animation-delay-300 {
-  animation-delay: 0.3s;
+.cancel-btn {
+  @apply bg-gray-500 text-white hover:bg-gray-600;
 }
 
-.animation-delay-500 {
-  animation-delay: 0.5s;
+.edit-form-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50;
+  animation: fade-in 0.3s ease-out forwards;
 }
 
-@keyframes bg-pan {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-bg-pan {
-  animation: bg-pan 15s ease-in-out infinite;
+.contact-us-link {
+  @apply inline-block px-12 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full hover:shadow-xl transition-all duration-300 transform hover:scale-105;
 }
 
 @keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
-.animate-client-logo {
-  animation: fade-in 0.5s ease-out forwards;
-}
-
-/* Form Styles */
-input[type="text"],
-input[type="url"],
-input[type="file"] {
-  @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500;
-}
-
-button[type="submit"] {
-  @apply px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition duration-300 disabled:opacity-50;
-}
-

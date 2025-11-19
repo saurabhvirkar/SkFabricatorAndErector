@@ -11,76 +11,9 @@ $text-color-light: #f9fafb; // gray-50
   z-index: 20; // Ensure it's above the hero section's pseudo-elements
 }
 
-@keyframes fade-in-down {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in-down {
-  animation: fade-in-down 0.5s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
-  opacity: 0; // Start hidden before animation
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s ease-out forwards;
-  opacity: 0; // Start hidden before animation
-}
-
-.animation-delay-100 {
-  animation-delay: 0.1s;
-}
-
-.animation-delay-200 {
-  animation-delay: 0.2s;
-}
-
-.animation-delay-300 {
-  animation-delay: 0.3s;
-}
-
-.animation-delay-400 {
-  animation-delay: 0.4s;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-}
-
 /* Styles for the new 'Numbers Speak' section */
 .counter-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background-color: $text-color-light; /* Light gray background */
 }
 

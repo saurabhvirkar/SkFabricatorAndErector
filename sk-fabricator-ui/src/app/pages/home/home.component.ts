@@ -12,6 +12,7 @@ import { AuthService } from '../../auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MapComponent } from '../map/map.component';
 import { HomeSliderService } from '../../_services/home-slider.service';
+import { ScrollingClientsComponent } from '../scrolling-clients/scrolling-clients.component';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ import { HomeSliderService } from '../../_services/home-slider.service';
     RouterLink,
     AboutDetailsComponent,
     FormsModule,
+    ScrollingClientsComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

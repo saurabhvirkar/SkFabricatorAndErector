@@ -1,0 +1,30 @@
+<div class="scrolling-clients-container bg-gray-50 py-10">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-6">
+      <h2 class="text-4xl font-extrabold text-gray-900 mb-3 animate-fade-in-down animation-delay-100">
+        Our Esteemed Clients
+      </h2>
+      <p class="text-lg text-gray-600 mt-2 animate-fade-in-up animation-delay-200">
+        We are proud to have partnered with a diverse range of leading companies.
+      </p>
+    </div>
+    <div class="scrolling-clients">
+      <div class="scrolling-wrapper">
+        @for (client of clients(); track client.id) {
+          <div class="client-logo">
+            <a [href]="client.clientUrl" target="_blank" rel="noopener noreferrer" [title]="client.name + ' Website'">
+              <img [src]="client.imageUrl" [alt]="client.name + ' Logo'" class="max-h-20 max-w-40 object-contain">
+            </a>
+          </div>
+        }
+        @for (client of clients(); track client.id) {
+          <div class="client-logo" aria-hidden="true">
+            <a [href]="client.clientUrl" target="_blank" rel="noopener noreferrer" [title]="client.name + ' Website'">
+              <img [src]="client.imageUrl" [alt]="client.name + ' Logo'" class="max-h-20 max-w-40 object-contain">
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

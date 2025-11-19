@@ -1,0 +1,56 @@
+$primary-color: #2563eb; // blue-600
+$text-color-dark: #1f2937; // gray-900
+$text-color-medium: #4b5563; // gray-600
+$text-color-light: #f9fafb; // gray-50
+
+.scrolling-clients-container {
+  background-color: $text-color-light;
+  padding: 4rem 0;
+}
+
+h2 {
+  color: $text-color-dark;
+}
+
+.scrolling-clients {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+  mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+
+  .scrolling-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+    animation: scroll 10s linear infinite;
+  }
+
+  .client-logo {
+    flex: 0 0 auto;
+    margin: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease-in-out;
+
+    img {
+      max-height: 80px; // Increased size for better visibility
+      max-width: 160px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
