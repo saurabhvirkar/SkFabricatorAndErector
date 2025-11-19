@@ -1,4 +1,3 @@
-export * from './accolade.model';
 export * from './client-details.model';
 export * from './gallery-image.model';
 export * from './home-slider.model';

@@ -6,17 +6,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 
-/**
- * Define the strict union type for project categories.
- * This resolves the TypeScript error in the template by ensuring
- * the categories array and the signal match the setFilter function signature.
- */
 type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
 
-/**
- * The main application component.
- * It contains all logic and templates for the project showcase feature.
- */
 @Component({
   selector: 'app-projects',
   standalone: true,
@@ -25,6 +16,7 @@ type ProjectCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintena
   styleUrls: ['./projects.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectService);
   private authService = inject(AuthService);

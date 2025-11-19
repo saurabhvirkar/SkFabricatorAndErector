@@ -22,9 +22,7 @@ export class ClientsDetailsComponent implements OnInit {
   showAddClientForm = signal<boolean>(false);
   editClient = signal<ClientDetails | null>(null);
   isEditing = computed(() => this.editClient() !== null);
-
   newClient: ClientDetails = { id: 0, name: '', imageUrl: '', clientUrl: '' };
-
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
   currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
 

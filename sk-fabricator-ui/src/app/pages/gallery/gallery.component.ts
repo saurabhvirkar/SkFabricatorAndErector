@@ -6,16 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GalleryService } from '../../_services/gallery.service';
 
-/**
- * Define the strict union type for image categories.
- * This ensures type safety and resolves the compiler error in the template.
- */
 type ImageCategory = 'All' | 'Piping' | 'Fabrication' | 'Erection' | 'Maintenance';
 
-/**
- * The main application component, now serving as the Work Gallery showcase.
- * It contains all logic and templates for the feature.
- */
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
@@ -46,7 +38,6 @@ export class GalleryComponent implements OnInit {
   // Convert observables to signals
   isLoggedIn = toSignal(this.authService.isLoggedIn$, { initialValue: false });
   currentUserRole = toSignal(this.authService.currentUserRole$, { initialValue: null });
-
   uploadCategories = computed(() => this.categories.filter(c => c !== 'All'));
 
   isAdminOrManager = computed(() => {

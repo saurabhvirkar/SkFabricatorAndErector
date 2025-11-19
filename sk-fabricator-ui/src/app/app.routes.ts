@@ -11,9 +11,6 @@ import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { authGuard } from './auth.guard';
 import { ClientsDetailsComponent } from './pages/clients-details/clients-details.component';
 
-
-
-
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: AdminLoginComponent }, 
