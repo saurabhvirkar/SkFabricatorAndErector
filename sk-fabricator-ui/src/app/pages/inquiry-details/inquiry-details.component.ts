@@ -134,4 +134,20 @@ export class InquiryDetailsComponent implements OnInit {
       });
     }
   }
+
+  // --- Modal State Signals ---
+  isModalOpen = signal(false);
+  selectedInquiry = signal<Inquiry | null>(null);
+
+  /** Opens the modal to show inquiry details. */
+  openModal(inquiry: Inquiry): void {
+    this.selectedInquiry.set(inquiry);
+    this.isModalOpen.set(true);
+  }
+
+  /** Closes the modal and clears the selection. */
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedInquiry.set(null);
+  }
 }
