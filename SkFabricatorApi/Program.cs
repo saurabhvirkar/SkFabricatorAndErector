@@ -1,6 +1,7 @@
 using SkFabricatorApi.StartupExtensions;
 using SkFabricatorApi.Models;
 using Microsoft.AspNetCore.HttpOverrides; // Added for ForwardedHeaders
+using SkFabricatorApi.Middleware;
 // using Microsoft.AspNetCore.DataProtection; // No longer needed for free tier
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,6 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<SkFabricatorApi.Filters.ValidationFilter>();
-    options.Filters.Add<SkFabricatorApi.Filters.ApiExceptionFilter>();
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
@@ -53,6 +53,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 app.UseCorsPolicy();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSwaggerDocumentation();
 app.UseAuthentication();
 app.UseAuthorization();

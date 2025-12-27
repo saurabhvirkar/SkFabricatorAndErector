@@ -81,16 +81,8 @@ public class TeamService : ITeamService
             Details = request.Details
         };
 
-        try
-        {
-            await _teamRepository.AddAsync(teamMember);
-            return teamMember;
-        }
-        catch (System.Exception ex)
-        {
-            _logger.LogError(ex, "Error adding team member to repository.");
-            throw new System.Exception($"Failed to add team member: {ex.InnerException?.Message ?? ex.Message}", ex);
-        }
+        await _teamRepository.AddAsync(teamMember);
+        return teamMember;
     }
 
     public async Task<bool> DeleteTeamMemberAsync(int id)

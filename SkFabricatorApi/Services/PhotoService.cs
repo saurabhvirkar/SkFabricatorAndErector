@@ -1,5 +1,6 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
@@ -11,8 +12,9 @@ public class PhotoService : IPhotoService
 {
     private readonly Cloudinary _cloudinary;
     private readonly IPhotoRepository _photoRepository;
+    private readonly ILogger<PhotoService> _logger;
 
-    public PhotoService(IOptions<CloudinarySettings> config, IPhotoRepository photoRepository)
+    public PhotoService(IOptions<CloudinarySettings> config, IPhotoRepository photoRepository, ILogger<PhotoService> logger)
     {
         var acc = new Account(
             config.Value.CloudName,
@@ -21,10 +23,12 @@ public class PhotoService : IPhotoService
         );
         _cloudinary = new Cloudinary(acc);
         _photoRepository = photoRepository;
+        _logger = logger;
     }
 
     public async Task<Photo> AddPhotoAsync(IFormFile file, string category, bool isAboutSlider)
     {
+        _logger.LogInformation("Adding photo in category {Category}, isAboutSlider: {IsAboutSlider}", category, isAboutSlider);
         var uploadResult = new ImageUploadResult();
         int width = 0;
         int height = 0;
@@ -46,6 +50,7 @@ public class PhotoService : IPhotoService
 
         if (uploadResult.Error != null)
         {
+            _logger.LogError("Error uploading photo: {Error}", uploadResult.Error.Message);
             throw new System.Exception(uploadResult.Error.Message);
         }
 

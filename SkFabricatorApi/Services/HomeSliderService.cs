@@ -71,16 +71,8 @@ public class HomeSliderService : IHomeSliderService
             Description = request.Description
         };
 
-        try
-        {
-            await _homeSliderRepository.AddAsync(homeSlider);
-            return homeSlider;
-        }
-        catch (System.Exception ex)
-        {
-            _logger.LogError(ex, "Error adding home slider item to repository.");
-            throw new System.Exception($"Failed to add home slider item: {ex.InnerException?.Message ?? ex.Message}", ex);
-        }
+        await _homeSliderRepository.AddAsync(homeSlider);
+        return homeSlider;
     }
 
     public async Task<bool> DeleteHomeSliderAsync(int id)

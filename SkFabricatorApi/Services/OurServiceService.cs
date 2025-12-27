@@ -1,5 +1,6 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SkFabricatorApi.Models;
 using SkFabricatorApi.Repositories;
@@ -11,8 +12,9 @@ public class OurServiceService : IOurServiceService
 {
     private readonly Cloudinary _cloudinary;
     private readonly IOurServiceRepository _ourServiceRepository;
+    private readonly ILogger<OurServiceService> _logger;
 
-    public OurServiceService(IOptions<CloudinarySettings> config, IOurServiceRepository ourServiceRepository)
+    public OurServiceService(IOptions<CloudinarySettings> config, IOurServiceRepository ourServiceRepository, ILogger<OurServiceService> logger)
     {
         var acc = new Account(
             config.Value.CloudName,
@@ -21,10 +23,12 @@ public class OurServiceService : IOurServiceService
         );
         _cloudinary = new Cloudinary(acc);
         _ourServiceRepository = ourServiceRepository;
+        _logger = logger;
     }
 
     public async Task<OurService> AddServiceImageAsync(int serviceId, IFormFile file)
     {
+        _logger.LogInformation("Adding image to service with ID {ServiceId}", serviceId);
         var ourService = await _ourServiceRepository.GetByIdAsync(serviceId) ?? throw new System.Exception("Service not found");
 
         var uploadResult = new ImageUploadResult();
@@ -41,17 +45,20 @@ public class OurServiceService : IOurServiceService
 
         if (uploadResult.Error != null)
         {
+            _logger.LogError("Error uploading service image: {Error}", uploadResult.Error.Message);
             throw new System.Exception(uploadResult.Error.Message);
         }
 
         ourService.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
         await _ourServiceRepository.UpdateAsync(ourService);
+        _logger.LogInformation("Service image updated for service ID {ServiceId}", serviceId);
         return ourService;
     }
 
     public async Task<OurService> AddServiceAsync(AddOurServiceRequestDto request)
     {
+        _logger.LogInformation("Adding new service: {Name}", request.Name);
         var uploadResult = new ImageUploadResult();
 
         if (request.File != null && request.File.Length > 0)
