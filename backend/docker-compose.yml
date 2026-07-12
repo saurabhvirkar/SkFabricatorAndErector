@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: sk_postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=sk_fabricator
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  api:
+    container_name: sk_api
+    build:
+      context: .
+      dockerfile: src/Api/Dockerfile # This file will be created in a later phase
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=sk_fabricator;Username=admin;Password=admin;
+    depends_on:
+      - postgres
+    restart: on-failure
+
+volumes:
+  postgres_data:
